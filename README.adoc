@@ -1,0 +1,52 @@
+# paralela25a-evan-chen
+
+## Glosario
+    1. Programación serial: es una manera de programar tal que las instrucciones se ejecutan en secuencia, una despues de la otra (No comienza uno si el anterior no ha terminado). *Analogia/Ejemplo*: Una coreografia de baile donde hay una serie de pasos determinados que se deben de ejecutar una tras otra.
+
+    2. Programación concurrente: la forma de programar **no serial**, donde **se divide el problema en pedacitos y se intercala entre estos**. *Analogia/Ejemplo*: Cocinar uno o varios platillos, llevando a cabo pasos de las recetas a la misma vez pero cambiando entre ellas (corto la lechuga de la ensalada mientras se terminan de cocinar el espagueti, y voy alternando entre ambas recetas) 
+
+    3. Programación paralela: tipo de programacion donde procesos se llevan a cabo simultaneamente y no hay intercalacion entre tareas. *Analogia/Ejemplo*: 
+
+    4. Concurrencia de tareas: Separar asuntos sin buscar mejor rendimiento, sino una colaboracion entre distintos ejecutantes expertos en lo que hacen.
+
+    5. Paralelismo de datos: Incremento de desempeno y rapidez, donde se busca optimizar el rendimiento de un programa.
+
+    Hilo de ejecución.
+
+    Indeterminismo.
+
+    Memoria privada y compartida.
+
+    Espera activa.
+
+    Condición de carrera.
+
+    Control de concurrencia.
+
+    Seguridad condicional.
+
+    Exclusión mutua.
+
+    Semáforo.
+
+    Barrera.
+
+    Variable de condición.
+
+    Candado de lectura y escritura.
+
+    Descomposición.
+
+    Mapeo.
+
+    Incremento de velocidad (speedup).
+
+    Eficiencia.
+
+    Comunicación punto a punto entre procesos.
+
+    Comunicación colectiva entre procesos.
+
+    Reducción.
+
+
