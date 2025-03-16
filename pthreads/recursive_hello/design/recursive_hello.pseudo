@@ -1,0 +1,16 @@
+procedure main()
+  num = 2
+  create_thread(greet(2))
+  print "Hello from main thread"
+  join_thread(thread)
+end procedure
+
+procedure greet(num)
+  if (num == 0)
+    print "Goodbye from secondary thread! Received number: " num
+  else
+    print "Hello from secondary thread! Received number: " num
+    create_thread(greet(num-1))
+    join_thread(thread)
+  end if
+end procedure

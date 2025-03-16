@@ -1,0 +1,21 @@
+= Design of solution
+:experimental:
+:nofooter:
+:source-highlighter: pygments
+:stem:
+:toc:
+:xrefstyle: short
+
+
+[[procedural_design]]
+== Procedural design
+
+The pseudocode for the problem can be found in the following lines:
+
+[#pseudocode]
+[source,delphi]
+----
+include::recursive_hello.pseudo[]
+----
+
+

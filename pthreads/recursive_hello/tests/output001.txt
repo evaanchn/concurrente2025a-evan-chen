@@ -1,0 +1,4 @@
+Hello from main thread
+Hello from secondary thread! Received number: 2
+Hello from secondary thread! Received number: 1
+Goodbye from secondary thread! Received number: 0

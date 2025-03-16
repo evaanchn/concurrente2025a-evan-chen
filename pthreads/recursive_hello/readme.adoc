@@ -1,0 +1,88 @@
+= Recursive Hello
+:experimental:
+:nofooter:
+:source-highlighter: pygments
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+
+[[problem_statement]]
+== Problem statement
+
+This is a variation of the hello example.
+
+Copy your pthreads/hello to pthreads/recursive_hello. You can rename pthreads/recursive_hello/hello.c to recurive_hello.c or main.c, if you prefer. 
+
+Modify greet() so that it receives a number of type size_t. IF this number is 0, greet() prints a farewell and the received number. Then it stops its execution.
+
+If the number greet() receives is greater than zero, it prints a greeting and the number received. Then it creates a thread to invoke greet() but with a number less than the parameter.
+
+Modify the main() procedure so that it creates a local variable of type size_t. Send this number as a parameter to the subroutine greet(), which will execute in the secondary thread.
+
+
+[[design]]
+== Design of solution
+
+#See the link:design/readme.adoc[design/] folder for an overall design of the solution.#
+
+[[predictions]]
+== Predictions
+
+I predict that the main thread will greet first or second (first call to greet may go first), as the greet function creates two more threads to run itself and carry out the greet or farewell action. Basically, my hypothesis is that recursive thread creation and joining is possible and could go smoothly.
+
+I visualize the following output with the proposed design:
+
+Input example:
+
+[source]
+----
+include::tests/input001.txt[]
+----
+
+Output example:
+
+[source]
+----
+include::tests/output001.txt[]
+----
+
+[[results]]
+== Results
+`Hello from main thread`
+
+`Hello from secondary thread! Received number: 2`
+
+`Hello from secondary thread! Received number: 1`
+
+`Goodbye from secondary thread! Received number: 0`
+
+As the above output shows, my hypothesis was correct.
+
+[[user_manual]]
+== User manual
+
+[[build]]
+=== Build
+
+Run make command in _recursive_hello_ folder to build
+
+`make`
+
+[[usage]]
+=== Usage
+
+Use the following command to execute the program:
+
+`./build/recursive_hello`
+
+[[credits]]
+== Credits
+
+Evan Chen <evan.chen@ucr.ac.cr> 
+
+Modified from hello.c example, by Dr. Jeisson Hidalgo
+
+Used video by Jacob Sorber to understand how pthread_create handled procedures with parameters
+https://www.youtube.com/watch?v=It0OFCbbTJE
