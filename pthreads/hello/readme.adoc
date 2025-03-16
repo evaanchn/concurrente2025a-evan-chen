@@ -1,0 +1,14 @@
+= Hello world with threads
+:experimental:
+:nofooter:
+:source-highlighter: pygments
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+
+[[problem_statement]]
+== Problem statement
+
+Write a program that creates two threads when executed: main and secondary. Both threads must greet with "Hello from main thread" and "Hello from secondary thread" messages in the standard output, respectively. Use a dynamic analizer of the code like the _memcheck_ and _helgrind_ (from Valgrind) tools, or Google Sanitizers to ensure the program does not provoke race conditions.

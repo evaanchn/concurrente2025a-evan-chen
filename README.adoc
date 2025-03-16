@@ -1,15 +1,15 @@
 # paralela25a-evan-chen
 
 ## Glosario
-    1. *Programación serial*: es una manera de programar tal que las instrucciones se ejecutan en secuencia, una despues de la otra (No comienza uno si el anterior no ha terminado). _Analogia_: Una coreografia de baile donde hay una serie de pasos determinados que se deben de ejecutar una tras otra.
+    1. *Programación serial*: es una manera de programar tal que las instrucciones se ejecutan en secuencia, una despues de la otra (No comienza uno si el anterior no ha terminado). *Analogia*: Una coreografia de baile donde hay una serie de pasos determinados que se deben de ejecutar una tras otra.
 
-    2. *Programación concurrente*: la forma de programar **no serial**, donde #**se divide el problema en pedacitos y se intercala entre estos**#. *Analogia*: Cocinar uno o varios platillos, llevando a cabo pasos de las recetas a la misma vez pero cambiando entre ellas (corto la lechuga de la ensalada mientras se terminan de cocinar el espagueti, y voy alternando entre ambas recetas) 
+    2. *Programación concurrente*: un metaparadigma que implica la programacion #**no serial**#. Una forma de concurrencia es dividir el problema en pedacitos e intercalar entre estos. *Analogia*: Cocinar uno o varios platillos, llevando a cabo pasos de las recetas a la misma vez pero cambiando entre ellas (corto la lechuga de la ensalada mientras se terminan de cocinar el espagueti, y voy alternando entre ambas recetas). 
 
-    3. *Programación paralela*: tipo de programacion donde procesos se llevan a cabo simultaneamente y no hay intercalacion entre tareas. *Analogia*: Los diferentes organos de un cuerpo operan a la misma vez. Por ejemplo, el corazon no espera que uno respire para latir, y a la vez el cuerpo puede estar digiriendo, pensando, caminando, etc.
+    3. *Programación paralela*: tipo de programacion donde procesos se llevan a cabo simultaneamente y no hay intercalacion entre tareas. Esta en el tope de la escala de concurrencia. *Analogia*: Los diferentes organos de un cuerpo operan a la misma vez. Por ejemplo, el corazon no espera que uno respire para latir, y a la vez el cuerpo puede estar digiriendo, pensando, caminando, etc.
 
-    4. *Concurrencia de tareas*: Separar asuntos sin buscar mejor rendimiento del programa, sino una colaboracion entre distintos ejecutantes expertos en lo que contribuyen.
+    4. *Concurrencia de tareas*: Separar asuntos sin buscar mejor rendimiento del programa, sino una colaboracion entre distintos ejecutantes expertos en lo que contribuyen. 
 
-    5. *Paralelismo de datos*: Incremento de desempeno y rapidez, donde se busca optimizar el rendimiento de un programa.
+    5. *Paralelismo de datos*: Incremento de rapidez, optimizacion en rendimiento, donde se trata de hacer que el tiempo de ejecucion de un programa baje de mucho a poco. Aqui se involucra el High-performance computing (HPC) y clusters.
 
     Hilo de ejecución.
 

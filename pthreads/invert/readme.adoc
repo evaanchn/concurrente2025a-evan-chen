@@ -1,4 +1,4 @@
-= Project name
+= Invert
 :experimental:
 :nofooter:
 :source-highlighter: pygments
@@ -11,7 +11,7 @@
 [[problem_statement]]
 == Problem statement
 
-#Analysis: Describe the problem to be solved#
+El ejemplo programa inversor (invert) lee números enteros de la entrada estándar y los imprime en la salida estándar en el orden inverso. Su propósito es crear proyectos con el Makefile genérico. Se crea el proyecto en C, enunciado, casos de prueba, compilar, correr, probar, estilo de código (linting), y documentación (doxygen).
 
 Input example:
 
