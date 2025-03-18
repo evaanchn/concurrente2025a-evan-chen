@@ -1,6 +1,6 @@
 procedure main()
   num = 2
-  create_thread(greet(2))
+  create_thread(greet(num))
   print "Hello from main thread"
   join_thread(thread)
 end procedure

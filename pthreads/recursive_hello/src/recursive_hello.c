@@ -19,16 +19,18 @@ void* greet(void* data);
  */
 // procedure main:
 int main(void) {
-  size_t num = 2; // Local variable initialized in 2
+  size_t num = 2;  // Local variable initialized in 2
 
-  //pthread creation
+  // pthread creation, sending the local variable num casted to void*
   pthread_t thread;
-  int error = pthread_create(&thread, /*attr*/ NULL, greet, &num);
+  int error = pthread_create(&thread, /*attr*/ NULL, greet, (void*) num);
+
+  // If thread is created successfully
   if (error == EXIT_SUCCESS) {
     // print "Hello from main thread"
     printf("Hello from main thread\n");
 
-    // Wait for created thread to finish executing (which could also be waiting)
+    // Wait for secondary thread to finish executing, if necessary
     pthread_join(thread, /*value_ptr*/ NULL);
   } else {
     fprintf(stderr, "Error: could not create secondary thread\n");
@@ -38,23 +40,26 @@ int main(void) {
 
 // procedure greet:
 void* greet(void* data) {
-  size_t* number = (size_t*) data; // Casting pointer to original type.
+  size_t number = (size_t) data;  // Casting pointer to original type.
   // Bid farewell if number is 0
-  if (*number == 0){
-    printf("Goodbye from secondary thread! Received number: %zu\n", *number);
-  }
-  // Greet and report number otherwise
-  else{
-    printf("Hello from secondary thread! Received number: %zu\n", (*number)--);
-    
-    pthread_t thread;
-    int error = pthread_create(&thread, /*attr*/ NULL, greet, data);
-    if (error != EXIT_SUCCESS){
+  if (number == 0) {
+    printf("Goodbye from secondary thread! Received number: %zu\n", number);
+  } else {
+    // Otherwise greet and report received number
+    printf("Hello from secondary thread! Received number: %zu\n", number);
+
+    // Create new thread to call greet again with number - 1
+    pthread_t greet_thread;
+    int error = pthread_create(&greet_thread, /*attr*/
+      NULL, greet, (void*) number - 1);
+
+    // If not created successfully, inform and return
+    if (error != EXIT_SUCCESS) {
       fprintf(stderr, "Error: could not create secondary thread\n");
+    } else {
+      // Otherwise wait for new thread to finish executing
+      pthread_join(greet_thread, /*value_ptr*/ NULL);
     }
-    else{
-      pthread_join(thread, /*value_ptr*/ NULL);
-    } 
   }
   return NULL;
 }  // end procedure

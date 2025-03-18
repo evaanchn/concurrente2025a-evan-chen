@@ -58,7 +58,7 @@ include::tests/output001.txt[]
 
 `Goodbye from secondary thread! Received number: 0`
 
-As the above output shows, my hypothesis was correct.
+As the above output shows, my hypothesis was correct. However, upon further executions of the program, I discovered that sometimes the secondary thread greeted before the main thread did, meaning I overlooked the indeterminism of the program in my initial analysis.
 
 [[user_manual]]
 == User manual
