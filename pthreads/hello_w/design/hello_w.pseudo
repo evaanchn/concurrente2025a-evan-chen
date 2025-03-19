@@ -1,0 +1,13 @@
+procedure main:
+  // Create a thread and delegate the execution of the greet procedure to achieve concurrence
+  create_thread(greet)
+
+  // Continue with printing the main thread greeting. This may happen before or after the secondary thread's greeting.
+  print "Hello from main thread" 
+end procedure
+
+procedure greet:
+  // Greets user in standard output upon execution
+  print "Hello from secondary thread" 
+end procedure
+
