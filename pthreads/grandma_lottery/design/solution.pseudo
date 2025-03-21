@@ -1,8 +1,15 @@
 procedure main()
-  create_thread(greet)
-  print "Hello from main thread"
+  mutable grand_child1 := create_thread(buy_lottery)
+  mutable grand_child2 := create_thread(buy_lottery)
+
+  const number1 = join_thread(grand_child1)
+  const number2 = join_thread(grand_child2)
+
+  print "My numbers are {number 1} and {number 2}"
+  
 end procedure
 
-procedure greet()
-  print "Hello from secondary thread"
+procedure buy_lottery()
+  sleep(1) // 1 second
+  return random(0, 100) // Random integer between {0, 1, 2, ..., 99}
 end procedure
