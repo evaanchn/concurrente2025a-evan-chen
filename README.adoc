@@ -11,9 +11,9 @@
 
     5. *Paralelismo de datos*: Incremento de rapidez, optimizacion en rendimiento, donde se trata de hacer que el tiempo de ejecucion de un programa baje de mucho a poco. Aqui se involucra el High-performance computing (HPC) y clusters.
 
-    Hilo de ejecución.
+    6. *Hilo de ejecución*: Un segmento en la memoria con valores creado y gestionado por el sistema operativo. Este carga los valores del hilo en los registros de un core para poder ejecutar codigo.
 
-    Indeterminismo.
+    7. *Indeterminismo*: Impredecibilidad de como se comportaran los hilos durante cada ejecucion.
 
     Memoria privada y compartida.
 
