@@ -1,13 +1,41 @@
-procedure main:
-  // Create a thread and delegate the execution of the greet procedure to achieve concurrence
-  create_thread(greet)
+// PSEUDOCODE MODIFIED TO ADJUST TO OFFICIAL C CODE
+procedure main(argc, argv[])
+  // *ORIGINAL*
+  // create thread_count as result of converting argv[1] to integer
+  // Use := to specify assignation/initialization
+  // declare thread_count := integer(argv[1])
 
-  // Continue with printing the main thread greeting. This may happen before or after the secondary thread's greeting.
-  print "Hello from main thread" 
+  // Create thead_count, assuming initial amount as available cores
+  // The amount is consulted from a system function
+  declare thread_count := get(available_cores)
+  if argc == 2 do 
+    thread_count := integer(argv[1])
+  end if
+
+  create_threads(thread_count)
+
 end procedure
 
-procedure greet:
-  // Greets user in standard output upon execution
-  print "Hello from secondary thread" 
+procedure create_threads(thread_count)
+  // Create array of pthread structures, one for each thread
+  // Amount of memory allocated is number of threads to use * size of pthread
+  declare threads := allocate(thread_count * sizeof(pthread_t))
+
+  // For every requested thread 
+  for thread_number := 0 to thread_count do
+    // Create thread to run greet with corresponding thread number
+    create_thread(greet, thread_number, thread_count) // thread team
+  end for
+
+  print "Hello from main thread"
+
+  // For every created thread
+  for thread_number := 0 to thread_count do
+    // Join all created threads, as always, waits for thread to finish first
+    join_thread(threads[thread_number])
+  end for
 end procedure
 
+procedure greet(thread_number, thread_count)
+  print "Hello from secondary thread", thread_number, " of ", thread_count
+end procedure
