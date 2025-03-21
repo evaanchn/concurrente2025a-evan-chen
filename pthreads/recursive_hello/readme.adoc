@@ -60,13 +60,18 @@ include::tests/output001.txt[]
 
 As the above output shows, my hypothesis was correct. However, upon further executions of the program, I discovered that sometimes the secondary thread greeted before the main thread did, meaning I overlooked the indeterminism of the program in my initial analysis.
 
+[[trace]]
+== Memory Trace
+Week 2's memory trace can be found bellow.
+image::trace/recursive_hello_trace.svg[]
+
 [[user_manual]]
 == User manual
 
 [[build]]
 === Build
 
-Run make command in _recursive_hello_ folder to build
+Run make command in terminal in _recursive_hello_ folder to build
 
 `make`
 
