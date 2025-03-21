@@ -7,8 +7,8 @@ procedure main(argc, argv[])
 
   // Create thead_count, assuming initial amount as available cores
   // The amount is consulted from a system function
-  declare thread_count := get(available_cores)
-  if argc == 2 do 
+  mutable thread_count := get(available_cores)
+  if argc = 2 do 
     thread_count := integer(argv[1])
   end if
 
@@ -36,6 +36,7 @@ procedure create_threads(thread_count)
   end for
 end procedure
 
+// Greets user, indicating thread ID
 procedure greet(thread_number, thread_count)
   print "Hello from secondary thread", thread_number, " of ", thread_count
 end procedure
