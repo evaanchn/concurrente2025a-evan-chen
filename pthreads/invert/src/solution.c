@@ -10,7 +10,8 @@
  * @return Status code to the operating system, 0 means success.
  */
 int main(void) {
-  // Create a dynamic array to store the numbers, given we don't know the number of elements beforehand
+  // Create a dynamic array to store the numbers, 
+  // given we don't know the number of elements beforehand
   size_t count = 0, capacity = 1000;
   long* numbers = malloc(capacity * sizeof(long));
 

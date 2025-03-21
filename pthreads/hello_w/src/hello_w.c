@@ -1,5 +1,5 @@
 // Copyright 2021 Jeisson Hidalgo <jeisson.hidalgo@ucr.ac.cr> CC-BY 4.0
-// Commented by Evan Chen <evan@ucr.ac.cr
+// Commented by Evan Chen <evan@ucr.ac.cr>
 #include <assert.h>
 #include <inttypes.h>
 #include <pthread.h>
@@ -66,7 +66,7 @@ int create_threads(uint64_t thread_count) {
   int error = EXIT_SUCCESS;  // Error control, assume success
 
   // Allocate memory for a pthread array in heap with malloc():
-  // amount of threads requested * 8 bytes (size of a pthread)
+  // amount of threads requested * 8 bytes (size of a pthread).
   pthread_t* threads = (pthread_t*) malloc(thread_count * sizeof(pthread_t));
 
   // If memory was allocated successfully
