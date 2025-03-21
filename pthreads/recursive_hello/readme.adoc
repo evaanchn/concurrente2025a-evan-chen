@@ -63,6 +63,7 @@ As the above output shows, my hypothesis was correct. However, upon further exec
 [[trace]]
 == Memory Trace
 Week 2's memory trace can be found bellow.
+
 image::trace/recursive_hello_trace.svg[]
 
 [[user_manual]]
