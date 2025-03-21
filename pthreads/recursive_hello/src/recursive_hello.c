@@ -5,17 +5,20 @@
 #include <stdlib.h>
 
 /**
- * @brief Recursive procedure that bids farewell and reports number if parameter received is 0, 
- * otherwise it greets and reports the number, creating another thread to call itself with 1 num less than parameter.
- * @param void* data. Void pointer that will become a size_t* to use inside procedure.
+ * @brief Recursive procedure that bids farewell and reports number if parameter
+ * received is 0, otherwise it greets and reports the number, creating another 
+ * thread to call itself with 1 num less than parameter.
+ * @param data. Void pointer casted to size_t* inside procedure.
  * @return NULL
  */
 void* greet(void* data);
 
 /**
- * @brief Main procedure of program. Creates secondary thread to greet from recursively and greet itself.
+ * @brief Main procedure of program. Creates secondary thread to greet from 
+ * recursively, and later greet itself.
  * @param void. No parameters.
- * @return EXIT_SUCCESS (0) to the O.S if nothing went wrong. EXIT_FAILURE (1) if there was an error.
+ * @return EXIT_SUCCESS (0) to the O.S if nothing went wrong. 
+ * EXIT_FAILURE (1) if there was an error.
  */
 // procedure main:
 int main(void) {
