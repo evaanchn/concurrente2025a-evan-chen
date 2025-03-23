@@ -1,0 +1,3 @@
+# hello_count
+
+On my *Fedora 40 64-bit* virtual machine, the maximum amount of threads is around *93,400* threads, a number discovered by executing the program with different numbers. The PTHREADS_THREAD_MAX constant does not seem to exist.

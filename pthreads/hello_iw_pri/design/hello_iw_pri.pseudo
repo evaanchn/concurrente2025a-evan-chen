@@ -1,0 +1,44 @@
+// PSEUDOCODE MODIFIED TO ADJUST TO OFFICIAL C CODE
+procedure main(argc, argv[])
+  // *ORIGINAL*
+  // create thread_count as result of converting argv[1] to integer
+  // Use := to specify assignation/initialization
+  // declare thread_count := integer(argv[1])
+
+  // Create thead_count, assuming initial amount as available cores
+  // The amount is consulted from a system function
+  mutable thread_count := get(available_cores)
+  if argc = 2 do 
+    thread_count := integer(argv[1])
+  end if
+
+  create_threads(thread_count)
+
+end procedure
+
+procedure create_threads(thread_count)
+  // Create array of pthread structures, one for each thread
+  // Amount of memory allocated is number of threads to use * size of pthread
+  declare threads := allocate(thread_count * sizeof(pthread_t))
+
+  declare private_data := allocate(thread_count * sizeof(private_data))
+  // For every requested thread 
+  for thread_number := 0 to thread_count do
+    // Create thread to run greet with corresponding thread number
+    create_thread(greet, private_data) // thread team
+  end for
+
+  print "Hello from main thread"
+
+  // For every created thread
+  for thread_number := 0 to thread_count do
+    // Join all created threads, as always, waits for thread to finish first
+    join_thread(threads[thread_number])
+  end for
+end procedure
+
+// Greets user, indicating thread number, of total amount of threads
+procedure greet(private_data)
+  print "Hello from secondary thread", private_data->thread_number, 
+    " of ", private_data->thread_count
+end procedure
