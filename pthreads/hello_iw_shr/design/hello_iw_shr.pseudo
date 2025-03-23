@@ -6,8 +6,10 @@ procedure main(argc, argv[])
   // declare thread_count := integer(argv[1])
 
   // Create thead_count, assuming initial amount as available cores
-  // The amount is consulted from a system function
-  mutable thread_count := get(available_cores)
+  // The amount is consulted from a system function.
+  // Making this variable shared means that all threads will have access to 
+  // this number, instead of duplicating it across private_data
+  shared thread_count := get(available_cores)
   if argc = 2 do 
     thread_count := integer(argv[1])
   end if
@@ -24,7 +26,7 @@ procedure create_threads(thread_count)
   // For every requested thread 
   for thread_number := 0 to thread_count do
     // Create thread to run greet with corresponding thread number
-    create_thread(greet, thread_number, thread_count) // thread team
+    create_thread(greet, thread_number) // thread team
   end for
 
   print "Hello from main thread"
@@ -37,7 +39,9 @@ procedure create_threads(thread_count)
 end procedure
 
 // Greets user, indicating thread number, of total amount of threads
-procedure greet(thread_number, thread_count)
+procedure greet(thread_number)
+  // The only change in this version is that thread_count is now shared across
+  // worker threads
   print "Hello from secondary thread", thread_number, 
     " of ", thread_count
 end procedure
