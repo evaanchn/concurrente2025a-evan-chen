@@ -1,0 +1,58 @@
+= Heat Transfer Simulation (Serial)
+:experimental:
+:nofooter:
+:source-highlighter: pygments
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+
+[[problem_statement]]
+== Problem statement
+
+This simulation models the time evolution of heat distribution in a rectangular plate with R rows and C columns, determining when all square cells reach thermal equilibrium. Each cell's temperature updates iteratively based on heat transfer with its four immediate neighbors. The new temperature at time step k+1 is calculated using the current temperature, the thermal diffusivity of the material, the cell area, and the net energy exchanged with adjacent cells. The update formula follows a discrete approximation of the heat equation, with the use of an equilibrium point constant (epsilon), ensuring a realistic simulation of thermal equilibrium.
+
+
+Input example:
+
+[source]
+----
+include::tests/input001.txt[]
+----
+
+Output example:
+
+[source]
+----
+include::tests/output001.txt[]
+----
+
+[[design]]
+== Design of solution
+
+#See the link:design/readme.adoc[design/] folder for an overall design of the solution.#
+
+
+[[user_manual]]
+== User manual
+
+[[build]]
+=== Build
+
+Run the program with the following command
+
+`make`
+
+[[usage]]
+=== Usage
+
+#Describe how to run your solution, e.g: arguments. Provide examples.#
+
+
+[[credits]]
+== Credits
+
+Evan Chen Cheng <evan.chen@ucr.ac.cr>
+
+#Give credit to authors of libraries, images, sounds, or any resource you used.#
