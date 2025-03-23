@@ -1,6 +1,0 @@
-bin/
-build/
-doc/
-*.pyc
-.DS_Store
-.vscode
