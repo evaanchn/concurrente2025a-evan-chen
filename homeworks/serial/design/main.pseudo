@@ -1,0 +1,19 @@
+// (Concurrent part commented out)
+procedure main()
+  // mutable thread_count := 0
+  if argc < 2 do
+    print "Error: No job file specified"
+  end if
+  // else do
+  //   if argc == 2 do
+  //      thread_count := available_cores
+  //   end if
+  //   else do
+  //      thread_count := argv[2]
+  //   end
+  // end
+
+  call simulate()
+
+  return EXIT_SUCCESS
+end procedure
