@@ -15,9 +15,9 @@
 
     7. *Indeterminismo*: Impredecibilidad de como se comportaran los hilos durante cada ejecucion.
 
-    Memoria privada y compartida.
+    8. *Memoria privada y compartida*: Datos a los que tienen acceso los hilos: privada, en este sentido,m significa unicamente accesible por cada hilo respectivo, mientras que memoria compartida puede ser accedida por todos los hilos en un _thread team_. 
 
-    Espera activa.
+    9. *Espera activa*: Un tipo de espera que consume todos los recursos de las CPU, por ejemplo, un while seco ejecutado a traves de miles de hilos. Es nociva a la maquina y especialmente prohibido cuando se trata de programacion concurrente (y programacion en general).
 
     Condición de carrera.
 
