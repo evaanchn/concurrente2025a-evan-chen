@@ -7,7 +7,8 @@ procedure main(argc, argv[])  // referee
   // Athlete count must be odd
   if athlete_count is odd then
     // Create a score board to record the best shots
-    shared best_shots := 0.0[team_count][athlete_count]
+    // Matrix filled with zeroess
+    shared best_shots :=  array(team_coount, array(athlete_count, 0.0))
     compete()
     print_result()
   else
@@ -53,4 +54,7 @@ procedure print_result()
       print "draw for round", athlete_number
     end if
   end for
+
+  const winner = 1 if team_scores[0] > team_scores[1] else 2
+  print "result {team_scores[0]}:team_scores[1], team {winner} wins"
 end procedure
