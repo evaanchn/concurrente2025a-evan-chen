@@ -1,14 +1,14 @@
 procedure simulate(file_path, thread_count)
-  plate_count = call set_job_file(file_path)
+  const job = set_job(file_path)
 
   for plate_number := 0 to plate_count do
     mutable k_states := 0
     mutable reached_equilibrium := false
-    const curr_plate = plates[plate_number]
-    mutable plate_matrix := call set_plate(curr_plate)
+    const curr_plate = job->plates[plate_number]
+    mutable plate_matrix := set_plate(curr_plate)
 
     while not reached_equilibrium do
-      call update_plate(plate_matrix)
+      update_plate(plate_matrix)
       k_states := k_states + 1
     end while
 
@@ -17,21 +17,7 @@ procedure simulate(file_path, thread_count)
   end for
 
   report_results(plates)
-  call free_plates()
+  free_plates()
 
   return 0
-end procedure
-
-procedure set_job_file(file_path)
-  const file := fopen(file_path, "rt")
-  declare plate_file_path
-  declare interval_duration
-  declare thermal_diffusivity
-  declare cells_dimension
-  declare epsilon
-  while not reached EOF do
-    declare plate
-    // Initialize plate
-    call 
-
 end procedure

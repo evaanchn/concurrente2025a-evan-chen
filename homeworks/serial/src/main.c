@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "simulation.h"
+
 /**
  * @brief Processes execution command to set thread count and 
  *        manage if job file was specified. Calls simulate.
@@ -15,7 +17,7 @@
  */
 int main(int argc, char* argv[]) {
   // Amount of threads to use in simulation (IMPLEMENTED FOR HW2)
-  // uint64_t thread_count = 1;
+  uint64_t thread_count = 1;
 
   if (argc < 2) {
     // print "Error: No job file specified"
@@ -29,6 +31,6 @@ int main(int argc, char* argv[]) {
   //   sscanf(argv[2], "%" SCNu64, &thread_count);
   // }
 
-  // TODO(EV): simulate(argv[1], thread_count);
+  simulate(argv[1], thread_count);
   return EXIT_SUCCESS;
 }

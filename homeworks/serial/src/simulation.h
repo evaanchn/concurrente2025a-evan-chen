@@ -1,7 +1,9 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-int simulate(const char* job_file_path);
+#include <inttypes.h>
+
+int simulate(const char* job_file_path, uint64_t thread_count);
 
 
 #endif // SIMULATION_H
