@@ -11,11 +11,11 @@
 // const size_t shot_count = 3;
 #define shot_count 3
 
-typedef struct shared_data_t{
+typedef struct shared_data {
   double** best_shots;
 } shared_data_t;
 
-typedef struct private_data_t{
+typedef struct private_data {
   size_t team_number;
   size_t athlete_number;
   shared_data_t* shr_data;
@@ -24,7 +24,8 @@ typedef struct private_data_t{
 void compete(const size_t athlete_count, shared_data_t* shared_data);
 double** create_double_matrix(const size_t rows, const size_t cols);
 pthread_t** create_pthread_matrix(const size_t rows, const size_t cols);
-private_data_t** create_private_data_t_matrix(const size_t rows, const size_t cols);
+private_data_t** create_private_data_t_matrix(const size_t rows,
+    const size_t cols);
 
 void destroy_double_matrix(double** matrix, size_t rows);
 void destroy_pthread_matrix(pthread_t** matrix, size_t rows);
@@ -40,22 +41,21 @@ int main(int argc, char* argv[]) {
   size_t athlete_count = 0;
   if (argc >= 2) {
     if (sscanf(argv[1], "%zu", &athlete_count) == 1) {
-      // Athlete count must be odd. 
+      // Athlete count must be odd.
       // (Anything that is not 0 is taken as true)
       if (athlete_count % 2) {
         double** best_shots = create_double_matrix(team_count, athlete_count);
         if (best_shots) {
-          shared_data_t* shared_data = 
-              (shared_data_t*)calloc(1, sizeof(shared_data_t));
-          if (shared_data){
+          shared_data_t* shared_data =
+              (shared_data_t*) calloc(1, sizeof(shared_data_t));
+          if (shared_data) {
             shared_data->best_shots = best_shots;
             srand(time(NULL) + clock());
             compete(athlete_count, shared_data);
             print_result(athlete_count, best_shots);
             destroy_double_matrix(best_shots, team_count);
             free(shared_data);
-          }
-          else{
+          } else {
             fprintf(stderr, "Error: not enough memory for shared data\n");
           }
         } else {
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
 
 void compete(const size_t athlete_count, shared_data_t* shared_data) {
   pthread_t** thread_ids = create_pthread_matrix(team_count, athlete_count);
-  private_data_t** private_data_matrix = 
+  private_data_t** private_data_matrix =
       create_private_data_t_matrix(team_count, athlete_count);
   assert(thread_ids);
   assert(private_data_matrix);
@@ -81,10 +81,12 @@ void compete(const size_t athlete_count, shared_data_t* shared_data) {
     // For each athlete
     for (size_t athlete_number = 0; athlete_number < athlete_count;
         ++athlete_number) {
-      private_data_matrix[team_number][athlete_number].athlete_number = athlete_number;
-      private_data_matrix[team_number][athlete_number].team_number = team_number;
+      private_data_matrix[team_number][athlete_number].athlete_number =
+          athlete_number;
+      private_data_matrix[team_number][athlete_number].team_number =
+          team_number;
       private_data_matrix[team_number][athlete_number].shr_data = shared_data;
-      pthread_create(thread_ids[team_number][athlete_number], NULL, athlete,
+      pthread_create(&thread_ids[team_number][athlete_number], NULL, athlete,
           &private_data_matrix[team_number][athlete_number]);
     }
   }
@@ -98,16 +100,16 @@ void compete(const size_t athlete_count, shared_data_t* shared_data) {
     }
   }
 
-  delete_private_data_matrix(private_data_matrix);
-  delete_pthread_matrix(thread_ids);
+  destroy_private_data_matrix(private_data_matrix, team_count);
+  destroy_pthread_matrix(thread_ids, team_count);
 }
 
-void* athlete(void*data){
+void* athlete(void*data) {
   private_data_t* pri_data = (private_data_t*) data;
   size_t team_number = pri_data->team_number;
   size_t athlete_number = pri_data->athlete_number;
   shared_data_t* shr_data = (shared_data_t*) pri_data->shr_data;
-  shr_data->best_shots[team_number][athlete_number] = 
+  shr_data->best_shots[team_number][athlete_number] =
       shot(pri_data->team_number, pri_data->athlete_number);
   return NULL;
 }
@@ -168,7 +170,7 @@ double** create_double_matrix(const size_t rows, const size_t cols) {
   return matrix;
 }
 
-pthread_t** create_pthread_matrix(const size_t rows, const size_t cols){
+pthread_t** create_pthread_matrix(const size_t rows, const size_t cols) {
   pthread_t** matrix = calloc(rows, sizeof(pthread_t*));
   if (matrix) {
     for (size_t row = 0; row < rows; ++row) {
@@ -181,7 +183,8 @@ pthread_t** create_pthread_matrix(const size_t rows, const size_t cols){
   return matrix;
 }
 
-private_data_t** create_private_data_t_matrix(const size_t rows, const size_t cols){
+private_data_t** create_private_data_t_matrix(const size_t rows,
+      const size_t cols) {
   private_data_t** matrix = calloc(rows, sizeof(private_data_t*));
   if (matrix) {
     for (size_t row = 0; row < rows; ++row) {
