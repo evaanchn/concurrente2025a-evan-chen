@@ -16,7 +16,8 @@
 void* greet(void* data);
 
 /**
- * @brief Greets user in stdout. specifying which thread is used at the moment
+ * @brief Creates and later joins threads used to call greet, sending necessary
+ *        arguments to each thread.
  * @param thread_count: Amount of threads to create
  * @return error: Control variable that indicates success or failure of process
  */

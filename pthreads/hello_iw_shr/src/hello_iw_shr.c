@@ -38,8 +38,8 @@ typedef struct private_data {
 void* greet(void* data);
 
 /**
- * @brief Greets user in stdout. specifying which thread is used at the moment,
- *        as well as the total number of worker threads in team for each hello
+ * @brief Creates and later joins threads used to call greet, sending necessary
+ *        arguments to each thread.
  * @param shared_data: Amount of threads to create, but now in a register that
  *        all threads can access
  * @return error: Control variable that indicates success or failure of process
