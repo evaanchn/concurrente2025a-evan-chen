@@ -7,7 +7,7 @@ record of plate
   declare plate_matrix
   declare k_states
 
-procedure set_plate(plate)
+procedure set_plate_matrix(plate)
   declare file_name = plate->file_name
   declare file = fopen(file_name, "rb")
 
@@ -15,10 +15,10 @@ procedure set_plate(plate)
   mutable cols := 0
 
   // Read rows and cols first, store in previously declared variables
-  declare plate_matrix = init_plate_matrix(rows, cols)
+  plate->plate_matrix = init_plate_matrix(rows, cols)
   for row := 0 to rows do 
     // Read row and store with fread, col amount of doubles, size of double
-  end
+  end for
 
 end procedure
 
@@ -48,7 +48,7 @@ procedure update_plate(plate)
   return reached_equilibrium
 end procedure
 
-procedure update_plate_matrix(plate)
+procedure update_plate_file(plate)
   const file_name = plate->file_name
   declare file := openf(file_name, "wb")
   // Write row and col as first 16 bytes
