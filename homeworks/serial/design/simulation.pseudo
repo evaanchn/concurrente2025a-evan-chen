@@ -6,7 +6,7 @@ procedure simulate(file_name, thread_count)
     mutable k_states := 0
     mutable reached_equilibrium := false
     const curr_plate = job->plates[plate_number]
-    mutable plate_matrix := set_plate(curr_plate)
+    mutable plate_matrix := set_plate_matrix(curr_plate)
 
     while not reached_equilibrium do
       update_plate(plate_matrix)

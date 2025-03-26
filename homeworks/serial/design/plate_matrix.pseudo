@@ -1,0 +1,61 @@
+record of plate_matrix
+  declare rows
+  declare cols
+  declare matrix**
+  declare auxiliary_matrix**
+
+
+procedure update_cell(plate_matrix, row, col, interval_duration,
+        thermal_diffusivity, cells_dimension)
+  declare matrix := plate_matrix->auxiliary_matrix // Aux holds current temp
+  declare result := -4 * matrix[row][col] // Net energy released
+  result := result + matrix[row-1][col] // Add top neighbor energy
+  result := result + matrix[row][col+1] // Add right neighbor energy
+  result := result + matrix[row+1][col] // Add bottom neighbor energy
+  result := result + matrix[row][col-1] // Add left neighbor energy
+  result := result * thermal_diffusivity * interval_duration
+  result := result / cells_dimension * cells_dimension
+  result := result + matrix[row][col]
+
+  plate_matrix->matrix[row][col] = result
+end procedure
+
+procedure copy_plate_matrix(plate_matrix)
+  for row := 0 to plate_matrix->rows do 
+    for col := 0 to plate_matrix->cols do 
+        auxiliary_matrix[row][col] := matrix[row][col]
+    end
+  end
+end procedure
+
+// Sets up plate_matrix and allocates memory for 
+procedure init_plate_matrix(rows, cols)
+  declare plate_matrix := allocate(sizeof(plate_matrix_t))
+  plate_matrix->rows = rows
+  plate_matrix->cols = cols
+  plate_matrix->matrix = create_double_matrix(rows, cols)
+  plate_matrix->auxiliary_matrix = create_double_matrix(rows, cols)
+  return plate_matrix
+end procedure
+
+procedure create_double_matrix(rows, cols)
+  declare matrix = array(rows, double*)
+  for row := 0 to rows do 
+    matrix[row] = array(cols, double)
+  end for
+  return matrix
+end procedure
+
+procedure destroy_matrices(plate_matrix)
+  const rows = plate_matrix->rows
+  const cols = plate_matrix->cols
+  destroy_double_matrix(plate_matrix->matrix, rows, cols)
+  destroy_double_matrix(plate_matrix->auxiliary_matrix, rows, cols)
+end procedure
+
+procedure destroy_double_matrix(matrix, rows, cols)
+  for row := 0 to rows do 
+    free(matrix[row])
+  end
+  free(matrix)
+end procedure

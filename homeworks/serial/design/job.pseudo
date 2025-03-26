@@ -1,4 +1,4 @@
-register of job
+record of job
   const file_name
   mutable plates_count
   mutable capacity

@@ -1,4 +1,4 @@
-register of plate
+record of plate
   declare file_name
   declare cells_dimension
   declare interval_duration
@@ -8,12 +8,14 @@ register of plate
   declare k_states
 
 procedure set_plate(plate)
-  declare plate_matrix = plate->plate_matrix
   declare file_name = plate->file_name
   declare file = fopen(file_name, "rb")
-  // Read rows and cols first
-  plate_matrix->rows = rows
-  plate_matrix->cols = cols
+
+  mutable rows := 0
+  mutable cols := 0
+
+  // Read rows and cols first, store in previously declared variables
+  declare plate_matrix = init_plate_matrix(rows, cols)
   for row := 0 to rows do 
     // Read row and store with fread, col amount of doubles, size of double
   end
@@ -31,7 +33,7 @@ procedure update_plate(plate)
       update_cell(plate_matrix, row, col)
 
       declare new_temperature = plate_matrix -> matrix[row][col]
-      declare old_temperature = plate_matrix -> auxiliary[row][col]
+      declare old_temperature = plate_matrix -> auxiliary_matrix[row][col]
       declare difference = abs(new_temperature - old_temperature -> old_temperature) 
       if difference > biggest_change do 
         biggest change := difference
