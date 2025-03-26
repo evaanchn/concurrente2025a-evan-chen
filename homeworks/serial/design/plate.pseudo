@@ -1,0 +1,56 @@
+register of plate
+  declare file_name
+  declare cells_dimension
+  declare interval_duration
+  declare thermal_diffusivity
+  declare epsilon
+  declare plate_matrix
+  declare k_states
+
+procedure set_plate(plate)
+  declare plate_matrix = plate->plate_matrix
+  declare file_name = plate->file_name
+  declare file = fopen(file_name, "rb")
+  // Read rows and cols first
+  plate_matrix->rows = rows
+  plate_matrix->cols = cols
+  for row := 0 to rows do 
+    // Read row and store with fread, col amount of doubles, size of double
+  end
+
+end procedure
+
+procedure update_plate(plate)
+  declare plate_matrix = plate->plate_matrix
+  copy_plate_matrix(plate_matrix)
+  mutable reached_equilibrium := true 
+  mutable biggest_change := 0
+
+  for row := 1 to plate_matrix -> rows - 1 do 
+    for col := 1 to plate_matrix -> cols - 1 do 
+      update_cell(plate_matrix, row, col)
+
+      declare new_temperature = plate_matrix -> matrix[row][col]
+      declare old_temperature = plate_matrix -> auxiliary[row][col]
+      declare difference = abs(new_temperature - old_temperature -> old_temperature) 
+      if difference > biggest_change do 
+        biggest change := difference
+      end if
+    end for
+  end for
+
+  if difference > epsilon do 
+    reached_equilibrium := false
+  end if
+
+  return reached_equilibrium
+end procedure
+
+procedure update_plate_matrix(plate)
+  const file_name = plate->file_name
+  declare file := openf(file_name, "wb")
+  // Write row and col as first 16 bytes
+  for row := 0 to plate->plate_matrix->rows do 
+    // Write row, amount of bytes of cols, size of double
+  end for
+end procedure
