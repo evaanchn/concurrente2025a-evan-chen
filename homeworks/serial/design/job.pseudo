@@ -1,0 +1,65 @@
+register of job
+  const file_name
+  mutable plates_count
+  mutable capacity
+  mutable plates*[]
+
+procedure init_job(job_file_name)
+  declare job = allocate(sizeof(job))
+  job->file_name = job_file_name
+  job->plates_count = 0
+  job->plates_capacity = 100
+  job->plates = init_plates(capacity)
+  return job
+end procedure
+
+procedure set_job(job)
+  const file := fopen(job->file_name, "rt")
+  declare plate_file_name
+  declare interval_duration
+  declare thermal_diffusivity
+  declare cells_dimension
+  declare epsilon
+
+  while not reached EOF do
+    // Use fscanf to set previously declared variables,
+    // then assign to plates[plates_count]
+
+    job->plates_count := job->plates_count + 1
+  end while
+
+  fclose(file)
+end procedure
+
+procedure init_plates(capacity)
+  declare plates = array(capacity, plate*)
+  for i := 0 to capacity do 
+    plate = allocate(sizeof(plate_t)))
+  end for
+
+  return plates
+end procedure
+
+procedure destroy_job(job)
+  for i := 0 to job->plates_count do 
+    if plate do 
+      free(plate)
+    end
+  end
+
+  free(plates)
+  free(job)
+end procedure
+
+procedure report_results(job)
+  const report_file = fopen("tests/{file_name}", "a")
+  for i := 0 to job->plates_count do
+    declare plate = job->plates[i]
+    declare simulated_seconds = plate->k * plate->interval_duration
+    declare formatted_time = array(50, sizeof(char))
+    format_time(simulated_seconds, formatted_time, 48) // Provided code
+    // Write formatted text in report file with info of current plate
+  end for
+
+  fclose(report_file)
+end procedure 

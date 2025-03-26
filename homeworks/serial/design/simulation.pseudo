@@ -1,5 +1,6 @@
-procedure simulate(file_path, thread_count)
-  const job = set_job(file_path)
+procedure simulate(file_name, thread_count)
+  const job = init_job(file_name)
+  set_job(job)
 
   for plate_number := 0 to plate_count do
     mutable k_states := 0
