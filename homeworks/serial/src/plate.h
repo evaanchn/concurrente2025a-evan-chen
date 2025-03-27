@@ -13,7 +13,7 @@
 typedef struct plate {
   char* file_name;
   uint64_t cells_dimension;
-  double interval_duration;
+  uint64_t interval_duration;
   double thermal_diffusivity;
   double epsilon;
   plate_matrix_t * plate_matrix;

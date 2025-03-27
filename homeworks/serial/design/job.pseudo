@@ -1,4 +1,4 @@
-record of job
+struct job
   const file_name
   mutable plates_count
   mutable capacity
@@ -14,7 +14,7 @@ procedure init_job(job_file_name)
 end procedure
 
 procedure set_job(job)
-  const file := fopen(job->file_name, "rt")
+  declare file := openf(job->file_name, "rt")
   declare plate_file_name
   declare interval_duration
   declare thermal_diffusivity
