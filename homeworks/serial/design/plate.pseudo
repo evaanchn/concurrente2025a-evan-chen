@@ -1,4 +1,4 @@
-record of plate
+struct plate
   declare file_name
   declare cells_dimension
   declare interval_duration
@@ -11,8 +11,8 @@ procedure set_plate_matrix(plate)
   declare file_name = plate->file_name
   declare file = fopen(file_name, "rb")
 
-  mutable rows := 0
-  mutable cols := 0
+  declare rows
+  declare cols
 
   // Read rows and cols first, store in previously declared variables
   plate->plate_matrix = init_plate_matrix(rows, cols)
@@ -24,7 +24,7 @@ end procedure
 
 procedure update_plate(plate)
   declare plate_matrix = plate->plate_matrix
-  copy_plate_matrix(plate_matrix)
+  set_auxiliary(plate_matrix)
   mutable reached_equilibrium := true 
   mutable biggest_change := 0
 
@@ -34,14 +34,14 @@ procedure update_plate(plate)
 
       declare new_temperature = plate_matrix -> matrix[row][col]
       declare old_temperature = plate_matrix -> auxiliary_matrix[row][col]
-      declare difference = abs(new_temperature - old_temperature -> old_temperature) 
+      declare difference = abs(new_temperature - old_temperature) 
       if difference > biggest_change do 
         biggest change := difference
       end if
     end for
   end for
 
-  if difference > epsilon do 
+  if difference > plate->epsilon do 
     reached_equilibrium := false
   end if
 
