@@ -2,7 +2,7 @@
 
 #include "plate_matrix.h"
 
-plate_matrix_t* init_place_matrix(uint64_t rows, uint64_t cols) {
+plate_matrix_t* init_plate_matrix(uint64_t rows, uint64_t cols) {
   plate_matrix_t* plate_matrix =
       (plate_matrix_t*) calloc(1, sizeof(plate_matrix_t));
   if (plate_matrix) {
@@ -22,13 +22,9 @@ plate_matrix_t* init_place_matrix(uint64_t rows, uint64_t cols) {
 }
 
 void set_auxiliary(plate_matrix_t* plate_matrix) {
-    for (int row = 0; row < plate_matrix->rows; ++row) {
-        for (int col = 0; col < plate_matrix->cols; ++col) {
-            // auxiliary_matrix[row][col] := matrix[row][col]
-            plate_matrix->auxiliary_matrix[row][col]
-                = plate_matrix->matrix[row][col];
-        }
-    }
+    double** old_temperatures = plate_matrix->matrix;
+    plate_matrix->matrix = plate_matrix->auxiliary_matrix;
+    plate_matrix->auxiliary_matrix = old_temperatures;
 }
 
 void update_cell(plate_matrix_t* plate_matrix, uint64_t row, uint64_t col,

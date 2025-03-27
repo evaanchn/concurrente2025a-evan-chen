@@ -2,25 +2,25 @@
 
 #include "job.h"
 
-job_t* init_job(const char* job_file_name) {
+job_t* init_job(char* job_file_name) {
   job_t* job = (job_t*) malloc(sizeof(job_t));
 
-  if (!job) {
+  if (job) {
+    job->file_name = job_file_name;
+    job->plates_count = 0;
+    job->plates_capacity = 50;
+    job->plates = (plate_t**) calloc(job->plates_capacity, sizeof(plate_t*));
+
+    if (!job->plates) {
+      perror("Error: Memory for plates could not be allocated");
+      destroy_job(job);
+      return NULL;
+    }
+  } else {
     perror("Error: Memory for job could not be allocated");
     return NULL;
   }
-
-  job->file_name = job_file_name;
-  job->plates_count = 0;
-  job->plates_capacity = 50;
-  job->plates = (plate_t*) calloc(job->plates_capacity, sizeof(plate_t*));
-
-  if (!job->plates) {
-    perror("Error: Memory for plates could not be allocated");
-    destroy_job(job);
-    return NULL;
-  }
-
+  
   return job;
 }
 
@@ -33,15 +33,15 @@ int set_job(job_t* job) {
     return 21;
   }
 
-  char* plate_file_name;
+  char plate_file_name[40];  // Allocate enough memory to hold the string
   uint64_t interval_duration;
   double thermal_diffusivity;
   double epsilon;
 
-  while (fscanf(job_file, "%s\t%" SCNu64, "\t%ld\t%ld\n", &plate_file_name,
-      &interval_duration, &thermal_diffusivity, &epsilon) == 4) {
-    plate_t* curr_plate = job->plates[job->plates_count] =
-        (plate_t*) malloc(sizeof(plate_t));
+  while (fscanf(job_file, "%s\t%" SCNu64 "\t%lf\t%lf\n", plate_file_name,
+              &interval_duration, &thermal_diffusivity, &epsilon) == 4) {
+
+    plate_t* curr_plate = (plate_t*) malloc(sizeof(plate_t));
 
     if (!curr_plate) {
       perror("Error: Memory for new plate could not be allocated");
@@ -71,7 +71,8 @@ int set_job(job_t* job) {
 
 int expand_job(job_t* job) {
   job->plates_capacity *= 2;
-  plate_t* temp = realloc(job->plates, sizeof(plate_t)*job->plates_capacity);
+  plate_t** temp = 
+      realloc(job->plates, sizeof(plate_t*) * job->plates_capacity);
   if (!temp) {
     destroy_job(job);
     return EXIT_FAILURE;
@@ -93,14 +94,15 @@ void destroy_job(job_t* job) {
 
 // Return parameter text must have at least 48 chars (YYYY/MM/DD hh:mm:ss)
 char* format_time(const time_t seconds, char* text, const size_t capacity) {
-    // TODO (Evan Chen): Figure out what is wrong with this
-//   const time* gmt = gmtime(&seconds);
-//   snprintf(text, capacity, "%04d/%02d/%02d\t%02d:%02d:%02d", gmt->tm_year
-//     - 70, gmt->tm_mon, gmt->tm_mday - 1, gmt->tm_hour,
-//     gmt->tm_min, gmt->tm_sec);
-//   return text;
+    // TODO (Evan Chen): Verify this works
+  const struct tm* gmt = gmtime(&seconds);
+  snprintf(text, capacity, "%04d/%02d/%02d\t%02d:%02d:%02d", gmt->tm_year
+    - 70, gmt->tm_mon, gmt->tm_mday - 1, gmt->tm_hour,
+    gmt->tm_min, gmt->tm_sec);
+  return text;
 }
 
 void report_results(job_t* job) {
   // TODO (Evan Chen): Finish once format_time is ready
+  char* results_file_name = job->file_name;
 }

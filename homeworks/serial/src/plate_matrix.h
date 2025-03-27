@@ -3,6 +3,7 @@
 #ifndef PLATE_MATRIX_H
 #define PLATE_MATRIX_H
 
+#include <assert.h>
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@ typedef struct plate_matrix {
   double** auxiliary_matrix;
 } plate_matrix_t;
 
-plate_matrix_t* init_place_matrix(uint64_t rows, uint64_t cols);
+plate_matrix_t* init_plate_matrix(uint64_t rows, uint64_t cols);
 
 void set_auxiliary(plate_matrix_t* plate_matrix);
 

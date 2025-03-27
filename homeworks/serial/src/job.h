@@ -3,6 +3,7 @@
 #ifndef JOB_H
 #define JOB_H
 
+#include <assert.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -12,10 +13,10 @@ typedef struct job {
   char* file_name;
   size_t plates_count;
   size_t plates_capacity;
-  struct plate_h** plates;
+  plate_t** plates;
 } job_t;
 
-job_t* init_job(const char* job_file_name);
+job_t* init_job(char* job_file_name);
 
 int set_job(job_t* job);
 

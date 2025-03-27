@@ -31,6 +31,6 @@ int main(int argc, char* argv[]) {
   //   sscanf(argv[2], "%" SCNu64, &thread_count);
   // }
 
-  simulate(argv[1], thread_count);
-  return EXIT_SUCCESS;
+  int error = simulate(argv[1], thread_count);
+  return error;
 }

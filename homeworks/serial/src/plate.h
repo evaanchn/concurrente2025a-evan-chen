@@ -3,7 +3,9 @@
 #ifndef PLATE_H
 #define PLATE_H
 
+#include <assert.h>
 #include <inttypes.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,10 +22,10 @@ typedef struct plate {
   uint64_t k_states;
 } plate_t;
 
-void set_plate_matrix(plate_t* plate);
+int set_plate_matrix(plate_t* plate);
 
 bool update_plate(plate_t* plate);
 
-void update_plate_file(plate_t* plate);
+int update_plate_file(plate_t* plate);
 
 #endif  // PLATE_H

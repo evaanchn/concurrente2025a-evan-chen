@@ -2,12 +2,22 @@
 
 #include "plate.h"
 
-void set_plate_matrix(plate_t* plate) {
+int set_plate_matrix(plate_t* plate) {
   const char* file_name = plate->file_name;
   FILE* plate_file = fopen(file_name, "rb");
+
+  if (!plate_file) {
+    perror("Error: Plate file %s could not be opened");
+    return 31;
+  }
+
   uint64_t rows, cols;
-  fread(&rows, sizeof(uint64_t), 1, plate_file);
-  fread(&cols, sizeof(uint64_t), 1, plate_file);
+  if (fread(&rows, sizeof(uint64_t), 1, plate_file) != 1 ||
+      fread(&cols, sizeof(uint64_t), 1, plate_file) != 1) {
+    perror("Error: Rows and cols could not be read");
+    fclose(plate_file);
+    return 32;
+  }
 
   plate->plate_matrix = init_plate_matrix(rows, cols);
 
@@ -17,6 +27,7 @@ void set_plate_matrix(plate_t* plate) {
   }
 
   fclose(plate_file);
+  return EXIT_SUCCESS;
 }
 
 bool update_plate(plate_t* plate) {
@@ -52,20 +63,30 @@ bool update_plate(plate_t* plate) {
   return reached_equilibrium;
 }
 
-void update_plate_file(plate_t* plate) {
+int update_plate_file(plate_t* plate) {
+  int error = EXIT_SUCCESS;
+
   const char* output_file_name = plate->file_name;
   // TODO (Evan Chen): Add folder path output/
   FILE* output_file = fopen(output_file_name, "wb");
-  plate_matrix_t* plate_matrix = plate->plate_matrix;
+  
+  if (output_file) { 
+    plate_matrix_t* plate_matrix = plate->plate_matrix;
 
-  fwrite(plate_matrix->rows, sizeof(uint64_t), 1, output_file);
-  fwrite(plate_matrix->cols, sizeof(uint64_t), 1, output_file);
+    fwrite(&plate_matrix->rows, sizeof(uint64_t), 1, output_file);
+    fwrite(&plate_matrix->cols, sizeof(uint64_t), 1, output_file);
 
-  for (uint64_t row = 0; row < plate_matrix->rows; ++row) {
-    // TODO (Evan Chen): Figure out if this works
-    fwrite(plate_matrix->matrix[row], sizeof(double),
-        plate_matrix->cols, output_file);
+    for (uint64_t row = 0; row < plate_matrix->rows; ++row) {
+      // TODO (Evan Chen): Figure out if this works
+      fwrite(plate_matrix->matrix[row], sizeof(double),
+          plate_matrix->cols, output_file);
+    }
+  } else {
+    perror("Error: Could not open output file");
+    destroy_matrices(plate->plate_matrix);
+    error = EXIT_FAILURE;
   }
 
   fclose(output_file);
+  return error;
 }
