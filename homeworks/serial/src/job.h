@@ -20,6 +20,8 @@ job_t* init_job(char* job_file_name);
 
 int set_job(job_t* job);
 
+int check_capacity(job_t* job);
+
 int expand_job(job_t* job);
 
 void destroy_job(job_t* job);
