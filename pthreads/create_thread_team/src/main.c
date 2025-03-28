@@ -13,11 +13,13 @@
 
 typedef struct shared_data {
   double** best_shots;
+  size_t athlete_count;
 } shared_data_t;
 
 typedef struct private_data {
-  size_t team_number;
-  size_t athlete_number;
+  pthread_t thread_id;
+  size_t thread_number;
+  size_t thread_count;
   shared_data_t* shr_data;
 } private_data_t;
 
@@ -36,6 +38,10 @@ double shot(const size_t team_number, const size_t athlete_number);
 double random_f(const double min, const double max);
 void print_result(const size_t athlete_count, double** best_shots);
 
+private_data_t* create_threads(const size_t count, void*(*routine)(void*),
+    void* data);
+int join_threads(const size_t count, private_data_t* private_data);
+
 int main(int argc, char* argv[]) {
   // Get the number of athletes in each team
   size_t athlete_count = 0;
@@ -50,6 +56,8 @@ int main(int argc, char* argv[]) {
               (shared_data_t*) calloc(1, sizeof(shared_data_t));
           if (shared_data) {
             shared_data->best_shots = best_shots;
+            shared_data->athlete_count = athlete_count;
+
             srand(time(NULL) + clock());
             compete(athlete_count, shared_data);
             print_result(athlete_count, best_shots);
@@ -71,51 +79,22 @@ int main(int argc, char* argv[]) {
 }
 
 void compete(const size_t athlete_count, shared_data_t* shared_data) {
-  pthread_t** thread_ids = create_pthread_matrix(team_count, athlete_count);
-  private_data_t** private_data_matrix =
-      create_private_data_t_matrix(team_count, athlete_count);
-  assert(thread_ids);
-  assert(private_data_matrix);
-  // For each team
-  for (size_t team_number = 0; team_number < team_count; ++team_number) {
-    // For each athlete
-    for (size_t athlete_number = 0; athlete_number < athlete_count;
-        ++athlete_number) {
-      private_data_matrix[team_number][athlete_number].athlete_number =
-          athlete_number;
-      private_data_matrix[team_number][athlete_number].team_number =
-          team_number;
-      private_data_matrix[team_number][athlete_number].shr_data = shared_data;
-      pthread_create(&thread_ids[team_number][athlete_number], NULL, athlete,
-          &private_data_matrix[team_number][athlete_number]);
-    }
-  }
-
-  // For each team
-  for (size_t team_number = 0; team_number < team_count; ++team_number) {
-    // For each athlete
-    for (size_t athlete_number = 0; athlete_number < athlete_count;
-        ++athlete_number) {
-      pthread_join(thread_ids[team_number][athlete_number], NULL);
-    }
-    // free(private_data_matrix[team_number]);
-    // free(thread_ids[team_number]);
-  }
-
-  // free(private_data_matrix);
-  // free(thread_ids);
-
-  destroy_private_data_matrix(private_data_matrix, team_count);
-  destroy_pthread_matrix(thread_ids, team_count);
+  const size_t thread_count = team_count * athlete_count;
+  // SHARED DATA COULD ALSO BE CREATED HERE. 
+  // E.g. shared_data_t shared_data = { athlete_count, best_shots};
+  private_data_t* teams = create_threads(thread_count, athlete, shared_data);
+  join_threads(thread_count, teams);
 }
 
 void* athlete(void*data) {
   private_data_t* pri_data = (private_data_t*) data;
-  size_t team_number = pri_data->team_number;
-  size_t athlete_number = pri_data->athlete_number;
   shared_data_t* shr_data = (shared_data_t*) pri_data->shr_data;
+
+  const size_t thread_number = pri_data->thread_number;
+  const size_t team_number = thread_number / shr_data->athlete_count;
+  const size_t athlete_number = thread_number % shr_data->athlete_count;
   shr_data->best_shots[team_number][athlete_number] =
-      shot(pri_data->team_number, pri_data->athlete_number);
+      shot(team_number, pri_data->thread_number);
   return NULL;
 }
 
@@ -231,3 +210,34 @@ void destroy_private_data_matrix(private_data_t** matrix, size_t rows) {
   }
 }
 
+private_data_t* create_threads(const size_t count, void*(*routine)(void*), void* data) {
+  private_data_t* private_data = (private_data_t*) 
+      calloc(count, sizeof(private_data));
+  if (private_data) {
+    for (size_t index = 0; index < count; ++index) {
+      private_data[index].thread_number = index;
+      private_data[index].thread_count = count;
+      private_data[index].shr_data = (shared_data_t*) data;
+      if (pthread_create(&private_data[index].thread_id, NULL,
+            routine, data) != 0) {
+        fprintf(stderr, "error: could not create thread %zu\n", index);
+        join_threads(index, private_data);
+        return NULL;
+      }
+    }
+  }
+  return private_data;
+}
+
+int join_threads(const size_t count, private_data_t* private_data) {
+  int error_count = 0;
+  for (size_t index = 0; index < count; ++index) {
+    const int error = pthread_join(private_data[index].thread_id, NULL);
+    if (error) {
+      fprintf(stderr, "error: could not join thread %zu\n", index);
+      ++error_count;
+    }
+  }
+  free(private_data);
+  return error_count;
+}
