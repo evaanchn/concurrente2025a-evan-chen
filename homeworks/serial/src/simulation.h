@@ -7,6 +7,7 @@
 
 #include "job.h"
 
-int simulate(char* job_file_path, uint64_t thread_count);
+int simulate(char* job_file_path, char* source_dir, char* output_dir, 
+    uint64_t thread_count);
 
 #endif  // SIMULATION_H

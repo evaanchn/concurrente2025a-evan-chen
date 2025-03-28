@@ -2,11 +2,17 @@
 
 #include "plate.h"
 
-int set_plate_matrix(plate_t* plate) {
-  char* file_name = plate->file_name;
-  // TODO Change back to file_name
-  FILE* plate_file = fopen("jobs/job001b/plate002.bin", "rb");
-  
+int set_plate_matrix(plate_t* plate, char* source_directory) {
+  char* plate_file_path = build_file_path(source_directory, plate->file_name);
+
+  if (!plate_file_path) {
+    perror("Error: Plate file path could not be built");
+    return EXIT_FAILURE;
+  }
+
+  FILE* plate_file = fopen(plate_file_path, "rb");
+  free(plate_file_path);
+
   if (!plate_file) {
     printf("Error: Plate file %s could not be opened", plate->file_name);
     return 31;
@@ -81,7 +87,6 @@ int update_plate_file(plate_t* plate) {
     fwrite(&plate_matrix->cols, sizeof(uint64_t), 1, output_file);
 
     for (uint64_t row = 0; row < plate_matrix->rows; ++row) {
-      // TODO (Evan Chen): Figure out if this works
       fwrite(plate_matrix->matrix[row], sizeof(double),
           plate_matrix->cols, output_file);
     }
@@ -93,16 +98,4 @@ int update_plate_file(plate_t* plate) {
 
   fclose(output_file);
   return error;
-}
-
-// TODO (Ev): GET RID LATER
-void print_matrix(plate_t* plate) {
-  plate_matrix_t* mat = plate->plate_matrix;
-  double** matrix = mat->matrix;
-  for (size_t row = 0; row < mat->rows; ++row) {
-    for (size_t col = 0; col < mat->cols; ++col) {
-      printf("%lf\t", matrix[row][col]);
-    }
-    printf("\n");
-  }
 }

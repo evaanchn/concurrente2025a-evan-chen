@@ -2,11 +2,13 @@
 
 #include "job.h"
 
-job_t* init_job(char* job_file_name) {
+job_t* init_job(char* job_file_name, char* source_dir, char* output_dir) {
   job_t* job = (job_t*) malloc(sizeof(job_t));
 
   if (job) {
     job->file_name = job_file_name;
+    job->source_directory = source_dir;
+    job->output_directory = output_dir;
     job->plates_count = 0;
     job->plates_capacity = 50;
     job->plates = (plate_t**) calloc(job->plates_capacity, sizeof(plate_t*));
@@ -25,12 +27,19 @@ job_t* init_job(char* job_file_name) {
 }
 
 int set_job(job_t* job) {
-  FILE* job_file = fopen(job->file_name, "rt");
+  char* job_file_path = build_file_path(job->source_directory, job->file_name);
+  if (!job_file_path) {
+    perror("Error: Job file path could not be built");
+    return 21;
+  }
+
+  FILE* job_file = fopen(job_file_path, "rt");
+  free(job_file_path);
 
   if (!job_file) {
     perror("Error: Job file could not be opened");
     destroy_job(job);
-    return 21;
+    return 22;
   }
 
   char plate_file_name[20];  // Allocate enough memory to hold the string
@@ -39,19 +48,19 @@ int set_job(job_t* job) {
   uint64_t cells_dimension;
   double epsilon;
 
-  while (fscanf(job_file, "%s\t%" SCNu64 "\t%lf\t%" SCNu64 "%lf\n", plate_file_name,
-      &interval_duration, &thermal_diffusivity, &cells_dimension,
-          &epsilon) == 5) {
+  while (fscanf(job_file, "%s\t%" SCNu64 "\t%lf\t%" SCNu64 "%lf\n", 
+    plate_file_name, &interval_duration, &thermal_diffusivity, 
+    &cells_dimension, &epsilon) == 5) {
     
     plate_t* curr_plate = (plate_t*) malloc(sizeof(plate_t));
     
     if (!curr_plate) {
       perror("Error: Memory for new plate could not be allocated");
       destroy_job(job);
-      return 22;
+      return 23;
     }
 
-    curr_plate->file_name = plate_file_name;
+    strcpy(curr_plate->file_name, plate_file_name);
     curr_plate->interval_duration = interval_duration;
     curr_plate->thermal_diffusivity = thermal_diffusivity;
     curr_plate->cells_dimension = cells_dimension;
@@ -112,15 +121,23 @@ char* format_time(const time_t seconds, char* text, const size_t capacity) {
 int report_results(job_t* job) {
   int error = EXIT_SUCCESS;
 
-  char* results_file_name = job->file_name;
-  FILE* results_file = fopen(results_file_name, "wt");
-  
+  char* results_file_path = build_file_path(job->output_directory,
+      job->file_name);
+
+  if (!results_file_path) {
+    perror("Error: Results file path could not be built");
+    return EXIT_FAILURE;
+  }
+
+  FILE* results_file = fopen(results_file_path, "w");
+  free(results_file_path);
+
   if (results_file) {
     for (size_t i = 0; i < job->plates_count; ++i) {
       plate_t* plate = job->plates[i];
       time_t simulated_seconds = plate->k_states * plate->interval_duration;
-      char* formatted_time = format_time (simulated_seconds, formatted_time, 50);
-      fprintf(results_file, "%s\t%" PRIu64 "\t%lf\t%" PRIu64 "%lf\t%" PRIu64 
+      char* formatted_time = format_time(simulated_seconds, formatted_time, 50);
+      fprintf(results_file, "%s\t%" PRIu64 "\t%lf\t%" PRIu64 "\t%lf\t%" PRIu64 
           "\t%s\n", plate->file_name, plate->interval_duration, 
           plate->thermal_diffusivity, plate->cells_dimension, plate->epsilon, 
           plate->k_states, formatted_time);

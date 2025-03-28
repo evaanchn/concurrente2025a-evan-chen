@@ -2,9 +2,10 @@
 
 #include "simulation.h"
 
-int simulate(char* job_file_path, uint64_t thread_count) {
+int simulate(char* job_file_path, char* source_dir, char* output_dir, 
+    uint64_t thread_count) {
   // const job = init_job(file_path)
-  job_t* job = init_job(job_file_path);
+  job_t* job = init_job(job_file_path, source_dir, output_dir);
 
   if (!job) {
     return 21;
@@ -14,12 +15,9 @@ int simulate(char* job_file_path, uint64_t thread_count) {
     return 22;
   }
   // for plate_number := 0 to plate_count do
-  // for (size_t plate_number = 0; plate_number < job->plates_count; 
-  //     ++plate_number) {
-  // TODO: Uncomment above get rid of below
-  for (size_t plate_number = 0; plate_number < 1; 
-    ++plate_number) {
-
+  for (size_t plate_number = 0; plate_number < job->plates_count; 
+      ++plate_number) {
+  
     //  mutable k_states := 0
     uint64_t k_states = 0;
 
@@ -28,8 +26,7 @@ int simulate(char* job_file_path, uint64_t thread_count) {
 
     plate_t* curr_plate = job->plates[plate_number];
 
-    //  mutable plate_matrix := set_plate_matrix(curr_plate)
-    if (set_plate_matrix(curr_plate) != EXIT_SUCCESS){
+    if (set_plate_matrix(curr_plate, job->source_directory) != EXIT_SUCCESS) {
       destroy_job(job);
       return 22;
     }
@@ -43,7 +40,8 @@ int simulate(char* job_file_path, uint64_t thread_count) {
     }  //  end while
 
     curr_plate->k_states = k_states;
-    printf("%" PRIu64, curr_plate->k_states);
+
+  // TODO Make sure files are updating
   //   if (update_plate_file(curr_plate) != EXIT_SUCCESS) {
   //     destroy_job(job);
   //     return 23;
@@ -53,7 +51,7 @@ int simulate(char* job_file_path, uint64_t thread_count) {
     destroy_matrices(curr_plate->plate_matrix);
   }  // end for
 
-  // report_results(job);
+  report_results(job);
   destroy_job(job);
 
   return EXIT_SUCCESS;

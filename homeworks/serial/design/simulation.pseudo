@@ -1,5 +1,5 @@
-procedure simulate(file_name, thread_count)
-  const job = init_job(file_name)
+procedure simulate(file_name, source_directory, output_directory, thread_count)
+  const job = init_job(file_name, source_directory, output_directory)
   set_job(job)
 
   for plate_number := 0 to plate_count do

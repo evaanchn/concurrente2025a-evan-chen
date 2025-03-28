@@ -10,11 +10,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "common.h"
 #include "plate_matrix.h"
 
 typedef struct plate {
-  // TODO (Evan): Adapt so tests route and output route are available
-  char* file_name;
+  char file_name[20];
   uint64_t cells_dimension;
   uint64_t interval_duration;
   double thermal_diffusivity;
@@ -23,14 +23,10 @@ typedef struct plate {
   uint64_t k_states;
 } plate_t;
 
-int set_plate_matrix(plate_t* plate);
+int set_plate_matrix(plate_t* plate, char* source_directory);
 
 bool update_plate(plate_t* plate);
 
 int update_plate_file(plate_t* plate);
-
-
-// TODO (Ev): GET RID LATER
-void print_matrix(plate_t* plate);
 
 #endif  // PLATE_H

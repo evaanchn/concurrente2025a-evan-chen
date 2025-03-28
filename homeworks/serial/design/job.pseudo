@@ -1,15 +1,19 @@
 struct job
-  const file_name
+  declare file_name
+  declare source_directory
+  declare output_directory 
   mutable plates_count
   mutable capacity
   mutable plates*[]
 
-procedure init_job(job_file_name)
+procedure init_job(job_file_name, source_directory, output_directory)
   declare job = allocate(sizeof(job))
   job->file_name = job_file_name
-  job->plates_count = 0
-  job->plates_capacity = 100
-  job->plates = init_plates(capacity)
+  job->source_directory = source_directory
+  job->output_directory = output_directory
+  job->plates_count := 0
+  job->plates_capacity := 100
+  job->plates := init_plates(capacity)
   return job
 end procedure
 
