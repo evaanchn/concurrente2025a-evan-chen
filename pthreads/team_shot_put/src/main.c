@@ -98,7 +98,12 @@ void compete(const size_t athlete_count, shared_data_t* shared_data) {
         ++athlete_number) {
       pthread_join(thread_ids[team_number][athlete_number], NULL);
     }
+    // free(private_data_matrix[team_number]);
+    // free(thread_ids[team_number]);
   }
+
+  // free(private_data_matrix);
+  // free(thread_ids);
 
   destroy_private_data_matrix(private_data_matrix, team_count);
   destroy_pthread_matrix(thread_ids, team_count);
