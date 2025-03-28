@@ -1,6 +1,37 @@
-# paralela25a-evan-chen
+= Paralela25a Evan Chen Cheng
+:experimental:
+:nofooter:
+:source-highlighter: pygments
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
 
-## Glosario
+== Pthreads
+
+[%autowidth]
+|=== 
+s|# s|Id s|Tipo s|Descripcion
+|1 m|link:pthreads/invert[invert] | Ejemplo de clase |Programa serial que invierte numeros enteros dados en la entrada estandar.
+|2 m|link:pthreads/hello[hello] | Ejemplo comentado |Primer acercamiento a concurrencia, donde se crea un hilo secundario para saludar al usuario, a la vez que se saluda en el hilo principal.
+|3 m|link:pthreads/recursive_hello[recursive_hello] | Ejercicio corto |Se modifica el ejemplo comentado link:pthreads/hello[hello] para que el procedimiento _greet()_ tome como parametro un numero y se despida si es 0, saludar si es 1 y volver a llamarse con un numero menor que el parametro recibido.
+|4 m|link:pthreads/hello_w[hello_w] | Ejemplo comentado |Toma como parametro en la linea de comandos, la cantidad de hilos con los que se desea saludar, llamando a greet con este e indicando el numero de hilo.
+|5 m|link:pthreads/grandma_lottery[grandma_lottery] | Ejemplo de clase |Representa con hilos de ejecucion a una abuelita que envia a sus dos nietos a comprar loteria. Conceptos: hilo de ejecucion.
+|6 m|link:pthreads/hello_iw_pri[hello_iw_pri] | Ejemplo comentado |Se modifica link:pthreads/hello_w[hello_w] tal que todos los hilos tienen registros privados (_private memory_) donde se guardan dos numeros: identificador del hilo y el total de hilos. Se reporta cual hilo de cuantos esta saludando para cada secundario.
+|7 m|link:pthreads/hello_iw_shr[hello_iw_shr] | Ejemplo comentado |Se modifica link:pthreads/hello_iw_pri[hello_iw_pri] tal que se almacena la cantidad total de hilos en un registro compartido (_shared memory_), el cual se guarda en cada registro privado.
+|8 m|link:pthreads/hello_order_busywait[hello_order_busywait] | Ejemplo comentado |Se modifica link:pthreads/hello_iw_shr[hello_iw_shr] de forma que se ordenan los saludos de hilos secundarios, mediante el uso de la espera activa (while persistente).
+|9 m|link:pthreads/team_shot_put[team_shot_put] | Ejemplo de clase |Se simula un enfrentamiento centrado en lanzamiento de peso entre dos equipos, donde se tienen matrices de hilos y registros privados.
+|10 m|link:pthreads/create_thread_team[create_thread_tean] | Ejemplo de clase |Se optimiza link:pthreads/team_shot_put[team_shot_put] con registros privados genericos, procedimientos relacionados para crearlos y unirlos, ademas de un registro compartido.
+|===
+
+== Tareas
+[%autowidth]
+|=== 
+s|# s|Id s|Titulo s|Descripcion
+|1 |link:homeworks/serial[serial] |Simulacion de calor (serial) |Se simula el proceso de equilibrio de laminas, reportando los parametros utilizados, la cantidad de estados transcurridas y la duracion de simulacion.
+|===
+
+== Glosario
     1. *Programación serial*: es una manera de programar tal que las instrucciones se ejecutan en secuencia, una despues de la otra (No comienza uno si el anterior no ha terminado). *Analogia*: Una coreografia de baile donde hay una serie de pasos determinados que se deben de ejecutar una tras otra.
 
     2. *Programación concurrente*: un metaparadigma que implica la programacion #**no serial**#. Una forma de concurrencia es dividir el problema en pedacitos e intercalar entre estos. *Analogia*: Cocinar uno o varios platillos, llevando a cabo pasos de las recetas a la misma vez pero cambiando entre ellas (corto la lechuga de la ensalada mientras se terminan de cocinar el espagueti, y voy alternando entre ambas recetas). 
