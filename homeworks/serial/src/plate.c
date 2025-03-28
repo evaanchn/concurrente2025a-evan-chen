@@ -3,11 +3,12 @@
 #include "plate.h"
 
 int set_plate_matrix(plate_t* plate) {
-  const char* file_name = plate->file_name;
-  FILE* plate_file = fopen(file_name, "rb");
-
+  char* file_name = plate->file_name;
+  // TODO Change back to file_name
+  FILE* plate_file = fopen("jobs/job001b/plate002.bin", "rb");
+  
   if (!plate_file) {
-    perror("Error: Plate file %s could not be opened");
+    printf("Error: Plate file %s could not be opened", plate->file_name);
     return 31;
   }
 
@@ -20,11 +21,14 @@ int set_plate_matrix(plate_t* plate) {
   }
 
   plate->plate_matrix = init_plate_matrix(rows, cols);
+  double** matrix = plate->plate_matrix->matrix;
 
   for (size_t row = 0; row < rows; ++row) {
     // Read cols amount of doubles (a row) from plate_file to store
-    fread(&plate->plate_matrix[row], sizeof(double), cols, plate_file);
+    fread(matrix[row], sizeof(double), cols, plate_file);
   }
+
+  init_auxiliary(plate->plate_matrix);
 
   fclose(plate_file);
   return EXIT_SUCCESS;
@@ -41,13 +45,12 @@ bool update_plate(plate_t* plate) {
   uint64_t cell_area = plate->cells_dimension * plate->cells_dimension;
   double mult_constant = diff_times_interval / cell_area;
 
-  for (size_t row = 1; row < plate_matrix->rows; ++row) {
-    for (size_t col = 1; col < plate_matrix->cols; ++col) {
+  for (size_t row = 1; row < plate_matrix->rows - 1; ++row) {
+    for (size_t col = 1; col < plate_matrix->cols - 1; ++col) {
       update_cell(plate_matrix, row, col, mult_constant);
 
       double new_temperature = plate_matrix -> matrix[row][col];
       double old_temperature = plate_matrix -> auxiliary_matrix[row][col];
-      // TODO (Evan Chen): Verify fabs() works for abs
       double difference = fabs(new_temperature - old_temperature);  // ABS
 
       if (difference > biggest_change) {
@@ -56,10 +59,11 @@ bool update_plate(plate_t* plate) {
     }
   }
 
+  
   if (biggest_change > plate->epsilon) {
     reached_equilibrium = false;
   }
-
+  
   return reached_equilibrium;
 }
 
@@ -89,4 +93,16 @@ int update_plate_file(plate_t* plate) {
 
   fclose(output_file);
   return error;
+}
+
+// TODO (Ev): GET RID LATER
+void print_matrix(plate_t* plate) {
+  plate_matrix_t* mat = plate->plate_matrix;
+  double** matrix = mat->matrix;
+  for (size_t row = 0; row < mat->rows; ++row) {
+    for (size_t col = 0; col < mat->cols; ++col) {
+      printf("%lf\t", matrix[row][col]);
+    }
+    printf("\n");
+  }
 }

@@ -21,6 +21,29 @@ plate_matrix_t* init_plate_matrix(uint64_t rows, uint64_t cols) {
   }
 }
 
+void init_auxiliary(plate_matrix_t* plate_matrix) {
+  double** initial_matrix = plate_matrix->matrix;
+  
+  for (uint64_t col = 0; col < plate_matrix->cols; ++col) {
+    plate_matrix->auxiliary_matrix[0][col] = initial_matrix[0][col];
+  }
+
+  uint64_t last_row = plate_matrix -> rows - 1;
+  for (uint64_t col = 0; col < plate_matrix->cols; ++col) {
+    plate_matrix->auxiliary_matrix[last_row][col] = 
+        initial_matrix[last_row][col];
+  }
+
+  for (uint64_t row = 1; row < last_row; ++row) {
+    plate_matrix->auxiliary_matrix[row][0] = initial_matrix[row][0];
+  }
+
+  uint64_t last_col = plate_matrix -> cols - 1;
+  for (uint64_t row = 1; row < last_row; ++row) {
+    plate_matrix->auxiliary_matrix[row][last_col] = initial_matrix[row][last_col];
+  }
+}
+
 void set_auxiliary(plate_matrix_t* plate_matrix) {
     double** old_temperatures = plate_matrix->matrix;
     plate_matrix->matrix = plate_matrix->auxiliary_matrix;
@@ -58,11 +81,11 @@ void update_cell(plate_matrix_t* plate_matrix, uint64_t row, uint64_t col,
 }
 
 // CODE FROM TEAM_SHOT_PUT IN PTHREADS/TEAM_SHOT_PUT/SRC
-double** create_double_matrix(const uint64_t rows, const uint64_t cols) {
-    double** matrix = calloc(rows, sizeof(double*));
+double** create_double_matrix(const size_t rows, const size_t cols) {
+  double** matrix = (double**) calloc(rows, sizeof(double*));
   if (matrix) {
     for (size_t row = 0; row < rows; ++row) {
-      if ((matrix[row] = calloc(cols, sizeof(double))) == NULL) {
+      if ((matrix[row] = (double*) calloc(cols, sizeof(double))) == NULL) {
         destroy_double_matrix(matrix, rows);
         return NULL;
       }

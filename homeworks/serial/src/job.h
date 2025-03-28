@@ -28,6 +28,6 @@ void destroy_job(job_t* job);
 
 char* format_time(const time_t seconds, char* text, const size_t capacity);
 
-void report_results(job_t* job);
+int report_results(job_t* job);
 
 #endif  // JOB_H

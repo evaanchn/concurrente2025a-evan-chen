@@ -42,9 +42,9 @@ int set_job(job_t* job) {
   while (fscanf(job_file, "%s\t%" SCNu64 "\t%lf\t%" SCNu64 "%lf\n", plate_file_name,
       &interval_duration, &thermal_diffusivity, &cells_dimension,
           &epsilon) == 5) {
-
+    
     plate_t* curr_plate = (plate_t*) malloc(sizeof(plate_t));
-
+    
     if (!curr_plate) {
       perror("Error: Memory for new plate could not be allocated");
       destroy_job(job);
@@ -57,6 +57,7 @@ int set_job(job_t* job) {
     curr_plate->cells_dimension = cells_dimension;
     curr_plate->epsilon = epsilon;
 
+    job->plates[job->plates_count] = curr_plate;
     job->plates_count += 1;
     
     if (check_capacity(job) != EXIT_SUCCESS) { return EXIT_FAILURE; }

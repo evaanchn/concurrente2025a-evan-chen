@@ -19,6 +19,8 @@ typedef struct plate_matrix {
 
 plate_matrix_t* init_plate_matrix(uint64_t rows, uint64_t cols);
 
+void init_auxiliary(plate_matrix_t* plate_matrix);
+
 void set_auxiliary(plate_matrix_t* plate_matrix);
 
 void update_cell(plate_matrix_t* plate_matrix, uint64_t rows, uint64_t cols,
@@ -27,7 +29,7 @@ void update_cell(plate_matrix_t* plate_matrix, uint64_t rows, uint64_t cols,
 
 void destroy_matrices(plate_matrix_t* plate_matrix);
 
-double** create_double_matrix(const uint64_t rows, const uint64_t cols);
+double** create_double_matrix(uint64_t rows, uint64_t cols);
 
 void destroy_double_matrix(double** matrix, const uint64_t rows);
 
