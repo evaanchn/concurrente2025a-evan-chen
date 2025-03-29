@@ -2,13 +2,12 @@
 
 #include "job.h"
 
-job_t* init_job(char* job_file_name, char* source_dir, char* output_dir) {
+job_t* init_job(char* job_file_name) {
   job_t* job = (job_t*) malloc(sizeof(job_t));
 
   if (job) {
     job->file_name = job_file_name;
-    job->source_directory = source_dir;
-    job->output_directory = output_dir;
+    job->source_directory = extract_directory(job_file_name);
     job->plates_count = 0;
     job->plates_capacity = 50;
     job->plates = (plate_t**) calloc(job->plates_capacity, sizeof(plate_t*));
@@ -27,14 +26,7 @@ job_t* init_job(char* job_file_name, char* source_dir, char* output_dir) {
 }
 
 int set_job(job_t* job) {
-  char* job_file_path = build_file_path(job->source_directory, job->file_name);
-  if (!job_file_path) {
-    perror("Error: Job file path could not be built");
-    return 21;
-  }
-
-  FILE* job_file = fopen(job_file_path, "rt");
-  free(job_file_path);
+  FILE* job_file = fopen(job->file_name, "rt");
 
   if (!job_file) {
     perror("Error: Job file could not be opened");
@@ -102,10 +94,14 @@ int expand_job(job_t* job) {
 
 void destroy_job(job_t* job) {
   assert(job);
+  assert(job->plates);
   for (size_t i = 0; i < job->plates_count; ++i) {
+    assert(job->plates[i]);
     free(job->plates[i]);
   }
   free(job->plates);
+  assert(job->source_directory);
+  free(job->source_directory);
   free(job);
 }
 
@@ -121,22 +117,39 @@ char* format_time(const time_t seconds, char* text, const size_t capacity) {
 int report_results(job_t* job) {
   int error = EXIT_SUCCESS;
 
-  char* results_file_path = build_file_path(job->output_directory,
-      job->file_name);
+  char* file_name = extract_file_name(job->file_name);
+
+  if (!file_name) { return EXIT_FAILURE; }
+
+  char* file_name_tsv = modify_extension(file_name, "tsv");
+
+  if (!file_name_tsv) { 
+    free(file_name);
+    return EXIT_FAILURE; 
+  }
+
+  char* results_file_path = build_file_path(REPORTS_DIRECTORY, file_name_tsv);
+
+  printf("%s\n", results_file_path);
 
   if (!results_file_path) {
     perror("Error: Results file path could not be built");
+    free(file_name_tsv);
+    free(file_name);
     return EXIT_FAILURE;
   }
 
   FILE* results_file = fopen(results_file_path, "w");
   free(results_file_path);
+  free(file_name_tsv);
+  free(file_name);
 
   if (results_file) {
     for (size_t i = 0; i < job->plates_count; ++i) {
       plate_t* plate = job->plates[i];
       time_t simulated_seconds = plate->k_states * plate->interval_duration;
-      char* formatted_time = format_time(simulated_seconds, formatted_time, 50);
+      char formatted_time[50];
+      format_time(simulated_seconds, formatted_time, 50);
       fprintf(results_file, "%s\t%" PRIu64 "\t%lf\t%" PRIu64 "\t%lf\t%" PRIu64 
           "\t%s\n", plate->file_name, plate->interval_duration, 
           plate->thermal_diffusivity, plate->cells_dimension, plate->epsilon, 

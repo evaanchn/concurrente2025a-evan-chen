@@ -1,25 +1,33 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
 
 #include "plate_matrix.h"
+#include <assert.h>
+#include <stdlib.h>
 
 plate_matrix_t* init_plate_matrix(uint64_t rows, uint64_t cols) {
-  plate_matrix_t* plate_matrix =
-      (plate_matrix_t*) calloc(1, sizeof(plate_matrix_t));
-  if (plate_matrix) {
+    plate_matrix_t* plate_matrix = (plate_matrix_t*) 
+        malloc(sizeof(plate_matrix_t));
+    if (!plate_matrix) return NULL; // Handle allocation failure
+
     plate_matrix->rows = rows;
     plate_matrix->cols = cols;
     plate_matrix->matrix = create_double_matrix(rows, cols);
-    plate_matrix->auxiliary_matrix = create_double_matrix(rows, cols);
+    
+    if (!plate_matrix->matrix) { 
+        free(plate_matrix); 
+        return NULL; 
+    }
 
-    // TODO (evan.chen): Adapt asserts to ifs later
-    assert(plate_matrix->matrix);
-    assert(plate_matrix->auxiliary_matrix);
+    plate_matrix->auxiliary_matrix = create_double_matrix(rows, cols);
+    if (!plate_matrix->auxiliary_matrix) { 
+        free(plate_matrix->matrix); // Free matrix before returning
+        free(plate_matrix); 
+        return NULL; 
+    }
 
     return plate_matrix;
-  } else {
-      return NULL;
-  }
 }
+
 
 void init_auxiliary(plate_matrix_t* plate_matrix) {
   double** initial_matrix = plate_matrix->matrix;

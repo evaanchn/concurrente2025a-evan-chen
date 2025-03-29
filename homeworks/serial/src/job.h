@@ -13,13 +13,12 @@
 typedef struct job {
   char* file_name;
   char* source_directory;
-  char* output_directory;
   size_t plates_count;
   size_t plates_capacity;
   plate_t** plates;
 } job_t;
 
-job_t* init_job(char* job_file_name, char* source_dir, char* output_dir);
+job_t* init_job(char* job_file_name);
 
 int set_job(job_t* job);
 

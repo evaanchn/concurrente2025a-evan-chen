@@ -2,10 +2,13 @@
 
 #include "simulation.h"
 
-int simulate(char* job_file_path, char* source_dir, char* output_dir, 
-    uint64_t thread_count) {
+int simulate(char* job_file_path, uint64_t thread_count) {
+  if (thread_count > 1) {
+    printf("Concurrent solution yet to be developed\n");
+  }
+
   // const job = init_job(file_path)
-  job_t* job = init_job(job_file_path, source_dir, output_dir);
+  job_t* job = init_job(job_file_path);
 
   if (!job) {
     return 21;
@@ -14,6 +17,7 @@ int simulate(char* job_file_path, char* source_dir, char* output_dir,
   if (set_job(job) != EXIT_SUCCESS) {
     return 22;
   }
+
   // for plate_number := 0 to plate_count do
   for (size_t plate_number = 0; plate_number < job->plates_count; 
       ++plate_number) {
@@ -26,10 +30,16 @@ int simulate(char* job_file_path, char* source_dir, char* output_dir,
 
     plate_t* curr_plate = job->plates[plate_number];
 
-    if (set_plate_matrix(curr_plate, job->source_directory) != EXIT_SUCCESS) {
+    char* source_directory = extract_directory(job->file_name);
+    if (!source_directory) { return 23; }
+
+    if (set_plate_matrix(curr_plate, source_directory) != EXIT_SUCCESS) {
+      free(source_directory);
       destroy_job(job);
-      return 22;
+      return 24;
     }
+
+    free(source_directory);
 
     //  while not reached_equilibrium do
     while (!reached_equilibrium) {
@@ -42,13 +52,15 @@ int simulate(char* job_file_path, char* source_dir, char* output_dir,
     curr_plate->k_states = k_states;
 
   // TODO Make sure files are updating
-  //   if (update_plate_file(curr_plate) != EXIT_SUCCESS) {
-  //     destroy_job(job);
-  //     return 23;
-  //   }
+    if (update_plate_file(curr_plate, job->source_directory)
+       != EXIT_SUCCESS) {
+      destroy_job(job);
+      return 23;
+    }
 
     // Free matrices memory
     destroy_matrices(curr_plate->plate_matrix);
+    free(curr_plate->plate_matrix);  // In case takes up too much memory 
   }  // end for
 
   report_results(job);

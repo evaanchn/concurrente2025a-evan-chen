@@ -6,7 +6,6 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
   char* plate_file_path = build_file_path(source_directory, plate->file_name);
 
   if (!plate_file_path) {
-    perror("Error: Plate file path could not be built");
     return EXIT_FAILURE;
   }
 
@@ -73,13 +72,23 @@ bool update_plate(plate_t* plate) {
   return reached_equilibrium;
 }
 
-int update_plate_file(plate_t* plate) {
+int update_plate_file(plate_t* plate, char* source_directory) {
   int error = EXIT_SUCCESS;
 
-  const char* output_file_name = plate->file_name;
+  char* updated_file_name = set_plate_file_name(plate);
+  char* output_file_name = build_file_path(source_directory, 
+    updated_file_name);
+  
+  if (!output_file_name) { 
+    free(updated_file_name);
+    return EXIT_FAILURE;
+  }
+  
   // TODO (Evan Chen): Add folder path output/
   FILE* output_file = fopen(output_file_name, "wb");
-  
+  free(updated_file_name);
+  free(output_file_name);
+
   if (output_file) { 
     plate_matrix_t* plate_matrix = plate->plate_matrix;
 
@@ -98,4 +107,35 @@ int update_plate_file(plate_t* plate) {
 
   fclose(output_file);
   return error;
+}
+
+char* set_plate_file_name(plate_t* plate) {
+  const char *last_dot = strrchr(plate->file_name, '.'); // Find the last '.'
+  
+  if (!last_dot) {
+    perror("Error: in modify_extension(), no extension specified for file");
+    return NULL;
+  }
+
+  char suffix[25]; // Enough for 20 digits, .bin and null terminator
+
+  snprintf(suffix, sizeof(suffix), "%lu.bin", plate->k_states);
+
+  size_t name_length = last_dot - plate->file_name;
+
+  // Allocate memory: name + dot + extension + null terminator
+  size_t new_size = name_length + strlen(suffix) + 2;
+
+  char *new_filename = (char *)malloc(new_size);
+
+  if (!new_filename) {
+      perror("Error: in modify_extension(), memory allocation failed");
+      return NULL;
+  }
+
+  // Construct the new filename safely
+  snprintf(new_filename, new_size, "%.*s-%s", (int)name_length, plate->file_name, 
+      suffix);
+
+  return new_filename;
 }

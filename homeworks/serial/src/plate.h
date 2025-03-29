@@ -27,6 +27,8 @@ int set_plate_matrix(plate_t* plate, char* source_directory);
 
 bool update_plate(plate_t* plate);
 
-int update_plate_file(plate_t* plate);
+int update_plate_file(plate_t* plate, char* source_directory);
+
+char* set_plate_file_name(plate_t* plate);
 
 #endif  // PLATE_H

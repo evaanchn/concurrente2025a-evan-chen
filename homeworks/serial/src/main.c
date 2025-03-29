@@ -23,10 +23,7 @@ int main(int argc, char* argv[]) {
     // print "Error: No job file specified"
     perror("ERROR: No job file specified\n");
     return 11;
-  } else if (argc < 4) {
-    perror("ERROR: No source directory or output directory specified\n");
-    return 12;
-  } // else if (argc == 4) {
+  } // else if (argc == 2) {
   //   // Taken from hello_w example, calls sysconf to get available cores.
   //   thread_count = sysconf(_SC_NPROCESSORS_ONLN);
   // } else {
@@ -34,6 +31,6 @@ int main(int argc, char* argv[]) {
   //   sscanf(argv[2], "%" SCNu64, &thread_count);
   // }
 
-  int error = simulate(argv[1], argv[2], argv[3], thread_count);
+  int error = simulate(argv[1], thread_count);
   return error;
 }
