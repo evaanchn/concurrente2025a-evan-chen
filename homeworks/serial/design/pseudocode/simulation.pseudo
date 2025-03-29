@@ -15,6 +15,8 @@ procedure simulate(file_name, source_directory, output_directory, thread_count)
 
     curr_plate->k_states = k_states
     update_plate_file(curr_plate)
+
+    destroy_plate_matrix(curre_plate->plate_matrix)
   end for
 
   report_results(plates)
