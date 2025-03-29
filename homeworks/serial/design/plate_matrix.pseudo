@@ -76,10 +76,11 @@ procedure create_double_matrix(rows, cols)
   return matrix
 end procedure
 
-procedure destroy_matrices(plate_matrix)
+procedure destroy_plate_matrix(plate_matrix)
   const rows = plate_matrix->rows
   destroy_double_matrix(plate_matrix->matrix, rows)
   destroy_double_matrix(plate_matrix->auxiliary_matrix, rows)
+  free(plate_matrix)
 end procedure
 
 procedure destroy_double_matrix(matrix, rows)

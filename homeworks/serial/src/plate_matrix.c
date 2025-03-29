@@ -111,12 +111,14 @@ double** create_double_matrix(const size_t rows, const size_t cols) {
   return matrix;
 }
 
-void destroy_matrices(plate_matrix_t* plate_matrix) {
-    uint64_t rows = plate_matrix->rows;
+void destroy_plate_matrix(plate_matrix_t* plate_matrix) {
+  uint64_t rows = plate_matrix->rows;
 
-    // Calls double matrix destruction subroutines
-    destroy_double_matrix(plate_matrix->matrix, rows);
-    destroy_double_matrix(plate_matrix->auxiliary_matrix, rows);
+  // Calls double matrix destruction subroutines
+  destroy_double_matrix(plate_matrix->matrix, rows);
+  destroy_double_matrix(plate_matrix->auxiliary_matrix, rows);
+
+  free(plate_matrix);
 }
 
 // CODE FROM TEAM_SHOT_PUT

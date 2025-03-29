@@ -57,9 +57,8 @@ int simulate(char* job_file_path, uint64_t thread_count) {
       return 23;
     }
 
-    // Free matrices memory
-    destroy_matrices(curr_plate->plate_matrix);
-    free(curr_plate->plate_matrix);  // In case takes up too much memory 
+    // Free matrices memory in case it takes up too much memory
+    destroy_plate_matrix(curr_plate->plate_matrix);
   }  // end for
 
   report_results(job);

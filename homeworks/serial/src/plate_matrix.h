@@ -61,10 +61,11 @@ void update_cell(plate_matrix_t* plate_matrix, uint64_t row,
 double** create_double_matrix(const size_t rows, const size_t cols);
 
 /**
- * @brief Frees memory allocated for both matrices in plate_matrix_t.
+ * @brief Frees memory allocated for both matrices in plate_matrix 
+ * and then plate_matrix
  * @param plate_matrix Pointer to the plate matrix.
  */
-void destroy_matrices(plate_matrix_t* plate_matrix);
+void destroy_plate_matrix(plate_matrix_t* plate_matrix);
 
 /**
  * @brief Frees memory allocated for a 2D matrix of doubles.

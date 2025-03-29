@@ -100,7 +100,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     }
   } else {
     perror("Error: Could not open output file");
-    destroy_matrices(plate->plate_matrix);
+    destroy_plate_matrix(plate->plate_matrix);
     error = EXIT_FAILURE;
   }
 

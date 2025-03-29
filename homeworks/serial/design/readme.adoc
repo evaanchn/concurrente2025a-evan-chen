@@ -40,3 +40,11 @@ A section for common code was added to store string manipulation functions like 
 ----
 include::common.pseudo[]
 ----
+
+=== plate_matrix
+The subroutines associated to the plate_matrix_t struct involve allocation and deallocation of memory for the matrices, the management of the auxiliary matrix (switching with main matrix before each temperature update), and the application of the formula for calculating a cell's new temperature (update_cell(), most notable subroutine of this section).
+
+[source,delphi]
+----
+include::plate_matrix.pseudo[]
+----
