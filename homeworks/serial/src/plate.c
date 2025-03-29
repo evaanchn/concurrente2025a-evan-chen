@@ -84,7 +84,6 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     return EXIT_FAILURE;
   }
   
-  // TODO (Evan Chen): Add folder path output/
   FILE* output_file = fopen(output_file_name, "wb");
   free(updated_file_name);
   free(output_file_name);

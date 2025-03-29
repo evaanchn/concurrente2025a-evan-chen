@@ -51,7 +51,6 @@ int simulate(char* job_file_path, uint64_t thread_count) {
 
     curr_plate->k_states = k_states;
 
-  // TODO Make sure files are updating
     if (update_plate_file(curr_plate, job->source_directory)
        != EXIT_SUCCESS) {
       destroy_job(job);

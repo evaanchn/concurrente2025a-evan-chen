@@ -22,10 +22,21 @@ image::class_diagram.svg[link="<url-provided-by-your-design-tool>"]
 [[procedural_design]]
 == Procedural design
 
-The pseudocode for the main procedure can be found below.
+=== main
+The main procedure is in charge of processing the arguments received in the execution command, and notify any anomalies related to the input to the user. Then, it calls simulate() in simulation.c and later returns the error code returned by said procedure. The pseudocode for main() can be found below.
 
 [#pseudocode]
 [source,delphi]
 ----
 include::main.pseudo[]
+----
+
+Note that the thread_count part will be implemented in the second part of this homework.
+
+=== common
+A section for common code was added to store string manipulation functions like build_file_path() (concatenates file name to directory), extract_directory(), extract_file_name(), and modify_extension() (returns modified extension of given file path). These were thought up to properly control where to find files to read or write in, for example to store simulated plates in the source directory, or writing .tsv reports of simulations. ChatGPT's assistance was needed for this part. Self-written pseudocode for each procedure:
+
+[source,delphi]
+----
+include::common.pseudo[]
 ----

@@ -2,37 +2,33 @@
 
 #include "common.h"
 
-char* build_file_path (char* directory, char* file_name) {
-  // Allocate memory for the full path, +1 for null terminator +1 for slash
-  size_t length = strlen(directory) + strlen(file_name) + 2;
+char* build_file_path(const char* directory, const char* filename) {
+  if (!directory || !filename) return NULL;  // In case of NULL chars
 
+  // Calculate required memory: directory + '/' + filename + '\0'
+  size_t length = strlen(directory) + strlen(filename) + 2;
+
+  // Allocate memory for the full path
   char *full_path = (char *)malloc(length);
-
   if (!full_path) {
-      perror("Error: Memory allocation failed in build_file_path\n");
+      fprintf(stderr, "Error: Memory allocation failed in build_file_path\n");
       return NULL;
   }
 
-  // Merge strings safely
-  // int snprintf ( char * s, size_t n, const char * format, ... )
-  snprintf(full_path, length, "%s/%s", directory, file_name);
-
+  // Construct the full path safely, using snprintf
+  snprintf(full_path, length, "%s/%s", directory, filename);
   return full_path;
 }
 
 char* extract_directory(const char *filepath) {
-  // Find the last occurrence of '/'.
-  // char* strrchcr(char* str, int chr) -> returns pointer 
-  // to last occurence of chr
+  if (!filepath) return NULL;  // Handle NULL input
+
+  // Find the last occurrence of '/'
   const char *last_slash = strrchr(filepath, '/');
+  if (!last_slash) return NULL;  // No directory found
 
-  if (!last_slash) {
-    perror ("Error: No file directory specified\n");
-      return NULL;
-  }
-
-  size_t dir_length = last_slash - filepath; // Length up to last slash
-  char *directory = (char *)malloc(dir_length + 1); // Allocate memory
+  size_t dir_length = last_slash - filepath;  // Length up to last slash
+  char *directory = (char *)malloc(dir_length + 1);  // Allocate memory
 
   if (!directory) {
     perror("Error: Memory allocation for directory failed");
@@ -40,55 +36,56 @@ char* extract_directory(const char *filepath) {
   }
 
   strncpy(directory, filepath, dir_length);
-  directory[dir_length] = '\0'; // Null-terminate
+  directory[dir_length] = '\0';  // Null-terminate
 
   return directory;
 }
 
-char *extract_file_name(const char *filepath) {
-  if (!filepath) return NULL; // Handle NULL input
+
+char* extract_file_name(const char *filepath) {
+  if (!filepath) return NULL;  // Handle NULL input
 
   // Find the last occurrence of '/'
   const char *last_slash = strrchr(filepath, '/');
 
-  // If no slash is found, return a copy of the whole string (it's already a filename)
+  // If no slash is found, return a copy of the whole string
+  // (it's already a filename)
   const char *filename = last_slash ? last_slash + 1 : filepath;
 
   // Allocate memory for the new filename
   char *result = (char *)malloc(strlen(filename) + 1);
   if (!result) {
-      perror("Memory allocation failed");
+      perror("Memory allocation for file name extraction failed");
       return NULL;
   }
 
   // Copy the filename
-  strcpy(result, filename);
+  snprintf(result, strlen(filename) + 1, "%s", filename);
 
-  return result; // Caller must free()
+  return result;  // Caller must free()
 }
 
-char* modify_extension(const char *filename, const char *new_extension) {
-  const char *last_dot = strrchr(filename, '.'); // Find the last '.'
-  
-  if (!last_dot) {
-    perror("Error: in modify_extension(), no extension specified for file");
-    return NULL;
-  }
+char* modify_extension(const char *file_name, const char *new_extension) {
+  if (!file_name || !new_extension) return NULL;  // Handle NULL input
 
-  size_t name_length = last_dot - filename;
-  // Allocate memory: name + dot + extension + null terminator
+  // Find the last occurrence of '.' to locate the file extension
+  const char *last_dot = strrchr(file_name, '.');
+  if (!last_dot) return NULL;  // No extension found in filename
+
+  // Calculate required memory:
+  // base filename + dot + new extension + null terminator
+  size_t name_length = last_dot - file_name;
   size_t new_size = name_length + strlen(new_extension) + 2;
 
+  // Allocate memory for the new filename
   char *new_filename = (char *)malloc(new_size);
-
-  if (!new_filename) {
-      perror("Error: in modify_extension(), memory allocation failed");
-      return NULL;
-  }
+  if (!new_filename) return NULL;
 
   // Construct the new filename safely
-  snprintf(new_filename, new_size, "%.*s.%s", (int)name_length, filename, 
-      new_extension);
+  // %. *s indicates that the amount printed is limited by an int,
+  // in this case name_length
+  snprintf(new_filename, new_size, "%.*s.%s",
+      (int)name_length, file_name, new_extension);
 
-  return new_filename; // Caller must free()
+  return new_filename;
 }
