@@ -85,3 +85,11 @@ The subroutines associated to the plate_matrix_t struct involve allocation and d
 ----
 include::pseudocode/plate_matrix.pseudo[]
 ----
+
+== plate
+Here, subroutines related to the managing and updating of the matrices in plate matrix, and the generation of an updated matrix file can be found.
+
+[source,delphi]
+----
+include::pseudocode/plate.pseudo[]
+----

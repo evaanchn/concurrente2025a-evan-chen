@@ -20,6 +20,7 @@ procedure set_plate_matrix(plate)
     // Read row and store with fread, col amount of doubles, size of double
   end for
 
+  return 0
 end procedure
 
 procedure update_plate(plate)
@@ -34,7 +35,7 @@ procedure update_plate(plate)
 
       declare new_temperature = plate_matrix -> matrix[row][col]
       declare old_temperature = plate_matrix -> auxiliary_matrix[row][col]
-      declare difference = abs(new_temperature - old_temperature) 
+      declare difference = fabs(new_temperature - old_temperature) 
       if difference > biggest_change do 
         biggest change := difference
       end if
@@ -55,4 +56,24 @@ procedure update_plate_file(plate)
   for row := 0 to plate->plate_matrix->rows do 
     // Write row, amount of bytes of cols, size of double
   end for
+end procedure
+
+procedure set_plate_file_name(plate)
+  const last_dot = // Pointer to last dot in parameter
+
+  // Suffix is k_states simulated and .bin extension
+  declare suffix := array(25, char)
+
+  // Copy in suffix, "{k_states}.bin"
+
+  // Length of name and directory only
+  const name_length = last_dot - plate->file_name
+
+  // Allocate memory for the new filename: name + '-' + suffix + null terminator
+  const new_size = name_length + len(suffix) + 2
+  declare new_filename := allocate(new_size)
+
+  // In new_file_name, append suffix to filename
+
+  return new_filename
 end procedure
