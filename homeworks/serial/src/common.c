@@ -25,7 +25,7 @@ char* extract_directory(const char *filepath) {
 
   // Find the last occurrence of '/'
   const char *last_slash = strrchr(filepath, '/');
-  if (!last_slash) return NULL;  // No directory found
+  if (!last_slash) return "";  // No directory found
 
   size_t dir_length = last_slash - filepath;  // Length up to last slash
   char *directory = (char *)malloc(dir_length + 1);  // Allocate memory
