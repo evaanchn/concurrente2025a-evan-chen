@@ -1,7 +1,7 @@
 = Design of solution
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:
@@ -20,6 +20,16 @@ image::breakdown.svg[align="center"]
 Note that the execution command sends arguments into the program to process, which is where the job file to process is indicated. The .txt job file is then read to extract plate file names (.bin) and the related information for their simulation. At this point, plates of type struct plate_t are created to store the aforementioned information, and until it is the plate's turn to go throught the simulation that the .bin file is opened and read, creating plate matrices.
 
 After reaching equilibrium, a separate file is created to report the temperatures of the plate (Updated Plate), with the number of states that it took in the file name. A final report in .tsv is also created after completing the job (simulating all plates), stored in the same directory as the job.
+
+[[data_structures]]
+== Data structures
+Two main data structures were used in this solution. For instance, job_t is a dynamic array that holds plate_t structs, which in turn contain a plate_matrix_t struct that holds two matrices of doubles: matrix and auxiliary_matrix. The former holds new temperatures while the latter holds current ones, switching before updating temperatures.
+
+Below is an informal drawing of the described design.
+
+[#data_structures_drawing]
+.Data structures represented
+image::data_structures.svg[align="center"]
 
 [[object_design]]
 == Object-oriented design
