@@ -7,39 +7,31 @@ int simulate(char* job_file_path, uint64_t thread_count) {
     printf("Concurrent solution yet to be developed\n");
   }
 
-  // const job = init_job(file_path)
+  // Create job struct
   job_t* job = init_job(job_file_path);
+  if (!job) return 21;
 
-  if (!job) {
-    return 21;
-  }
-  
+  // Set the struct with necessary information
   if (set_job(job) != EXIT_SUCCESS) {
+    destroy_job(job);
     return 22;
   }
 
-  // for plate_number := 0 to plate_count do
-  for (size_t plate_number = 0; plate_number < job->plates_count; 
-      ++plate_number) {
-  
-    //  mutable k_states := 0
-    uint64_t k_states = 0;
-
-    //  mutable reached_equilibrium := false
-    bool reached_equilibrium = false;
-
+  // For each plate stored
+  for (size_t plate_number = 0; plate_number < job->plates_count;
+        ++plate_number) {
+    // Get current plate
     plate_t* curr_plate = job->plates[plate_number];
 
-    char* source_directory = extract_directory(job->file_name);
-    if (!source_directory) { return 23; }
-
-    if (set_plate_matrix(curr_plate, source_directory) != EXIT_SUCCESS) {
-      free(source_directory);
+    // Create plate's plate matrix: read plate file and store temperatures
+    if (set_plate_matrix(curr_plate, job->source_directory) != EXIT_SUCCESS) {
       destroy_job(job);
       return 24;
     }
 
-    free(source_directory);
+    // Loop to simulate the plate's changes in temperature
+    uint64_t k_states = 0;
+    bool reached_equilibrium = false;
 
     //  while not reached_equilibrium do
     while (!reached_equilibrium) {
@@ -49,20 +41,23 @@ int simulate(char* job_file_path, uint64_t thread_count) {
       ++k_states;
     }  //  end while
 
+    // Store k, number of states iterated until equilibrium, in plate
     curr_plate->k_states = k_states;
 
-    if (update_plate_file(curr_plate, job->source_directory)
-       != EXIT_SUCCESS) {
+    // Create an updated plate file with final temperatures
+    if (update_plate_file(curr_plate, job->source_directory) != EXIT_SUCCESS) {
       destroy_job(job);
-      return 23;
+      return 25;
     }
 
-    // Free matrices memory in case it takes up too much memory
+    // Deallocate memory so other plates have space for their matrices
     destroy_plate_matrix(curr_plate->plate_matrix);
-  }  // end for
+  }
 
+  // Report final results of the simulation
   report_results(job);
   destroy_job(job);
 
   return EXIT_SUCCESS;
 }
+

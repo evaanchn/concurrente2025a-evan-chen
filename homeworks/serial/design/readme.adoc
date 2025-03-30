@@ -95,6 +95,14 @@ In this section, apart from the report job results function, subroutines to cont
 include::pseudocode/job.pseudo[]
 ----
 
+==== simulation
+The procedure simulate() is where everything before is integrated to fully encompass the tasks of all three phases (input, processing, output). The pseudocode for said subroutine is the following.
+
+[source,delphi]
+----
+include::pseudocode/simulation.pseudo[]
+----
+
 ==== main
 The main procedure is in charge of processing the arguments received in the execution command, and notify any anomalies related to the input to the user. Then, it calls simulate() in simulation.c and later returns the error code returned by said procedure. The pseudocode for main() can be found below.
 
