@@ -35,6 +35,7 @@ image::heat_simul_uml.svg[align="center"]
 
 [[procedural_design]]
 == Procedural design
+=== Flowcharts
 The main procedures entail the processing of the execution command and the main algorithm of the program: simulate(). Flowcharts of both can be appreciated in <<main_procedures>>.
 
 [#main_procedures]
@@ -59,26 +60,18 @@ The procedure to create a .tsv report of the simulated job, report_results(), go
 .Report results function
 image::flowcharts/report_results.svg[align="center"]
 
-=== main
-The main procedure is in charge of processing the arguments received in the execution command, and notify any anomalies related to the input to the user. Then, it calls simulate() in simulation.c and later returns the error code returned by said procedure. The pseudocode for main() can be found below.
-
 [#pseudocode]
-[source,delphi]
-----
-include::pseudocode/main.pseudo[]
-----
+=== Pseudocode
+The pseudocode for each file of the program will be presented in reverse usage order, meaning that subroutines for "classes" that are agregated will be described first, building up to the main procedures.
 
-Note that the thread_count part will be implemented in the second part of this homework.
-
-=== common
+==== common
 A section for common code was added to store string manipulation functions like build_file_path() (concatenates file name to directory), extract_directory(), extract_file_name(), and modify_extension() (returns modified extension of given file path). These were thought up to properly control where to find files to read or write in, for example to store simulated plates in the source directory, or writing .tsv reports of simulations. ChatGPT's assistance was needed for this part. Self-written pseudocode for each procedure:
-
 [source,delphi]
 ----
 include::pseudocode/common.pseudo[]
 ----
 
-=== plate_matrix
+==== plate_matrix
 The subroutines associated to the plate_matrix_t struct involve allocation and deallocation of memory for the matrices, the management of the auxiliary matrix (switching with main matrix before each temperature update), and the application of the formula for calculating a cell's new temperature (update_cell(), most notable subroutine of this section).
 
 [source,delphi]
@@ -86,10 +79,30 @@ The subroutines associated to the plate_matrix_t struct involve allocation and d
 include::pseudocode/plate_matrix.pseudo[]
 ----
 
-== plate
+==== plate
 Here, subroutines related to the managing and updating of the matrices in plate matrix, and the generation of an updated matrix file can be found.
 
 [source,delphi]
 ----
 include::pseudocode/plate.pseudo[]
 ----
+
+==== job
+In this section, apart from the report job results function, subroutines to control the job_t structure, a dynamic array, can be found. The most notable procedures are the aforementioned report_results() and set_job(), which reads the job file and sets up plate_t structs to store.
+
+[source,delphi]
+----
+include::pseudocode/job.pseudo[]
+----
+
+==== main
+The main procedure is in charge of processing the arguments received in the execution command, and notify any anomalies related to the input to the user. Then, it calls simulate() in simulation.c and later returns the error code returned by said procedure. The pseudocode for main() can be found below.
+
+
+[source,delphi]
+----
+include::pseudocode/main.pseudo[]
+----
+
+Note that the thread_count part will be implemented in the second part of this homework.
+
