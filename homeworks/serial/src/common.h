@@ -29,7 +29,7 @@ char* build_file_path(const char* directory, const char* file_name);
 char* extract_directory(const char* filepath);
 
 
-/// @brief Extracts the file name (without the directory path) 
+/// @brief Extracts the file name (without the directory path)
 /// @see extract_directory
 char* extract_file_name(const char* path);
 

@@ -21,7 +21,9 @@ typedef struct {
 
 /**
  * @brief Initializes a plate matrix with specified dimensions.
+ * 
  * Allocates memory for both primary and auxiliary matrices.
+ * 
  * @param rows Number of rows.
  * @param cols Number of columns.
  * @return Pointer to allocated plate_matrix_t or NULL on failure.
@@ -30,7 +32,9 @@ plate_matrix_t* init_plate_matrix(uint64_t rows, uint64_t cols);
 
 /**
  * @brief Initializes the auxiliary matrix by copying boundary values.
- * This ensures the boundary conditions remain constant.
+ * 
+ * Copies borders ensuring the boundary conditions remain constant.
+ * 
  * @param plate_matrix Pointer to the plate matrix.
  */
 void init_auxiliary(plate_matrix_t* plate_matrix);
@@ -49,7 +53,7 @@ void set_auxiliary(plate_matrix_t* plate_matrix);
  * @param col Column index.
  * @param mult_constant Multiplication constant for heat diffusion.
  */
-void update_cell(plate_matrix_t* plate_matrix, uint64_t row, 
+void update_cell(plate_matrix_t* plate_matrix, uint64_t row,
     uint64_t col, double mult_constant);
 
 /**

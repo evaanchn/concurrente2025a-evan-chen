@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     // print "Error: No job file specified"
     perror("ERROR: No job file specified\n");
     return 11;
-  } // else if (argc == 2) {
+  }  // else if (argc == 2) {
   //   // Taken from hello_w example, calls sysconf to get available cores.
   //   thread_count = sysconf(_SC_NPROCESSORS_ONLN);
   // } else {
