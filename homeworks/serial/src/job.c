@@ -168,8 +168,6 @@ int report_results(job_t* job) {
   // Build results file path
   char* results_file_path = build_file_path(REPORTS_DIRECTORY, file_name_tsv);
 
-  printf("%s\n", results_file_path);
-
   if (!results_file_path) {
     perror("Error: Results file path could not be built");
     free(file_name_tsv);
@@ -179,9 +177,6 @@ int report_results(job_t* job) {
 
   // Open results file for writing
   FILE* results_file = fopen(results_file_path, "w");
-  free(results_file_path);
-  free(file_name_tsv);
-  free(file_name);
 
   if (results_file) {
     // Write each plate's data to the file
@@ -200,10 +195,15 @@ int report_results(job_t* job) {
           plate->k_states,
           formatted_time);
     }
+    printf("Results stored in: %s\n", results_file_path);
   } else {
     perror("Could not open results file");
     error = EXIT_FAILURE;
   }
+
+  free(results_file_path);
+  free(file_name_tsv);
+  free(file_name);
 
   fclose(results_file);
   return error;
