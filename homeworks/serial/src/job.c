@@ -185,8 +185,8 @@ int report_results(job_t* job) {
       time_t simulated_seconds = plate->k_states * plate->interval_duration;
       char formatted_time[50];
       format_time(simulated_seconds, formatted_time, 50);
-      fprintf(results_file, "%s\t%" PRIu64 "\t%lg\t%" PRIu64
-          "\t%lg\t%" PRIu64"\t%s\n",
+      fprintf(results_file, "%-10s\t%9" PRIu64 "\t%8.6lg\t%8" PRIu64
+          "\t%6.6lg\t%6" PRIu64 "\t%-48s\n",
           plate->file_name,
           plate->interval_duration,
           plate->thermal_diffusivity,
