@@ -4,3 +4,5 @@ doc/
 *.pyc
 .DS_Store
 .vscode
+
+homeworks/serial/reports/*
