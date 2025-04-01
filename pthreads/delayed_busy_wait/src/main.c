@@ -16,6 +16,7 @@
 typedef struct shared_data {
   uint64_t next_thread;
   uint64_t thread_count;
+  useconds_t max_delay;
 } shared_data_t;
 
 // thread_private_data_t
@@ -36,11 +37,17 @@ int main(int argc, char* argv[]) {
   // create thread_count as result of converting argv[1] to integer
   // thread_count := integer(argv[1])
   uint64_t thread_count = sysconf(_SC_NPROCESSORS_ONLN);
-  if (argc == 2) {
+  uint32_t max_delay = 0;
+  if (argc == 3) {
     if (sscanf(argv[1], "%" SCNu64, &thread_count) == 1) {
     } else {
       fprintf(stderr, "Error: invalid thread count\n");
       return 11;
+    }
+    if (sscanf(argv[2], "%" SCNu32, &max_delay) == 1) {
+    } else {
+      fprintf(stderr, "Error: invalid max delay\n");
+      return 12;
     }
   }
 
@@ -48,7 +55,9 @@ int main(int argc, char* argv[]) {
   if (shared_data) {
     shared_data->next_thread = 0;
     shared_data->thread_count = thread_count;
+    shared_data->max_delay = max_delay;
 
+    srand48(time(NULL) + clock());
     struct timespec start_time, finish_time;
     clock_gettime(CLOCK_MONOTONIC, &start_time);
 
@@ -119,7 +128,17 @@ void* greet(void* data) {
 
   // Wait until it is my turn
   while (shared_data->next_thread < private_data->thread_number) {
-    // busy-waiting
+// Make use of preprocessor to control if thread will sleep a random time
+// This way, code existence will be determined at compilation time
+// If one runs `make rand`, makefile will add definition for RANDOMSLEEP
+#ifdef RANDOMSLEEP
+    // lrand48() returns random long 
+    const useconds_t my_delay = lrand48() % shared_data->max_delay;
+    // delayed busy-waiting
+    usleep(my_delay);
+#else
+  usleep(shared_data->max_delay);
+#endif
   }  // end while
 
   // print "Hello from secondary thread"

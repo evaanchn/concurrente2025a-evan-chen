@@ -1,6 +1,7 @@
 procedure main(argc, argv[])
   shared next_thread := 0
   shared thread_count := integer(argv[1])
+  shared max_delay :- integer(argv[2])
   mutable team := create_threads(thread_count, greet)
   print "Hello from main thread"
   join_threads(team)
@@ -9,7 +10,8 @@ end procedure
 procedure greet(thread_number)
   // Wait until it is my turn
   while next_thread < thread_number do
-    // busy-wait
+    // delayed-wait with usleep, takes microseconds as param
+    usleep(max_delay) // Microsleep, u represents greek letter
   end while
   print "Hello from secondary thread", thread_number, " of ", thread_count
   // Allow subsequent thread to do the task
