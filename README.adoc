@@ -22,6 +22,7 @@ s|# s|Id s|Tipo s|Descripcion
 |8 m|link:pthreads/hello_order_busywait[hello_order_busywait] | Ejemplo comentado |Se modifica link:pthreads/hello_iw_shr[hello_iw_shr] de forma que se ordenan los saludos de hilos secundarios, mediante el uso de la espera activa (while persistente).
 |9 m|link:pthreads/team_shot_put[team_shot_put] | Ejemplo de clase |Se simula un enfrentamiento centrado en lanzamiento de peso entre dos equipos, donde se tienen matrices de hilos y registros privados.
 |10 m|link:pthreads/create_thread_team[create_thread_tean] | Ejemplo de clase |Se optimiza link:pthreads/team_shot_put[team_shot_put] con registros privados genericos, procedimientos relacionados para crearlos y unirlos, ademas de un registro compartido.
+|11 m|link:pthreads/position_race[position_race] | Ejemplo comentado |Representa una carrera entre hilos para reportar en orden, en que posicion quedaron.
 |===
 
 == Tareas
@@ -50,13 +51,13 @@ s|# s|Id s|Titulo s|Descripcion
 
     9. *Espera activa*: Un tipo de espera que consume todos los recursos de las CPU, por ejemplo, un while seco ejecutado a traves de miles de hilos. Es nociva a la maquina y especialmente prohibido cuando se trata de programacion concurrente (y programacion en general).
 
-    Condición de carrera.
+    10. *Condición de carrera*: En programacion concurrente, se trata de una situacion donde multiples hilos tratan de modificar y leer un mismo dato ("modificacion concurrente de memoria compartida"). Esto constituye un peligro, dado a que podria no haber consistencia del dato de forma logica.
 
-    Control de concurrencia.
+    11. *Control de concurrencia*: Organizacion de hilos de ejecucion, tal que la concurrencia pueda darse sin inconsistencias de datos, u otros problemas en general.
 
-    Seguridad condicional.
+    12. *Seguridad condicional*: 
 
-    Exclusión mutua.
+    13. *Exclusión mutua*: Conocido tambien como mutual exclusion, o mutex en ingles, se trata de un mecanismo de control de concurrencia, donde se serializa una region critica, o una region donde se produce condicion de carrera. Esto hace que solo un hilo pueda ejecutar esa seccion de codigo a la vez. *Analogia*: Puente angosto donde solo pasa un carro (hilo) a la vez.
 
     Semáforo.
 
