@@ -1,0 +1,14 @@
+= Position Race
+:experimental:
+:nofooter:
+:source-highlighter: highlightjs
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+
+[[problem_statement]]
+== Problem statement
+
+Simulate a race where threads report their ID and final position in a threads' race in order, making use of a control mechanism to determine who gets to take a position and announce its ranking.

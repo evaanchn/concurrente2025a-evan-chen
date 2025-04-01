@@ -1,0 +1,26 @@
+procedure main(argc, argv[])
+  // New shared data: position (in a race)
+  shared position := 0
+  // Mutex for controlling who gets to increment and report their position
+  shared can_access_position := create_mutex()
+  // Usual thread count assignation
+  shared thread_count := integer(argv[1])
+  for thread_number := 0 to thread_count do
+    create_thread(greet, thread_number) // thread team
+  end for
+  print "Hello from main thread"
+end procedure
+
+// Procedure that represents getting to finish line and reporting position
+procedure race(thread_number)
+  // Lock so only one thread can access
+  lock(can_access_position)
+  position := position + 1  // Increment position (started in 0)
+  declare my_position := position  // Takes position
+  // Report position. Inside critical region so printing is in order
+  print "Thread ", thread_number, "/", thread_count ": I arrived at position ",
+    my_position
+
+  // Unlock for next thread in queue
+  unlock(can_access_position)
+end procedure
