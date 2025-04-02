@@ -1,0 +1,29 @@
+procedure main(argc, argv[])
+  shared thread_count := integer(argv[1])
+
+  // Instead of a mutex, we now have an array of semaphores
+  // That will allow order and indeterminism at the same time
+  shared can_greet := array(thread_count, semaphore)
+
+  // Initialize array of semaphores first, to avoid any possible concurrency issue
+  for thread_number := 0 to thread_count do
+    // First semaphore starts in 1, the rest in 0
+    // (because C interprets 0 as false, making it 1)
+    can_greet[thread_number] := create_semaphore(not thread_number)
+  end for
+
+  // Initialize threads, sending them to execute greet 
+  for thread_number := 0 to thread_count do
+    create_thread(greet, thread_number) // thread team
+  end for
+  print "Hello from main thread"
+end procedure
+
+procedure greet(thread_number)
+  // Decrement current semaphore (always goes from 1 to 0)
+  wait(can_greet[thread_number])
+  print "Hello from secondary thread {thread_number} of {thread_count}"
+
+  // Increment next thread's semaphore, in a modular way so the index never exceeds the maximum
+  signal(can_greet[mod(thread_number + 1, thread_count)])
+end procedure
