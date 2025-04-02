@@ -1,7 +1,7 @@
 = Paralela25a Evan Chen Cheng
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:
@@ -23,6 +23,8 @@ s|# s|Id s|Tipo s|Descripcion
 |9 m|link:pthreads/team_shot_put[team_shot_put] | Ejemplo de clase |Se simula un enfrentamiento centrado en lanzamiento de peso entre dos equipos, donde se tienen matrices de hilos y registros privados.
 |10 m|link:pthreads/create_thread_team[create_thread_tean] | Ejemplo de clase |Se optimiza link:pthreads/team_shot_put[team_shot_put] con registros privados genericos, procedimientos relacionados para crearlos y unirlos, ademas de un registro compartido.
 |11 m|link:pthreads/position_race[position_race] | Ejemplo comentado |Representa una carrera entre hilos para reportar en orden, en que posicion quedaron.
+|12 m|link:pthreads/delated_busy_wait[delayed_busywait] | Ejemplo de clase |Se modifica link:pthreads/hello_order_busywait[hello_order_busywait] de forma que se "enmascara" la espera activa con sleeps de x microsegundos, sea constante u aleatorio.
+|13 m|link:pthreads/hello_order_semaphor[hello_order_semaphor] | Ejemplo comentado |Se utiliza un arreglo de semaforos como alternativa a la espera activa, asegurando impresiones en orden sin efectos secundarios nocivos.
 |===
 
 == Tareas
@@ -59,7 +61,7 @@ s|# s|Id s|Titulo s|Descripcion
 
     13. *Exclusión mutua*: Conocido tambien como mutual exclusion, o mutex en ingles, se trata de un mecanismo de control de concurrencia, donde se serializa una region critica, o una region donde se produce condicion de carrera. Esto hace que solo un hilo pueda ejecutar esa seccion de codigo a la vez. *Analogia*: Puente angosto donde solo pasa un carro (hilo) a la vez.
 
-    Semáforo.
+    14. *Semáforo*: Un mecanismo de control de concurrencia que permite concurrencia y orden. A diferencia del mutex, un semaforo no es booleano, sino un valor entero que puede ser positivo, nulo o negativo. Cuando un hilo trata de pasar por un semaforo, le decremente (wait), y si el valor llega a ser negativo, se bloquea. Los siguientes hilos en llegar no podran ejecutar el codigo en la region critica, hasta que los hilos que ya entraron lo vuelvan a incrementar y el valor del semaforo vuelve a ser positivo.
 
     Barrera.
 
