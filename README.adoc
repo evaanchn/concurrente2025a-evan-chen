@@ -25,6 +25,7 @@ s|# s|Id s|Tipo s|Descripcion
 |11 m|link:pthreads/position_race[position_race] | Ejemplo comentado |Representa una carrera entre hilos para reportar en orden, en que posicion quedaron.
 |12 m|link:pthreads/delated_busy_wait[delayed_busywait] | Ejemplo de clase |Se modifica link:pthreads/hello_order_busywait[hello_order_busywait] de forma que se "enmascara" la espera activa con sleeps de x microsegundos, sea constante u aleatorio.
 |13 m|link:pthreads/hello_order_semaphor[hello_order_semaphor] | Ejemplo comentado |Se utiliza un arreglo de semaforos como alternativa a la espera activa, asegurando impresiones en orden sin efectos secundarios nocivos.
+|14 m|link:pthreads/hello_order_cond_safe[hello_order_cond_safe] | Ejemplo comentado |En vez de aplicar un mecanismo de control de concurrencia, se emplea un arreglo de saludos para particionar la memoria compartida en diferentes partes privadas, tal que se elimina condicion de carrera (seguridad condicional).
 |===
 
 == Tareas
@@ -55,9 +56,9 @@ s|# s|Id s|Titulo s|Descripcion
 
     10. *Condición de carrera*: En programacion concurrente, se trata de una situacion donde multiples hilos tratan de modificar y leer un mismo dato ("modificacion concurrente de memoria compartida"). Esto constituye un peligro, dado a que podria no haber consistencia del dato de forma logica.
 
-    11. *Control de concurrencia*: Organizacion de hilos de ejecucion, tal que la concurrencia pueda darse sin inconsistencias de datos, u otros problemas en general.
+    11. *Control de concurrencia*: Organizacion de hilos de ejecucion tal que la concurrencia pueda darse sin inconsistencias de datos, a la vez que se controla el tiempo de ejecucion. Al acudir a esto, se frena la concurrencia y se consumen recursos.
 
-    12. *Seguridad condicional*: 
+    12. *Seguridad condicional*: Un estado entre seguro para hilos y no seguro para hilos, donde la memoria compartida se particiona en secciones tal que se eliminan condiciones de carrera y cada hilo hace su trabajo en su area.
 
     13. *Exclusión mutua*: Conocido tambien como mutual exclusion, o mutex en ingles, se trata de un mecanismo de control de concurrencia, donde se serializa una region critica, o una region donde se produce condicion de carrera. Esto hace que solo un hilo pueda ejecutar esa seccion de codigo a la vez. *Analogia*: Puente angosto donde solo pasa un carro (hilo) a la vez.
 
