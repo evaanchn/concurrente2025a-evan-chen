@@ -81,4 +81,11 @@ char* format_time(const time_t seconds, char* text, const size_t capacity);
  */
 int report_results(job_t* job);
 
+/**
+ * @brief Calls upon common functions to build the report file's paths.
+ * @param job Pointer to the job structure.
+ * @return Report file path built.
+ */
+char* build_report_file_path(job_t* job);
+
 #endif  // JOB_H

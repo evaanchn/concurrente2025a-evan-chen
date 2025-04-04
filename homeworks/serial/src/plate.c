@@ -1,7 +1,7 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
 
 #include "plate.h"
-
+// TODO (e): Fuse plate and plate_matrix_t
 int set_plate_matrix(plate_t* plate, char* source_directory) {
   // Concatenate plate file name with same directory specified for job
   char* plate_file_path = build_file_path(source_directory, plate->file_name);
@@ -18,7 +18,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
   }
 
   // Read number of rows and number of columns (first 16 bytes)
-  uint64_t rows, cols;
+  uint64_t rows = 0, cols = 0;
 
   // Handle exception if reading is unsuccessful
   if (fread(&rows, sizeof(uint64_t), 1, plate_file) != 1 ||
@@ -160,7 +160,7 @@ char* set_plate_file_name(plate_t* plate) {
 
   // Allocate memory for the new filename: name + '-' + suffix + null terminator
   const size_t new_size = name_length + strlen(suffix) + 2;
-  char *new_filename = (char *)malloc(new_size);
+  char *new_filename = (char*)calloc(1, new_size);
 
   if (!new_filename) {
     perror("Error: in modify_extension(), memory allocation failed");

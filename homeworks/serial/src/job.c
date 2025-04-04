@@ -4,7 +4,7 @@
 
 job_t* init_job(char* job_file_name) {
   // Allocate memory for a new job structure
-  job_t* job = (job_t*) malloc(sizeof(job_t));
+  job_t* job = (job_t*) calloc(1, sizeof(job_t));
 
   if (job) {
     // Initialize job properties
@@ -38,20 +38,19 @@ int set_job(job_t* job) {
     destroy_job(job);
     return 22;
   }
-
   // Variables to store plate properties
-  char plate_file_name[MAX_FILE_NAME_SIZE];
-  uint64_t interval_duration;
-  double thermal_diffusivity;
-  uint64_t cells_dimension;
-  double epsilon;
+  char plate_file_name[MAX_FILE_NAME_SIZE] = "\0";
+  uint64_t interval_duration = 0;
+  double thermal_diffusivity = 0;
+  uint64_t cells_dimension = 0;
+  double epsilon = 0;
 
   // Read and parse each line from the job file
   while (fscanf(job_file, "%s\t%" SCNu64 "\t%lg\t%" SCNu64 "%lg\n",
     plate_file_name, &interval_duration, &thermal_diffusivity,
     &cells_dimension, &epsilon) == 5) {
     // Allocate memory for a new plate
-    plate_t* curr_plate = (plate_t*) malloc(sizeof(plate_t));
+    plate_t* curr_plate = (plate_t*) calloc(1, sizeof(plate_t));
 
     if (!curr_plate) {
       perror("Error: Memory for new plate could not be allocated");
@@ -60,7 +59,7 @@ int set_job(job_t* job) {
     }
 
     // Allocate memory for plate file name
-    curr_plate->file_name = (char*) malloc(strlen(plate_file_name) + 1);
+    curr_plate->file_name = (char*) calloc(1, strlen(plate_file_name) + 1);
     if (!curr_plate->file_name) {
       perror("Error: Memory for plate file name could not be allocated");
       free(curr_plate);  // Free allocated memory before returning
@@ -133,6 +132,7 @@ void destroy_job(job_t* job) {
 
 
 
+
 // CODE PROVIDED IN HOMEWORK DETAILS, MODIFIED TO APPEAL TO LINTER
 // Modifications credits to Albin Monge (gmtime_r part)
 // Return parameter text must have at least 48 chars (YYYY/MM/DD hh:mm:ss)
@@ -151,28 +151,11 @@ char* format_time(const time_t seconds, char* text, const size_t capacity) {
 
 int report_results(job_t* job) {
   int error = EXIT_SUCCESS;
-
-  // Extract file name from job file path
-  char* file_name = extract_file_name(job->file_name);
-
-  if (!file_name) return EXIT_FAILURE;
-
-  // Modify file extension to .tsv
-  char* file_name_tsv = modify_extension(file_name, "tsv");
-
-  if (!file_name_tsv) {
-    free(file_name);
-    return EXIT_FAILURE;
-  }
-
-  // Build results file path
-  char* results_file_path = build_file_path(REPORTS_DIRECTORY, file_name_tsv);
+  char* results_file_path = build_report_file_path(job);
 
   if (!results_file_path) {
     perror("Error: Results file path could not be built");
-    free(file_name_tsv);
-    free(file_name);
-    return EXIT_FAILURE;
+    return EXIT_FAILURE;  // Could not build report file path
   }
 
   // Open results file for writing
@@ -196,15 +179,36 @@ int report_results(job_t* job) {
           formatted_time);
     }
     printf("Results stored in: %s\n", results_file_path);
+    fclose(results_file);
   } else {
     perror("Could not open results file");
-    error = EXIT_FAILURE;
+    error = EXIT_FAILURE;  // Add error code later
   }
 
   free(results_file_path);
-  free(file_name_tsv);
-  free(file_name);
-
-  fclose(results_file);
   return error;
+}
+
+
+
+char* build_report_file_path (job_t* job) {
+  // Extract file name from job file path
+  char* file_name = extract_file_name(job->file_name);
+
+  if (!file_name) return NULL;
+
+  // Modify file extension to .tsv
+  char* file_name_tsv = modify_extension(file_name, "tsv");
+
+  if (!file_name_tsv) {
+    free(file_name);
+    return NULL;
+  }
+
+  // Build results file path
+  char* results_file_path = build_file_path(REPORTS_DIRECTORY, file_name_tsv);
+
+  free(file_name);
+  free(file_name_tsv);
+  return results_file_path;
 }

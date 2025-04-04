@@ -7,7 +7,7 @@
 plate_matrix_t* init_plate_matrix(uint64_t rows, uint64_t cols) {
   // Allocate memory for the plate_matrix_t structure
   plate_matrix_t* plate_matrix =
-      (plate_matrix_t*)malloc(sizeof(plate_matrix_t));
+      (plate_matrix_t*) calloc(1, sizeof(plate_matrix_t));
 
   if (!plate_matrix) return NULL;  // Handle allocation failure
 
@@ -32,6 +32,8 @@ plate_matrix_t* init_plate_matrix(uint64_t rows, uint64_t cols) {
 
   return plate_matrix;
 }
+
+
 
 void init_auxiliary(plate_matrix_t* plate_matrix) {
   double** initial_matrix = plate_matrix->matrix;
@@ -61,6 +63,8 @@ void init_auxiliary(plate_matrix_t* plate_matrix) {
   }
 }
 
+
+
 void set_auxiliary(plate_matrix_t* plate_matrix) {
   // Temperatures at current state are in matrix, but we want them to be
   // stored in auxiliary to have space in the main matrix for new temperatures
@@ -74,6 +78,8 @@ void set_auxiliary(plate_matrix_t* plate_matrix) {
   // to properly make calculations
   plate_matrix->auxiliary_matrix = current_temperatures;
 }
+
+
 
 void update_cell(plate_matrix_t* plate_matrix, uint64_t row,
       uint64_t col, double mult_constant) {
@@ -95,6 +101,8 @@ void update_cell(plate_matrix_t* plate_matrix, uint64_t row,
   plate_matrix->matrix[row][col] = result;
 }
 
+
+
 // CODE FROM TEAM_SHOT_PUT
 double** create_double_matrix(const size_t rows, const size_t cols) {
   double** matrix = (double**)calloc(rows, sizeof(double*));
@@ -111,6 +119,8 @@ double** create_double_matrix(const size_t rows, const size_t cols) {
   return matrix;
 }
 
+
+
 void destroy_plate_matrix(plate_matrix_t* plate_matrix) {
   uint64_t rows = plate_matrix->rows;
 
@@ -120,6 +130,8 @@ void destroy_plate_matrix(plate_matrix_t* plate_matrix) {
 
   free(plate_matrix);
 }
+
+
 
 // CODE FROM TEAM_SHOT_PUT
 void destroy_double_matrix(double** matrix, const uint64_t rows) {

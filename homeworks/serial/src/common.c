@@ -9,7 +9,7 @@ char* build_file_path(const char* directory, const char* filename) {
   size_t length = strlen(directory) + strlen(filename) + 2;
 
   // Allocate memory for the full path
-  char *full_path = (char *)malloc(length);
+  char *full_path = (char *)calloc(1, length);
   if (!full_path) {
       fprintf(stderr, "Error: Memory allocation failed in build_file_path\n");
       return NULL;
@@ -28,7 +28,7 @@ char* extract_directory(const char *filepath) {
   if (!last_slash) return "";  // No directory found
 
   size_t dir_length = last_slash - filepath;  // Length up to last slash
-  char *directory = (char *)malloc(dir_length + 1);  // Allocate memory
+  char *directory = (char*)calloc(1, dir_length + 1);  // Allocate memory
 
   if (!directory) {
     perror("Error: Memory allocation for directory failed");
@@ -53,7 +53,7 @@ char* extract_file_name(const char *filepath) {
   const char *filename = last_slash ? last_slash + 1 : filepath;
 
   // Allocate memory for the new filename
-  char *result = (char *)malloc(strlen(filename) + 1);
+  char *result = (char *)calloc(1, strlen(filename) + 1);
   if (!result) {
       perror("Memory allocation for file name extraction failed");
       return NULL;
@@ -78,7 +78,7 @@ char* modify_extension(const char *file_name, const char *new_extension) {
   size_t new_size = name_length + strlen(new_extension) + 2;
 
   // Allocate memory for the new filename
-  char *new_filename = (char *)malloc(new_size);
+  char *new_filename = (char *)calloc(1, new_size);
   if (!new_filename) return NULL;
 
   // Construct the new filename safely
