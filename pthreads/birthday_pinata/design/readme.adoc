@@ -1,0 +1,24 @@
+= Design of solution
+:experimental:
+:nofooter:
+:source-highlighter: highlightjs
+:stem:
+:toc:
+:xrefstyle: short
+
+
+[[procedural_design]]
+== Procedural design
+
+The solution for the problem was designed as a modification of the pthreads_race code, where instead of position, a shared variable pinata plays the subject of race condition, with each thread decreasing it by one to indicate a hit. A mutex is used to allow one thread to hit per turn, inside of a while true in the hit_pinata procedure. 
+
+The reason while true is used is because using the pinata itself to determine if the cycle should stop means there is a race condition (original solution involved this, but tsan reported it as dangerous). After locking the mutex inside of the cycle, conditionals put in place determine if the thread should stop hitting the pinata (adding a break).
+
+The pseudocode for the solution can be found below.
+
+[#pseudocode]
+[source,delphi]
+----
+include::birthday_pinata.pseudo[]
+----
+

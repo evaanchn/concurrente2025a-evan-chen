@@ -1,0 +1,43 @@
+procedure main()
+  shared pinata := integer(argv[2])
+  shared pinata_resistance := integer(argv[2])
+  shared can_hit_pinata := create_mutex()
+  shared thread_count := integer(argv[1])
+  for thread_number := 0 to thread_count do 
+    create_thread(hit_pinata, thread_number)
+  end for
+end procedure
+
+procedure hit_pinata(thread_number)
+  mutable broke_pinata := false  // Variable to determine which message print
+
+  // While true to avoid race condition (if we use pinata this will be outside
+  // a mutex, meaning there will be race condition with the threads modifying it)
+  while true do
+    lock(can_hit_pinata)  // Restrict entry to danger zone
+    // Make sure to only hit if pinata is not broken
+    if pinata == 0 do 
+      unlock(can_hit_pinata)
+      break
+    end
+
+    pinata := pinata - 1  // Hit pinata
+    hits := hits + 1  // Record hit
+    if pinata = 0 do 
+      broke_pinata := True  // State that the thread broke the pinata
+    end if
+    unlock(can_hit_pinata)  // Unlock for next thread to hit
+
+    // If broke pinata already, leave to report
+    if broke_pinata do 
+      break
+    end if
+  end while
+
+  // Print results
+  if broke_pinata do 
+    print "Thread {thread_number}/{pinata_resistance}: {hits} hits, I broke the pinata\n" 
+  else 
+    print "Thread {thread_number}/{pinata_resistance}: {hits} hits\n"
+  end if
+end procedure
