@@ -1,7 +1,7 @@
 = Construcción de edificio [building_tasks]
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:
