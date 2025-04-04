@@ -52,6 +52,7 @@ Agregue la gráfica al `readme.adoc` del ejercicio y una discusión de a lo sumo
 
 Si trabajó en equipos, indique además en el `readme.adoc` del ejercicio, los nombres de los miembros que participaron. Todos los miembros tendrán duplicado este documento en sus repositorios privados.
 
+[results]
 == Resultados y Discusion
 Se puede afirmar con certeza que el uso de semaforos y seguridad condicional es mucho mas eficiente que la espera activa, aun cuando esta sea "enmascarada" con sleeps como se puede ver en este experimento con 32000 hilos. Para la demora constante y aleatoria, se pueden notar que mientras mas largo sea la demora, mas tiempo tarda en concluir las tareas. Por otra parte, los programas que utilizaban semaforos y seguridad condicional rondaban los 1.5 segundos de ejecucion para las 9 pruebas que se hicieron respectivamente. Esto muestra una diferencia de alrededor de 3 minutos entre estos y la espera activa. 
 
@@ -65,3 +66,12 @@ image::graphs/comparison_graph.svg[].svg[align="center"]
 [#graph_log]
 .Grafico logaritmico
 image::graphs/comparison_graph_log.svg[].svg[align="center"]
+
+[members]
+== Miembros del grupo
+
+1. Andrey Bejarano C31070
+
+2. Evan Chen C32200
+
+3. Albin Monge C35000
