@@ -51,3 +51,17 @@ Cree una gráfica donde el eje-x son las duraciones dadas por argumento al progr
 Agregue la gráfica al `readme.adoc` del ejercicio y una discusión de a lo sumo dos párrafos. Indique cuál fue el mejor tiempo máximo de espera obtenido y los efectos de disminuir o incrementarlo. Conjeture y trate de explicar por qué ocurre este comportamiento. Finalmente indique si la espera activa con retraso es una solución óptima, y en caso negativo, provea una idea que pueda lograr este ideal.
 
 Si trabajó en equipos, indique además en el `readme.adoc` del ejercicio, los nombres de los miembros que participaron. Todos los miembros tendrán duplicado este documento en sus repositorios privados.
+
+== Resultados y Discusion
+Se puede afirmar con certeza que el uso de semaforos y seguridad condicional es mucho mas eficiente que la espera activa, aun cuando esta sea "enmascarada" con sleeps como se puede ver en este experimento con 32000 hilos. Para la demora constante y aleatoria, se pueden notar que mientras mas largo sea la demora, mas tiempo tarda en concluir las tareas. Por otra parte, los programas que utilizaban semaforos y seguridad condicional rondaban los 1.5 segundos de ejecucion para las 9 pruebas que se hicieron respectivamente. Esto muestra una diferencia de alrededor de 3 minutos entre estos y la espera activa. 
+
+Como un análisis empírico extra, mediante la revisión del monitor de recursos, a diferencia de la espera activa con un 100% del uso de los núcleos durante su ejecución, los métodos de semáforo y seguridad condicional no muestran un aumento porcentual notable respecto a los demás procesos del sistema. Se concluye que es preferible el uso de semaforos y seguridad condicional ante la ineficiente espera activa, en cuanto a mecanismos de control de concurrencia y en consideración además de los riesgos de un uso desmedido de recursos de hardware (CPU).
+
+[#graph]
+.Grafico normal
+image::graphs/comparison_graph.svg[].svg[align="center"]
+
+
+[#graph_log]
+.Grafico logaritmico
+image::graphs/comparison_graph_log.svg[].svg[align="center"]
