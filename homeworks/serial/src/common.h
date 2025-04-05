@@ -36,7 +36,7 @@ char* extract_file_name(const char* path);
 /**
  * @brief Modifies the extension of a given filename.
  * 
- * @param filename The original filename (e.g., "document.txt").
+ * @param file_name The original filename (e.g., "document.txt").
  * @param new_extension The new extension without a leading dot (e.g., "tsv").
  * @return A newly allocated string containing the filename 
  *         with the new extension (e.g., "document.tsv").
