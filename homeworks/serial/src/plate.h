@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #include "common.h"
+#include "errors.h"
 #include "plate_matrix.h"
 
 /**

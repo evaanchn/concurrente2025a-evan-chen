@@ -8,6 +8,7 @@
 #include <time.h>
 
 #include "common.h"
+#include "errors.h"
 #include "plate.h"
 
 /** @brief Initial capacity for plates allocation. */

@@ -14,7 +14,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
 
   if (!plate_file) {
     printf("Error: Plate file %s could not be opened", plate->file_name);
-    return 31;
+    return OPEN_PLATE_FILE_FAIL;
   }
 
   // Read number of rows and number of columns (first 16 bytes)
@@ -25,7 +25,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
       fread(&cols, sizeof(uint64_t), 1, plate_file) != 1) {
     perror("Error: Rows and cols could not be read");
     fclose(plate_file);
-    return 32;
+    return ROWS_COLS_READING_FAIL;
   }
 
   // Set up plate's plate_matrix (allocate space for matrices inside,
@@ -132,7 +132,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     // Handle file opening failure
     perror("Error: Could not open output file");
     destroy_plate_matrix(plate->plate_matrix);
-    error = EXIT_FAILURE;
+    error = OPEN_OUTPUT_FILE_FAIL;
   }
 
   // Close the file before returning
@@ -147,7 +147,7 @@ char* set_plate_file_name(plate_t* plate) {
   const char *last_dot = strrchr(plate->file_name, '.');
 
   if (!last_dot) {
-    perror("Error: in modify_extension(), no extension specified for file");
+    perror("Error: no extension specified for plate file\n");
     return NULL;
   }
 
@@ -163,7 +163,7 @@ char* set_plate_file_name(plate_t* plate) {
   char *new_filename = (char*)calloc(1, new_size);
 
   if (!new_filename) {
-    perror("Error: in modify_extension(), memory allocation failed");
+    perror("Error: Memory allocation failed for platefile name\n");
     return NULL;
   }
 

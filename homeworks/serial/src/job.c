@@ -8,18 +8,19 @@ int simulate(char* job_file_path, uint64_t thread_count) {
   if (thread_count > 1) {
     printf("Concurrent solution yet to be developed\n");
   }
+  int error = EXIT_SUCCESS;
+
   // Create job struct
   job_t* job = init_job(job_file_path);
-  if (!job) return 21;
+  if (!job) return JOB_INIT_FAIL;
 
   // Set the struct with necessary information
-  if (set_job(job) != EXIT_SUCCESS) {
-    destroy_job(job);
-    return 22;
-  }
+  error = set_job(job);
+  if (error != EXIT_SUCCESS) return error;
 
-  int error = process_plates(job);
-  if (error) return error;
+  // Process the plates
+  error = process_plates(job);
+  if (error != EXIT_SUCCESS) return error;
 
   // Report final results of the simulation
   report_results(job);
@@ -40,7 +41,7 @@ int process_plates(job_t* job) {
     // Create plate's plate matrix: read plate file and store temperatures
     if (set_plate_matrix(curr_plate, job->source_directory) != EXIT_SUCCESS) {
       destroy_job(job);
-      return 24;
+      return SET_PLATE_MATRIX_FAIL;
     }
 
     equilibrate_plate(job, plate_number);
@@ -77,7 +78,7 @@ int clean_plate(job_t* job, size_t plate_number) {
   // Create an updated plate file with final temperatures
   if (update_plate_file(curr_plate, job->source_directory) != EXIT_SUCCESS) {
     destroy_job(job);
-    return 25;
+    return UPDATE_PLATE_FILE_FAIL;
   }
 
   // Deallocate memory so other plates have space for their matrices
@@ -122,7 +123,7 @@ int set_job(job_t* job) {
   if (!job_file) {
     perror("Error: Job file could not be opened");
     destroy_job(job);
-    return 22;
+    return JOB_FILE_NOT_FOUND;
   }
   // Variables to store plate properties
   char plate_file_name[MAX_FILE_NAME_SIZE] = "\0";
@@ -141,7 +142,7 @@ int set_job(job_t* job) {
     if (!curr_plate) {
       perror("Error: Memory for new plate could not be allocated");
       destroy_job(job);
-      return 23;
+      return PLATE_ALLOCATION_FAIL;
     }
 
     // Allocate memory for plate file name
@@ -150,7 +151,7 @@ int set_job(job_t* job) {
       perror("Error: Memory for plate file name could not be allocated");
       free(curr_plate);  // Free allocated memory before returning
       destroy_job(job);
-      return 24;
+      return PLATE_FILE_NAME_ALLOCATION_FAIL;
     }
 
     // Copy file name and set plate properties
@@ -167,12 +168,14 @@ int set_job(job_t* job) {
     job->plates_count += 1;
 
     // Check if capacity needs to be expanded
-    if (check_capacity(job) != EXIT_SUCCESS) return EXIT_FAILURE;
+    if (check_capacity(job) != EXIT_SUCCESS) return JOB_EXPANSION_FAIL;
   }
 
   fclose(job_file);
   return EXIT_SUCCESS;
 }
+
+
 
 int check_capacity(job_t* job) {
   if (job->plates_count == job->plates_capacity) {
@@ -239,7 +242,7 @@ int report_results(job_t* job) {
 
   if (!results_file_path) {
     perror("Error: Results file path could not be built");
-    return EXIT_FAILURE;  // Could not build report file path
+    return BUILD_RESULTS_FILE_PATH_FAIL;
   }
 
   // Open results file for writing
@@ -266,7 +269,7 @@ int report_results(job_t* job) {
     fclose(results_file);
   } else {
     perror("Could not open results file");
-    error = EXIT_FAILURE;  // Add error code later
+    error = OPEN_RESULTS_FILE_FAIL;
   }
 
   free(results_file_path);
