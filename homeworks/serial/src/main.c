@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "simulation.h"
+#include "job.h"
 
 /**
  * @brief Processes execution command to set thread count and 

@@ -32,6 +32,21 @@ typedef struct {
 } job_t;
 
 /**
+ * @brief Carries out simulation of each plate in an indicated job.
+ * 
+ * @param job_file_path path of job to simulate
+ * @param thread_count amount of threads used to simulate
+ * @return Success or failure of procedure
+ */
+int simulate(char* job_file_path, uint64_t thread_count);
+
+int process_plates(job_t* job);
+
+void equilibrate_plate(job_t* job, size_t plate_number);
+
+int clean_plate(job_t* job, size_t plate_number);
+
+/**
  * @brief Initializes a job from a given job file name.
  * @param job_file_name Name of the job file.
  * @return Pointer to the initialized job, or NULL on failure.
