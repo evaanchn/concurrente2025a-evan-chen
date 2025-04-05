@@ -1,19 +1,26 @@
-= Hola mundo ordenado con semáforos
+= Ordered hello world with semaphores
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:
 :xrefstyle: short
 
 
-Haga que un equipo de hilos saluden siempre en orden. Es decir, si se crean `w` threads, la salida sea siempre en orden
+Have a team of threads always greet in order. That is, if `w` threads are created, the exit will always be in order.
 
-	Hello from thread 0 of w
-	Hello from thread 1 of w
-	Hello from thread 2 of w
-	...
-	Hello from thread w of w
+[example]
+====
+Hello from thread 0 of w
 
-Utilice una colección de semáforos como mecanismo de sincronización (control de concurrencia).
+Hello from thread 1 of w
+
+Hello from thread 2 of w
+
+...
+
+Hello from thread w of w
+====
+
+Use a collection of semaphores as a synchronization mechanism (concurrency control).

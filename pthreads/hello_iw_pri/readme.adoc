@@ -1,3 +1,17 @@
-# hello_count
+= Hello world with threads (private data)
+:experimental:
+:nofooter:
+:source-highlighter: highlightjs
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
 
-On my *Fedora 40 64-bit* virtual machine, the maximum amount of threads is around *93,400* threads, a number discovered by executing the program with different numbers. The PTHREADS_THREAD_MAX constant does not seem to exist.
+[[problem_statement]]
+== Problem statement
+
+Modify the "hello world" program to create an arbitrary number of threads. Each thread prints "Hello from secondary thread {i}" to standard output and terminates. Allow the user to specify the number of threads as a command-line argument. If this argument is omitted, assume the number of available CPUs on the system.
+
+[[hello_count]]
+== Hello Count
+On my *Fedora 40 64-bit* virtual machine, the maximum amount of threads is around *14,000* threads, a number discovered by executing the program with different numbers. The PTHREADS_THREAD_MAX constant does not seem to exist.

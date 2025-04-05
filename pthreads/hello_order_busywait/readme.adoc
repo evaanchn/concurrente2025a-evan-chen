@@ -1,0 +1,42 @@
+= Hello order busy wait
+:experimental:
+:nofooter:
+:source-highlighter: highlightjs
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+[[problem_statement]]
+== Problem statement
+
+Create a new version of your "numbered hello world" program where each thread prints "Hello from secondary thread i of w", where i is the thread number and w the total number of threads in the team, but with the following changes:
+
+Make sure the data common to all threads (the number w) is in a shared register (structure) for each thread. Keep the data exclusive to each thread (i) in the private register.
+
+Make sure the threads always say hello in order. That is, if w threads are created, the output is always in order.
+
+[example]
+====
+Hello from thread 0 of w
+
+Hello from thread 1 of w
+
+Hello from thread 2 of w
+
+...
+
+Hello from thread w of w
+
+====
+
+Use busywait as a synchronization mechanism (concurrency control).
+
+Run your hello_order_busywait solution several times with the maximum number of threads your operating system allows. Is the duration of your solution consistent with busywait?
+
+Describe the program's behavior and explain the reason for it in the readme.adoc file inside your hello_order_busywait folder. Indicate under what conditions things would be desperate enough to use busy wait, or if there are none, suggest alternative solutions.
+
+== Analysis
+After running this program several times with the maximum amount of threads for my virtual machine, I discovered it ran really too slowly to even reach the 14000 threads requested. This is because there are too many threads in queue, meaning it takes longer for the corresponding thread to get to the print.
+
+I think there wouldn't be any situation in which busy wait will be preferred over alternatives, like conditional safety, semaphores, and mutex.

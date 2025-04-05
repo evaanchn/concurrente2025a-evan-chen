@@ -1,7 +1,7 @@
 = Hello world with threads
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:
@@ -11,4 +11,4 @@
 [[problem_statement]]
 == Problem statement
 
-Write a program that creates two threads when executed: main and secondary. Both threads must greet with "Hello from main thread" and "Hello from secondary thread" messages in the standard output, respectively. Use a dynamic analizer of the code like the _memcheck_ and _helgrind_ (from Valgrind) tools, or Google Sanitizers to ensure the program does not provoke race conditions.
+Modify the "hello world" program to create an arbitrary number of threads. Each thread prints "Hello from secondary thread {i}" to standard output and terminates. Allow the user to specify the number of threads as a command-line argument. If this argument is omitted, assume the number of available CPUs on the system.

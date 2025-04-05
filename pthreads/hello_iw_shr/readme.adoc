@@ -1,0 +1,17 @@
+= Hello world with threads (shared data)
+:experimental:
+:nofooter:
+:source-highlighter: highlightjs
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+[[problem_statement]]
+== Problem statement
+
+Create a new version of "numbered hello world" program where each thread prints "Hello from secondary thread {i} of {w}", in which i is the thread number and w is the total number of threads in the team, but with the following changes:
+
+Place the shared data for all threads (the number w) in a shared register (structure) for each thread. Keep the unique data for each thread (i) in a private register.
+
+Report the duration in seconds that threads take to say hello. You can use the POSIX clock_gettime() function from <time.h>.

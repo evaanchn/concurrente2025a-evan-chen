@@ -1,20 +1,28 @@
-= Hola mundo ordenado con seguridad condicional
+= Hello world with conditional security
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:
 :xrefstyle: short
 
 
-Haga que un equipo de hilos saluden siempre en orden. Es decir, si se crean `w` threads, la salida sea siempre en orden
+Have a team of threads greet in order. That is, if w threads are created, the output is always in order.
 
-	Hello from thread 0 of w
-	Hello from thread 1 of w
-	Hello from thread 2 of w
-	...
-	Hello from thread w of w
+[example]
+====
+Hello from thread 0 of w
 
-Evite (si es posible) el control de concurrencia, es decir, trate de usar seguridad condicional (link:https://en.wikipedia.org/wiki/Thread_safety[conditionally safe^]).
+Hello from thread 1 of w
+
+Hello from thread 2 of w
+
+...
+
+Hello from thread w of w
+
+====
+Avoid concurrency control if possible, that is, try to use conditional safety
+(link:https://en.wikipedia.org/wiki/Thread_safety[conditionally safe^]).
 
