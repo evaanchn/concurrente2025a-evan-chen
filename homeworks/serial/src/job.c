@@ -32,16 +32,17 @@ int simulate(char* job_file_path, uint64_t thread_count) {
 
 
 int process_plates(job_t* job) {
-   // For each plate stored
+  // For each plate stored
   for (size_t plate_number = 0; plate_number < job->plates_count;
     ++plate_number) {
     // Get current plate
     plate_t* curr_plate = job->plates[plate_number];
 
     // Create plate's plate matrix: read plate file and store temperatures
-    if (set_plate_matrix(curr_plate, job->source_directory) != EXIT_SUCCESS) {
+    int error = set_plate_matrix(curr_plate, job->source_directory);
+    if (error != EXIT_SUCCESS) {
       destroy_job(job);
-      return SET_PLATE_MATRIX_FAIL;
+      return error;
     }
 
     equilibrate_plate(job, plate_number);
@@ -76,9 +77,10 @@ void equilibrate_plate(job_t* job, size_t plate_number) {
 int clean_plate(job_t* job, size_t plate_number) {
   plate_t* curr_plate = job->plates[plate_number];
   // Create an updated plate file with final temperatures
-  if (update_plate_file(curr_plate, job->source_directory) != EXIT_SUCCESS) {
+  int error = update_plate_file(curr_plate, job->source_directory);
+  if (error != EXIT_SUCCESS) {
     destroy_job(job);
-    return UPDATE_PLATE_FILE_FAIL;
+    return error;
   }
 
   // Deallocate memory so other plates have space for their matrices
@@ -104,12 +106,12 @@ job_t* init_job(char* job_file_name) {
 
     // Check if plates memory allocation failed
     if (!job->plates) {
-      perror("Error: Memory for plates could not be allocated");
+      perror("Error: Memory for plates could not be allocated\n");
       destroy_job(job);
       return NULL;
     }
   } else {
-    perror("Error: Memory for job could not be allocated");
+    perror("Error: Memory for job could not be allocated\n");
     return NULL;
   }
 
@@ -121,7 +123,7 @@ int set_job(job_t* job) {
   FILE* job_file = fopen(job->file_name, "rt");
 
   if (!job_file) {
-    perror("Error: Job file could not be opened");
+    perror("Error: Job file could not be opened\n");
     destroy_job(job);
     return JOB_FILE_NOT_FOUND;
   }
@@ -140,7 +142,7 @@ int set_job(job_t* job) {
     plate_t* curr_plate = (plate_t*) calloc(1, sizeof(plate_t));
 
     if (!curr_plate) {
-      perror("Error: Memory for new plate could not be allocated");
+      perror("Error: Memory for new plate could not be allocated\n");
       destroy_job(job);
       return PLATE_ALLOCATION_FAIL;
     }
@@ -148,7 +150,7 @@ int set_job(job_t* job) {
     // Allocate memory for plate file name
     curr_plate->file_name = (char*) calloc(1, strlen(plate_file_name) + 1);
     if (!curr_plate->file_name) {
-      perror("Error: Memory for plate file name could not be allocated");
+      perror("Error: Memory for plate file name could not be allocated\n");
       free(curr_plate);  // Free allocated memory before returning
       destroy_job(job);
       return PLATE_FILE_NAME_ALLOCATION_FAIL;
@@ -168,7 +170,12 @@ int set_job(job_t* job) {
     job->plates_count += 1;
 
     // Check if capacity needs to be expanded
-    if (check_capacity(job) != EXIT_SUCCESS) return JOB_EXPANSION_FAIL;
+    if (check_capacity(job) != EXIT_SUCCESS) {
+      perror("Error: Could not expand plates array");
+      free(curr_plate);  // Free allocated memory before returning
+      destroy_job(job);
+      return JOB_EXPANSION_FAIL;
+    }
   }
 
   fclose(job_file);
@@ -268,7 +275,7 @@ int report_results(job_t* job) {
     printf("Results stored in: %s\n", results_file_path);
     fclose(results_file);
   } else {
-    perror("Could not open results file");
+    perror("Error: Could not open results file");
     error = OPEN_RESULTS_FILE_FAIL;
   }
 
@@ -278,7 +285,7 @@ int report_results(job_t* job) {
 
 
 
-char* build_report_file_path (job_t* job) {
+char* build_report_file_path(job_t* job) {
   // Extract file name from job file path
   char* file_name = extract_file_name(job->file_name);
 

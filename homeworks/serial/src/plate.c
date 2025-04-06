@@ -1,7 +1,6 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
 
 #include "plate.h"
-// TODO (e): Fuse plate and plate_matrix_t
 int set_plate_matrix(plate_t* plate, char* source_directory) {
   // Concatenate plate file name with same directory specified for job
   char* plate_file_path = build_file_path(source_directory, plate->file_name);
@@ -100,12 +99,15 @@ int update_plate_file(plate_t* plate, char* source_directory) {
 
   // Generate the updated file name based on the plate's state
   char* updated_file_name = set_plate_file_name(plate);
+  if (!updated_file_name) return UPDATE_OUTPUT_FILE_NAME_FAIL;
+
   char* output_file_name = build_file_path(source_directory, updated_file_name);
 
   // Check if file path was successfully created
   if (!output_file_name) {
+    perror("Error: Could not build output file name");
     free(updated_file_name);
-    return EXIT_FAILURE;
+    return BUILD_OUTPUT_FILE_NAME_FAIL;
   }
 
   // Open the file for writing in binary mode
