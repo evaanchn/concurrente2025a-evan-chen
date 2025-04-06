@@ -8,8 +8,7 @@
 :xrefstyle: short
 
 [[analysis]]
-== Analysis
-
+== Initial Analysis (Brainstorm)
 After analyzing the problem, I tried to divide the program into 3 phases: input, simulation(processing), and output, each with their related subjects (execution command, job file, etc.). From these on out, possible subroutines were planned out to carry out each phase's tasks, with corresponding structs to store subject's data. A diagram of the described analysis can be found in 
 
 
@@ -36,7 +35,7 @@ image::data_structures.svg[align="center"]
 
 After the breakdown, the brainstormed subroutines were divided into different categories, some with structs (job_t, plate_t, and plate_matrix_t). The struct plate_matrix_t was thought up to better divide operations related with the process of simulating temperature changes and the actions before and after the simulation (which will be related to the plate_t struct). 
 
-<<class_diagram>> shows the relationship in the division. Note that arrows point to files included, with a blank source rombus meaning aggregation, and filled in source rombuses meaning composition. For the effects of this diagram, files will be considered classes. Names ending in "_t" indicate structs, with attributes listed with "-", and related functions listed with "+". *simulation* and *common* are the only files without struct definitions, not to mention the *main* file, which runs the simulate() procedure.
+<<class_diagram>> shows the relationship in the division. Note that arrows point to files included, with a blank source rombus meaning aggregation, and filled in source rombuses meaning composition. For the effects of this diagram, files will be considered classes. Names ending in "_t" indicate structs, with attributes listed with "-", and related functions listed with "+". *common* is the only file without struct definition, not to mention the *main* file, which runs the simulate() procedure.
 
 [#class_diagram]
 .UML class diagram for the program
@@ -52,34 +51,15 @@ The main procedures entail the processing of the execution command and the main 
 .Main procedures of the program
 image::flowcharts/main_procedures.svg[align="center"]
 
-Set functions are those in charge of creating and preparing jobs and plates. Both take information from files and store them in the structs created (of type job_t and plate_t). Notice that in <<set_functions>>, two of the main set functions are represented in flowcharts.
-
-[#set_functions]
-.Set functions
-image::flowcharts/set_functions.svg[align="center"]
-
 Update functions are in charge of simulating the plate's transformations between every state, as well as the writing of these files in binary once they have reached equilibrium. In <<update_functions>>, the flowcharts of the three main update procedures show the sequence of steps to achieve their goal.
 
 [#update_functions]
 .Update functions
 image::flowcharts/update_functions.svg[align="center"]
 
-The procedure to create a .tsv report of the simulated job, report_results(), goes through all of the registered plates, formats their information into a tab separated string and writes the result in a file with the same name as the job.
-
-[#report_results]
-.Report results function
-image::flowcharts/report_results.svg[align="center"]
-
 [#pseudocode]
 === Pseudocode
-The pseudocode for each file of the program will be presented in reverse usage order, meaning that subroutines for "classes" that are agregated will be described first, building up to the main procedures.
-
-==== common
-A section for common code was added to store string manipulation functions like build_file_path() (concatenates file name to directory), extract_directory(), extract_file_name(), and modify_extension() (returns modified extension of given file path). These were thought up to properly control where to find files to read or write in, for example to store simulated plates in the source directory, or writing .tsv reports of simulations. ChatGPT's assistance was needed for this part. Self-written pseudocode for each procedure:
-[source,delphi]
-----
-include::pseudocode/common.pseudo[]
-----
+The pseudocode for each file of the program will be presented in reverse usage order, meaning that subroutines for "classes" that are aggregated will be described first, building up to the main procedures.
 
 ==== plate_matrix
 The subroutines associated to the plate_matrix_t struct involve allocation and deallocation of memory for the matrices, the management of the auxiliary matrix (switching with main matrix before each temperature update), and the application of the formula for calculating a cell's new temperature (update_cell(), most notable subroutine of this section).
@@ -95,6 +75,14 @@ Here, subroutines related to the managing and updating of the matrices in plate 
 [source,delphi]
 ----
 include::pseudocode/plate.pseudo[]
+
+----
+==== simulate
+The procedure simulate() is where everything before is integrated to fully encompass the tasks of all three phases (input, processing, output). This algorithm is split into different subroutines: process_plates(), equilibrate_plate(), and clean_plate(). These functions can be found in job.c.
+
+[source,delphi]
+----
+include::pseudocode/simulate.pseudo[]
 ----
 
 ==== job
@@ -105,13 +93,7 @@ In this section, apart from the report job results function, subroutines to cont
 include::pseudocode/job.pseudo[]
 ----
 
-==== simulation
-The procedure simulate() is where everything before is integrated to fully encompass the tasks of all three phases (input, processing, output). The pseudocode for said subroutine is the following.
 
-[source,delphi]
-----
-include::pseudocode/simulation.pseudo[]
-----
 
 ==== main
 The main procedure is in charge of processing the arguments received in the execution command, and notify any anomalies related to the input to the user. Then, it calls simulate() in simulation.c and later returns the error code returned by said procedure. The pseudocode for main() can be found below.
