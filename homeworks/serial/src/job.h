@@ -41,10 +41,25 @@ typedef struct {
  */
 int simulate(char* job_file_path, uint64_t thread_count);
 
+/**
+ * @brief Loops through all of the plates recorded to simulate.
+ * 
+ * @param job current working job
+ * @return Success or failure of processing
+ */
 int process_plates(job_t* job);
 
+/**
+ * @brief Equilibrates current plate
+ * 
+ * @param job current working job
+ * @param plate_number current plate's index
+ */
 void equilibrate_plate(job_t* job, size_t plate_number);
 
+/// @brief Carries out recording of updated plate and freeing of memory.
+/// @see equilibrate_plates
+/// @return if clean up if successful
 int clean_plate(job_t* job, size_t plate_number);
 
 /**
