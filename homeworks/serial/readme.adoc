@@ -13,7 +13,21 @@
 
 This simulation models the time evolution of heat distribution in a rectangular plate with R rows and C columns, determining when all square cells reach thermal equilibrium. Each cell's temperature, except the border cells' (temperature injection points), updates iteratively based on heat transfer with its four immediate neighbors. 
 
-The new temperature at time step k+1 is calculated using the current temperature, the thermal diffusivity of the material, the cell area, and the net energy exchanged with adjacent cells, with formula: stem:[T_{i,j}^{k+1} = T_{i,j}^{k} + \frac{\Delta t\cdot \alpha}{h^2}(T_{i-1,j}^{k}+T_{i,j+1}^{k}+T_{i+1,j}^{k}+T_{i,j-1}^{k}-4T_{i,j}^{k})], where stem:[T_{i,j}^{k}] represents temperature at state k (current temperature), in row i, column j and stem:[T_{i,j}^{k+1}] represents the new temperature of the same cell. 
+The new temperature at time step k+1 is calculated using the current temperature, the thermal diffusivity of the material, the cell area, and the net energy exchanged with adjacent cells, with formula: stem:[T_{i,j}^{k+1} = T_{i,j}^{k} + \frac{\Delta t\cdot \alpha}{h^2}(T_{i-1,j}^{k}+T_{i,j+1}^{k}+T_{i+1,j}^{k}+T_{i,j-1}^{k}-4T_{i,j}^{k})], where:
+
+- stem:[T_{i,j}^{k}] represents temperature at state k (current temperature), in row i, column j
+
+- stem:[T_{i,j}^{k+1}] represents the new temperature of the same cell
+
+- stem:[\Delta t] is the duration of the interval between states (the greater the interval, the more energy can be transferred)
+
+- stem:[\alpha] is the thermal diffusivity of the plate's material, which determines how fast energy is transmitted: the greater the thermal diffusivity, the faster it occurs.
+
+- stem:[h^2] is the area of each cell (the greater the area, the slower energy is spread)
+
+- stem:[T_{i-1,j}^{k}+T_{i,j+1}^{k}+T_{i+1,j}^{k}+T_{i,j-1}^{k}] represents the energy received from immediate neighbors (horizontal and vertical)
+
+- stem:[-4T_{i,j}^{k}] is the energy that the cell itself transmitted to its four neighors.
 
 The update formula follows a discrete approximation of the heat equation, with the use of an equilibrium point constant (epsilon), ensuring a realistic simulation of thermal equilibrium.
 
@@ -69,7 +83,6 @@ Compile the program with the following command
 
 [[usage]]
 === Usage
-
 To execute the program, first make sure you have a correctly formatted job file (like the exmaple shown above) with the mentioned plate files, preferrably in the jobs/ folder. If not, remember to specify the folder path when running the execution command, which has the format:
 
 `bin/serial {folder_with_job}/{job_file_name}`
@@ -84,7 +97,35 @@ Furthermore, note that once the simulation ends, updated plate files with the nu
 
 For example, jobs/job002b/job002.txt, with a request to simulate plate001.bin (and others), would result in the creation of a plate001-12.bin (12 states until equilibrium) file in jobs/job002b/, and job002.tsv report in reports/.
 
+=== Output examples
+If the program executed without errors, a message indicating where the report file was stored will be shown in terminal.
 
+`Results stored in: reports/job###.tsv`
+
+However, if certain criteria are met, error messages could show as well. The following table illustrates the possible outcomes.
+
+[%autowidth]
+|===
+s|Error code s|Error s|Output Message
+|10 | *User did not add job file directory* m|`ERROR: No job file specified Usage: bin/serial <job_file_path>`
+|11 | Allocation for job struct failed m|`Error: Memory for job could not be allocated`
+|11 | Allocation for plates array failed m|`Error: Memory for plates could not be allocated`
+|12 | *Invalid job file name sent as argument* m|`Error: Job file could not be opened`
+|13 | Failed to allocate memory for plate struct m|`Error: Memory for new plate could not be allocated`
+|14 | Could not allocate memory for plate name m|`Error: Memory for plate file name could not be allocated`
+|15 | Could not reallocate memory for plates array m|`Error: Could not expand plates array`
+|16 | Could not build results file path m|`Error: Results file path could not be built`
+|17 | Could not open results file m|`Error: Could not open results file`
+|21 | *Incorrect plate file name in job file* m|`Error: Plate file {file_name} could not be opened`
+|22 | *No plate file extension specified* m|`Error: no extension specified for plate file`
+|22 | Could not allocate memory for plate file m|`Error: Memory allocation failed for plate file name`
+|23 | *Rows and cols values in plate file incorrect or failed to store* m|`Error: Rows and cols could not be read`
+|24 | Plate output file's path could not be built m|`Error: Could not build output file name`
+|25 | Plate output file could not be opened m|`Error: Could not open output file`
+
+|===
+
+Note that only errors in bold can be fixed by user, and the rest are system issues. Use command `echo $?` in terminal to check error code returned and verify with chart.
 [[credits]]
 == Credits
 
