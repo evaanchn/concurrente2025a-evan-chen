@@ -1,0 +1,91 @@
+struct plate_matrix_t
+  declare rows
+  declare cols
+  declare matrix**
+  declare auxiliary_matrix**
+
+// Sets up plate_matrix and allocates memory for matrices
+procedure init_plate_matrix(rows, cols)
+  declare plate_matrix := allocate(sizeof(plate_matrix_t))
+
+  plate_matrix->rows = rows
+  plate_matrix->cols = cols
+
+  plate_matrix->matrix = create_double_matrix(rows, cols)
+  plate_matrix->auxiliary_matrix = create_double_matrix(rows, cols)
+
+  return plate_matrix
+end procedure
+
+procedure init_auxiliary(plate_matrix)
+  declare initial_matrix := plate_matrix->matrix
+
+  // Copying first row into auxiliary matrix
+  for col := 0 to plate_matrix->cols do 
+    plate_matrix->auxiliary_matrix[0][col] := initial_matrix[0][col]
+  end for
+
+  // Copying last row into auxiliary matrix
+  declare last_row := plate_matrix->rows-1
+  for col := 0 to plate_matrix->cols do 
+    plate_matrix->auxiliary_matrix[0][last_row] := initial_matrix[0][last_row]
+  end for
+
+  // Copying first col into auxiliary matrix
+  for row := 1 to last_row do 
+    plate_matrix->auxiliary_matrix[row][0] := initial_matrix[row][0]
+  end for
+
+  // Copying first row into auxiliary matrix
+  declare last_col := plate_matrix->cols-1
+  for row := 1 to last_row do
+    plate_matrix->auxiliary_matrix[row][last_col] :=
+        initial_matrix[row][last_col]
+  end for
+end procedure
+
+procedure set_auxiliary(plate_matrix)
+  // Store official matrix pointer temporarily
+  declare current_temperatures := plate_matrix->matrix
+
+  // Perform switch so that aux and mat exchange
+  plate_matrix->matrix := plate_matrix->auxiliary_matrix
+  late_matrix->auxiliary_matrix := current_temperatures
+end procedure
+
+procedure update_cell(plate_matrix, row, col, mult_constant)
+  declare matrix := plate_matrix->auxiliary_matrix // Aux holds current temp
+  declare result := -4 * matrix[row][col] // Net energy released
+  result := result + matrix[row-1][col] // Add top neighbor energy
+  result := result + matrix[row][col+1] // Add right neighbor energy
+  result := result + matrix[row+1][col] // Add bottom neighbor energy
+  result := result + matrix[row][col-1] // Add left neighbor energy
+  result := result * mult_constant // (thermal_diffusivity * interval_duration) 
+                                   //               / cell_area
+  result := result + matrix[row][col]
+  
+  // Update new temperature in official matrix
+  plate_matrix->matrix[row][col] = result
+end procedure
+
+procedure create_double_matrix(rows, cols)
+  declare matrix = array(rows, double*)
+  for row := 0 to rows do 
+    matrix[row] = array(cols, double)
+  end for
+  return matrix
+end procedure
+
+procedure destroy_plate_matrix(plate_matrix)
+  const rows = plate_matrix->rows
+  destroy_double_matrix(plate_matrix->matrix, rows)
+  destroy_double_matrix(plate_matrix->auxiliary_matrix, rows)
+  free(plate_matrix)
+end procedure
+
+procedure destroy_double_matrix(matrix, rows)
+  for row := 0 to rows do 
+    free(matrix[row])
+  end for
+  free(matrix)
+end procedure

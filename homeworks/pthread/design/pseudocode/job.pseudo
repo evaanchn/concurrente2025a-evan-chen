@@ -1,0 +1,66 @@
+struct job
+  declare file_name          // Holds the name of the job file
+  declare source_directory   // Holds the source directory of the job and plate files
+  mutable plates_count       // Keeps track of the number of plates in the job
+  mutable capacity           // Holds the capacity of the plates array
+  mutable plates*[]          // Dynamic array of plates (each plate contains data related to the job)
+
+procedure init_job(job_file_name)
+  // Initialize the job object
+  declare job = allocate(sizeof(job))  // Allocate memory for the job structure
+  job->file_name = job_file_name      // Set the job file name
+  job->source_directory = source_directory  // Set the source directory
+  job->plates_count := 0               // Initialize plates count to 0
+  job->plates_capacity := 100          // Set initial capacity for the plates array
+  job->plates := init_plates(capacity) // Initialize plates array
+  return job                           // Return the initialized job object
+end procedure
+
+procedure set_job(job)
+  // Set job details from the job file
+  declare file := openf(job->file_name, "rt")  // Open the job file for reading
+  declare plate_file_name                   // Declare variable to store plate file name
+  declare interval_duration                 // Declare variable for the plate's interval duration
+  declare thermal_diffusivity               // Declare variable for the thermal diffusivity
+  declare cells_dimension                   // Declare variable for the cells' dimensions
+  declare epsilon                           // Declare variable for epsilon value (precision threshold)
+
+  while not reached EOF do                 // Loop until the end of the file
+    // Use fscanf to read and set the values for plate_file_name, interval_duration, 
+    // thermal_diffusivity, cells_dimension, and epsilon from the file.
+    // Then, assign these values to the next available position in the plates array.
+
+    job->plates_count := job->plates_count + 1 // Increment the plates count after adding a new plate
+  end while
+
+  fclose(file) // Close the file after reading is done
+end procedure
+
+procedure destroy_job(job)
+  // Free all memory allocated for the job and its plates
+  for i := 0 to job->plates_count do        // Loop through all plates in the job
+    if job->plates[i] do                            // If plate is not null, free it
+      free(job->plates[i]->file_name) // Free file name since it was dynamically allocated
+      free(job->plates[i])
+    end if
+  end for
+
+  free(job->source_directory)
+  free(plates)  // Free the memory allocated for the plates array
+  free(job)     // Free the memory allocated for the job structure
+end procedure
+
+procedure report_results(job)
+  // Generate and write a report based on the job's plates data
+  const report_file = fopen("tests/{file_name}", "a")  // Open the report file in append mode
+  for i := 0 to job->plates_count do         // Loop through all plates in the job
+    declare plate = job->plates[i]           // Get the current plate
+    declare simulated_seconds = plate->k * plate->interval_duration  // Calculate the simulated time for the plate
+    declare formatted_time = array(50, sizeof(char))  // Declare a buffer to store formatted time as a string
+    format_time(simulated_seconds, formatted_time, 48)  // Format the time (provided function)
+
+    // Write the formatted data of the current plate to the report file
+  end for
+
+  fclose(report_file)  // Close the report file
+end procedure
