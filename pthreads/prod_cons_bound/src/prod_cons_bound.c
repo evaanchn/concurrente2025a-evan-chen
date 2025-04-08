@@ -64,10 +64,22 @@ int analyze_arguments(int argc, char* argv[], shared_data_t* shared_data);
  */
 int create_threads(shared_data_t* shared_data);
 
+/**
+ * @brief Fills buffer with numbers the amount of rounds specified
+ * @param data Shared data pointer
+ */
 void* produce(void* data);
 
+/// @brief  Consumes products from buffer and signals back after
+/// @see produce()
 void* consume(void* data);
 
+/**
+ * @brief Generates random amount of microseconds between min and max
+ * @param min Minimum amount of microseconds specified
+ * @param max Maximum amount of microseconds specified
+ * @return Generated amount of microsecondss
+ */
 useconds_t random_between(useconds_t min, useconds_t max);
 
 int main(int argc, char* argv[]) {
