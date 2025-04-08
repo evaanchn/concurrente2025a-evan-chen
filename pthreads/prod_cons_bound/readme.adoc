@@ -1,0 +1,57 @@
+= Producer-Consumer Problem (Bound)
+:experimental:
+:nofooter:
+:source-highlighter: highlightjs
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+
+[[problem_statement]]
+== Problem statement
+
+The producer-consumer problem involves two concurrent entities, one producing something that the other consumes. Both have access to a finite (bounded) space where the products are stored, commonly called a buffer and circular in nature. Since the entities are concurrent, one is adding products to the buffer while the other is simultaneously consuming (or removing) them.
+
+The problem arises when both entities act at different speeds. If the consumer is faster than the producer, it could consume products that have not yet been placed in the buffer. If the producer is faster than the consumer, it catches up and overwrites products that the consumer has not yet processed.
+
+The problem is solved when the consumer processes all products in the same order in which the producer generates them. As with humans, the solution involves imposing a wait. If the consumer is faster, it will empty the buffer and must wait for the producer to generate the next product. If the producer is faster and fills the buffer, it must wait for the consumer to free up at least one space before it can continue producing.
+[[design]]
+== Design of solution
+
+#See the link:design/readme.adoc[design/] folder for an overall design of the solution.#
+
+
+[[user_manual]]
+== User manual
+
+[[build]]
+=== Build
+
+Build program with command `make`
+
+[[usage]]
+=== Usage
+
+To execute program, consider the following arguments:
+
+1. The buffer size.
+
+2. The number of rounds, loops, or times the buffer must be filled and emptied.
+
+3. The minimum duration in milliseconds that it takes the producer to generate a product.
+
+4. The maximum duration in milliseconds that it takes the producer to generate a product.
+
+5. The minimum duration in milliseconds that it takes the consumer to consume a product.
+
+6. The maximum duration in milliseconds that it takes the consumer to consume a product.
+
+An example command could be `bin/prod_cons_bound 3 2 0 100 0 750`, meaning a buffer with three spaces will be used, apart from 2 rounds, producer generation interval 0 - 100 milliseconds, and consumer interval of 0 - 750.
+
+[[credits]]
+== Credits
+
+Code by Jeisson Hidalgo-Cespedes <jeisson.hidalgo@ucr.ac.cr> CC-BY-4
+
+Commented by Evan Chen

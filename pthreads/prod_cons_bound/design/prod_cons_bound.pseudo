@@ -1,0 +1,57 @@
+procedure main(argc, argv[]):
+  // Validate argument count (all solicited must appear)
+  if argc = 7 then
+    // Initialize shared data
+    shared buffer_capacity := integer(argv[1])  // Size of buffer
+    shared buffer as array of buffer_capacity of float  // Actual buffer
+    shared rounds := integer(argv[2])  // The amount of iterations it will fill the buffer
+    shared producer_min_delay := integer(argv[3])  // Min delay for prod
+    shared producer_max_delay := integer(argv[4])  // Max delay for prod
+    shared consumer_min_delay := integer(argv[5])  // Min delay for cons
+    shared consumer_max_delay := integer(argv[6])  // Max delay for cons
+
+    // Semaphores to regulate producing and consuming
+    shared can_produce := create_semaphore(buffer_capacity)
+    shared can_consume := create_semaphore(0)
+
+    // Send one thread to produce, another to consume
+    create_threads(1, produce)
+    create_threads(1, consume)
+  end if
+end procedure
+
+procedure produce:
+  declare count := 0
+  // For each round specified
+  for round := 1 to rounds do
+    // Fill buffer
+    for index := 0 to buffer_capacity do
+      // Wait for its own semaphore
+      wait(can_produce)
+      // Simulate production
+      delay(random_between(producer_min_delay, producer_max_delay))
+      buffer[index] := ++count  // Number it "produced"
+      print("Produced ", buffer[index])  // Report in std out
+      signal(can_consume)  // Signal consumer that it can consume
+    end for
+  end for
+end procedure
+
+procedure consume:
+  for round := 1 to rounds do
+    for index := 0 to buffer_capacity do
+      wait(can_consume)  // Must wait for something to be produced first
+      value := buffer[index]  // Obtain produced value
+      // Simulate consumption
+      delay(random_between(consumer_min_delay, consumer_max_delay))
+      print("Consumed ", value)  // Report consumption
+      signal(can_produce)  // Signal producer that a space freed up
+    end for
+  end for
+end procedure
+
+function random_between(min, max):
+  // Formula for generating a random number between min and max
+  // Min sets baseline since other expression can return 0 to max - min - 1
+  return min + rand() % (max - min)
+end function
