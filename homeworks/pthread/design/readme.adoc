@@ -9,16 +9,8 @@
 
 [[analysis]]
 == Initial Analysis (Brainstorm)
-After analyzing the problem, I tried to divide the program into 3 phases: input, simulation(processing), and output, each with their related subjects (execution command, job file, etc.). From these on out, possible subroutines were planned out to carry out each phase's tasks, with corresponding structs to store subject's data. A diagram of the described analysis can be found in 
 
 
-[#breakdown]
-.Breakdown of problem and possible subroutines
-image::breakdown.svg[align="center"]
-
-Note that the execution command sends arguments into the program to process, which is where the job file to process is indicated. The .txt job file is then read to extract plate file names (.bin) and the related information for their simulation. At this point, plates of type struct plate_t are created to store the aforementioned information, and until it is the plate's turn to go throught the simulation that the .bin file is opened and read, creating plate matrices.
-
-After reaching equilibrium, a separate file is created to report the temperatures of the plate (Updated Plate), with the number of states that it took in the file name. A final report in .tsv is also created after completing the job (simulating all plates), stored in the same directory as the job.
 
 [[data_structures]]
 == Data structures
@@ -41,62 +33,6 @@ After the breakdown, the brainstormed subroutines were divided into different ca
 .UML class diagram for the program
 image::heat_simul_uml.svg[align="center"]
 
-
-[[procedural_design]]
-== Procedural design
-=== Flowcharts
-The main procedures entail the processing of the execution command and the main algorithm of the program: simulate(). Flowcharts of both can be appreciated in <<main_procedures>>.
-
-[#main_procedures]
-.Main procedures of the program
-image::flowcharts/main_procedures.svg[align="center"]
-
-Update functions are in charge of simulating the plate's transformations between every state, as well as the writing of these files in binary once they have reached equilibrium. In <<update_functions>>, the flowcharts of the three main update procedures show the sequence of steps to achieve their goal.
-
-[#update_functions]
-.Update functions
-image::flowcharts/update_functions.svg[align="center"]
-
-[#pseudocode]
-=== Pseudocode
-The pseudocode for each file of the program will be presented in reverse usage order, meaning that subroutines for "classes" that are aggregated will be described first, building up to the main procedures.
-
-==== plate_matrix
-The subroutines associated to the plate_matrix_t struct involve allocation and deallocation of memory for the matrices, the management of the auxiliary matrix (switching with main matrix before each temperature update), and the application of the formula for calculating a cell's new temperature (update_cell(), most notable subroutine of this section).
-
-[source,delphi]
-----
-include::pseudocode/plate_matrix.pseudo[]
-----
-
-==== plate
-Here, subroutines related to the managing and updating of the matrices in plate matrix, and the generation of an updated matrix file can be found.
-
-[source,delphi]
-----
-include::pseudocode/plate.pseudo[]
-
-----
-==== simulate
-The procedure simulate() is where everything before is integrated to fully encompass the tasks of all three phases (input, processing, output). This algorithm is split into different subroutines: process_plates(), equilibrate_plate(), and clean_plate(). These functions can be found in job.c.
-
-[source,delphi]
-----
-include::pseudocode/simulate.pseudo[]
-----
-
-==== job
-In this section, apart from the report job results function, subroutines to control the job_t structure, a dynamic array, can be found. The most notable procedures are the aforementioned report_results() and set_job(), which reads the job file and sets up plate_t structs to store.
-
-[source,delphi]
-----
-include::pseudocode/job.pseudo[]
-----
-
-
-
-==== main
-The main procedure is in charge of processing the arguments received in the execution command, and notify any anomalies related to the input to the user. Then, it calls simulate() in simulation.c and later returns the error code returned by said procedure. The pseudocode for main() can be found below.
 
 
 [source,delphi]

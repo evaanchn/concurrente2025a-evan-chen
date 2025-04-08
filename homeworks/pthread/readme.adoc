@@ -106,8 +106,9 @@ However, if certain criteria are met, error messages could show as well. The fol
 
 [%autowidth]
 |===
-s|Error code s|Error s|Output Message
-|10 | *User did not add job file directory* m|`ERROR: No job file specified Usage: bin/serial <job_file_path>`
+s|_Error code_ s|_Error_ s|_Output Message_
+|2 | *No job file specified* m|`usage: bin/pthread job_file_path thread_count (count optional)`
+|3 | *Invalid thread count (negative, 0 or greater than max threads)* m|`Error: Invalid thread count (0 < thread_count <= 32000)`
 |11 | Allocation for job struct failed m|`Error: Memory for job could not be allocated`
 |11 | Allocation for plates array failed m|`Error: Memory for plates could not be allocated`
 |12 | *Invalid job file name sent as argument* m|`Error: Job file could not be opened`
