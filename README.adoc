@@ -28,6 +28,7 @@ s|# s|Id s|Tipo s|Descripcion
 |14 m|link:pthreads/hello_order_cond_safe[hello_order_cond_safe] | Ejemplo comentado |En vez de aplicar un mecanismo de control de concurrencia, se emplea un arreglo de saludos para particionar la memoria compartida en diferentes partes privadas, tal que se elimina condicion de carrera (seguridad condicional).
 |15 m|link:pthreads/birthday_pinata[birthday_pinata] | Ejercicio corto |Representa una fiesta de hilos, donde solo uno de estos tiene permitido pegar la pinata a la vez y se turnan hasta que se quiebre.
 |16 m|link:pthreads/building_tasks[building_tasks] | Ejemplo de clase |Se representa la construccion de una casa, donde las tareas a hacer tienen dependencia de algunas anteriores. Se trata de completar la obra de manera concurrente, respetando las dependencias de cada tarea.
+|17 m|link:pthreads/prod_cons_bound[prod_cons_bound] | Ejemplo comentado |Se resuelve el problema del buffer acotado con dos semaforos, uno para el productor y otro para el consumidor.
 |===
 
 == Tareas
@@ -35,6 +36,7 @@ s|# s|Id s|Tipo s|Descripcion
 |=== 
 s|# s|Id s|Titulo s|Descripcion
 |1 |link:homeworks/serial[serial] |Simulacion de calor (serial) |Se simula el proceso de equilibrio de laminas, reportando los parametros utilizados, la cantidad de estados transcurridas y la duracion de simulacion.
+|2 |link:homeworks/pthrads[pthreads] |Simulacion de calor (concurrente) |Se habilita la opcion de utilizar hilos de ejecucion durante la misma simulacion de calor resuelta en la primera tarea.
 |===
 
 == Glosario
