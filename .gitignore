@@ -6,3 +6,6 @@ doc/
 .vscode
 
 homeworks/serial/reports/*
+homeworks/pthreads/reports/*
+homeworks/serial/jobs/job020b
+homeworks/pthreads/jobs/job020b
