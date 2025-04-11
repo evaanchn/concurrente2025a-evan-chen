@@ -3,6 +3,8 @@
 #ifndef JOB_H
 #define JOB_H
 
+#define _DEFAULT_SOURCE
+
 #include <assert.h>
 #include <stdlib.h>
 #include <time.h>
@@ -10,6 +12,7 @@
 #include "common.h"
 #include "errors.h"
 #include "plate.h"
+#include "threads.h"
 
 /** @brief Initial capacity for plates allocation. */
 #define STARTING_CAPACITY 10
@@ -45,17 +48,20 @@ int simulate(char* job_file_path, uint64_t thread_count);
  * @brief Loops through all of the plates recorded to simulate.
  * 
  * @param job current working job
+ * @param thread_count Amount of threads available for use
  * @return Success or failure of processing
  */
-int process_plates(job_t* job);
+int process_plates(job_t* job, uint64_t thread_count);
 
 /**
  * @brief Equilibrates current plate
  * 
  * @param job current working job
  * @param plate_number current plate's index
+ * @param thread_count Amount of threads available for use
+ * @return Success or failure of equilibrate
  */
-void equilibrate_plate(job_t* job, size_t plate_number);
+int equilibrate_plate(job_t* job, size_t plate_number,  uint64_t thread_count);
 
 /// @brief Carries out recording of updated plate and freeing of memory.
 /// @see equilibrate_plates
