@@ -85,15 +85,15 @@ Compile the program with the following command
 === Usage
 To execute the program, first make sure you have a correctly formatted job file (like the exmaple shown above) with the mentioned plate files, preferrably in the jobs/ folder. If not, remember to specify the folder path when running the execution command, which has the format:
 
-`bin/pthreads {folder_with_job}/{job_file_name}`
+`bin/pthread {folder_with_job}/{job_file_name}`
 
-An example execution command could be: `bin/pthreads jobs/job001b/job001.txt`
+An example execution command could be: `bin/pthread jobs/job001b/job001.txt`
 
 *IMPORTANT*: Note that this program has been adapted to allow concurrency in the simulation, thus, a second argument can be added to the execution command to specify the amount of threads to use. The program will run with a default amount if not specified.
 
-`bin/pthreads {folder_with_job}/{job_file_name} {thread_count}`
+`bin/pthread {folder_with_job}/{job_file_name} {thread_count}`
 
-Add a valid amount to the command like so: `bin/pthreads jobs/job001b/job001.txt 10` This way, the simulation will execute with 10 threads.
+Add a valid amount to the command like so: `bin/pthread jobs/job001b/job001.txt 10` This way, the simulation will execute with 10 threads.
 
 Furthermore, note that once the simulation ends, updated plate files with the number of states simulated in their names, written in binary, will be stored in the same directory as the job file. The .tsv report of the job will be stored in the results/ folder, with the same name as the job.
 
