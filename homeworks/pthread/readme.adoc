@@ -1,4 +1,4 @@
-= Heat Transfer Simulation (Serial)
+= Heat Transfer Simulation (Concurrent)
 :experimental:
 :nofooter:
 :source-highlighter: highlightjs
@@ -85,13 +85,15 @@ Compile the program with the following command
 === Usage
 To execute the program, first make sure you have a correctly formatted job file (like the exmaple shown above) with the mentioned plate files, preferrably in the jobs/ folder. If not, remember to specify the folder path when running the execution command, which has the format:
 
-`bin/serial {folder_with_job}/{job_file_name}`
+`bin/pthreads {folder_with_job}/{job_file_name}`
 
-An example execution command could be: `bin/serial jobs/job001b/job001.txt`
+An example execution command could be: `bin/pthreads jobs/job001b/job001.txt`
 
-Storing job files and plate files in the root directory serial/ is also valid, but not recommended, given the results could be unorganized with the rest of the program.
+*IMPORTANT*: Note that this program has been adapted to allow concurrency in the simulation, thus, a second argument can be added to the execution command to specify the amount of threads to use. The program will run with a default amount if not specified.
 
-Notice that by using the `make run` command, job002.txt from jobs/job002b/ will automatically be processed.
+`bin/pthreads {folder_with_job}/{job_file_name} {thread_count}`
+
+Add a valid amount to the command like so: `bin/pthreads jobs/job001b/job001.txt 10` This way, the simulation will execute with 10 threads.
 
 Furthermore, note that once the simulation ends, updated plate files with the number of states simulated in their names, written in binary, will be stored in the same directory as the job file. The .tsv report of the job will be stored in the results/ folder, with the same name as the job.
 
@@ -100,7 +102,16 @@ For example, jobs/job002b/job002.txt, with a request to simulate plate001.bin (a
 === Output examples
 If the program executed without errors, a message indicating where the report file was stored will be shown in terminal.
 
+[example]
+====
+`quilibrated plate {plate_number} in {seconds}s`
+
+`...`
+
+`Completed job in: {seconds}s`
+
 `Results stored in: reports/job###.tsv`
+====
 
 However, if certain criteria are met, error messages could show as well. The following table illustrates the possible outcomes.
 
@@ -123,6 +134,9 @@ s|_Error code_ s|_Error_ s|_Output Message_
 |23 | *Rows and cols values in plate file incorrect or failed to store* m|`Error: Rows and cols could not be read`
 |24 | Plate output file's path could not be built m|`Error: Could not build output file name`
 |25 | Plate output file could not be opened m|`Error: Could not open output file`
+|31 | Thread team could not be created m|`Error: Could not create thread team for plate ##`
+|32 | Thread could not be created m|`Error: could not create thread ##`
+|## | Threads failed to join (## is amount that failed to join) m|`Error: could not join thread ##`
 
 |===
 
