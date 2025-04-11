@@ -1,0 +1,20 @@
+procedure equilibrate_plate(job, plate_number, thread_count)
+  declare curr_plate := job->plates[plate_number]
+
+  initialize shared_data  // Add different components
+  declare thread_team := init_private_data(shared_data)
+
+  declare reached_equilibrium = false
+  while not reached_equilibrium do
+    create_threads(update_rows, thread_team)
+    update_plate(plate_matrix)
+    reached_equilibrium = true  // assume that it would be equilibrated
+    join_threads(thread_count, private_data, &reached_equilibrium)
+    k_states := k_states + 1
+  end while
+
+  free(thread_team)
+
+  curr_plate->k_states = k_states
+  update_plate_file(curr_plate)
+end procedure

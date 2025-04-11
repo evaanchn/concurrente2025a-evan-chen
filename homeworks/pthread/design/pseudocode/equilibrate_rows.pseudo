@@ -1,0 +1,29 @@
+function equilibrate_rows(data)
+  declare private_data := cast data to private_data_t*
+  declare shared_data := private_data->shared_data
+  declare plate_matrix := shared_data->plate_matrix
+  declare starting_row := private_data->starting_row
+  declare ending_row := private_data->ending_row
+
+  // Loop through assigned rows
+  for row from starting_row to ending_row do
+    for col from 1 to plate_matrix->cols - 2 do
+      // Update temperature value at cell based on neighbors
+      call update_cell(plate_matrix, row, col, shared_data->mult_constant)
+
+      // Fetch updated and previous temperature values
+      declare new_temperature := plate_matrix->matrix[row][col]
+      declare old_temperature := plate_matrix->auxiliary_matrix[row][col]
+
+      // Compute temperature difference
+      declare difference := abs(new_temperature - old_temperature)
+
+      // Mark as not equilibrated if difference exceeds threshold
+      if difference > shared_data->epsilon then
+        private_data->equilibrated := false
+      end if
+    end for
+  end for
+
+  return null
+end function
