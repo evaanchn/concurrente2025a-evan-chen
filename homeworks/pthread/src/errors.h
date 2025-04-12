@@ -3,6 +3,8 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 
+#include <stdlib.h>
+
 enum {
   ERR_NO_JOB_FILE = EXIT_FAILURE + 1,
   ERR_INVALID_THREAD_COUNT
