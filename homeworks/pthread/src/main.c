@@ -8,18 +8,25 @@
 
 #include "job.h"
 
+/**
+ * @brief Checks whether arguments were valid.
+ * @param argc Argument count.
+ * @param argv Arguments vector.
+ * @param *thread_count POinter to thread_count in main to set.
+ * @return Success or failure of arguments analysis.
+ */
 int analyze_arguments(int argc, char* argv[], uint64_t* thread_count);
 
 /**
  * @brief Processes execution command to set thread count and 
  *        manage if job file was specified. Calls simulate.
- * @param argc, argv: argc (int)- how many arguments were passed
- *                    argv (char*) - the array of arguments 
+ * @param argc Arguments count.
+ * @param argv Arguments vector.
  * @return Status code to the operating system, 0 means success.
  */
 int main(int argc, char* argv[]) {
-  // Amount of threads to use in simulation (IMPLEMENTED FOR HW2)
-  uint64_t thread_count = 1;
+  // Assume default amount of threads first
+  uint64_t thread_count = sysconf(_SC_NPROCESSORS_ONLN);
 
   int error = analyze_arguments(argc, argv, &thread_count);
 
