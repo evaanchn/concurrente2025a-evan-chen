@@ -11,7 +11,7 @@
 [[problem_statement]]
 == Problem description
 
-This simulation models the time evolution of heat distribution in a rectangular plate with R rows and C columns, determining when all square cells reach thermal equilibrium. Each cell's temperature, except the border cells' (temperature injection points), updates iteratively based on heat transfer with its four immediate neighbors. 
+This simulation models the time evolution of heat distribution in a rectangular plate with R rows and C columns, determining when all square cells reach thermal equilibrium. Each cell's temperature, except the border cells' (temperature injection points), updates by state based on heat transfer with its four immediate neighbors. 
 
 The new temperature at time step k+1 is calculated using the current temperature, the thermal diffusivity of the material, the cell area, and the net energy exchanged with adjacent cells, with formula: stem:[T_{i,j}^{k+1} = T_{i,j}^{k} + \frac{\Delta t\cdot \alpha}{h^2}(T_{i-1,j}^{k}+T_{i,j+1}^{k}+T_{i+1,j}^{k}+T_{i,j-1}^{k}-4T_{i,j}^{k})], where:
 
@@ -31,7 +31,7 @@ The new temperature at time step k+1 is calculated using the current temperature
 
 The update formula follows a discrete approximation of the heat equation, with the use of an equilibrium point constant (epsilon), ensuring a realistic simulation of thermal equilibrium.
 
-In short, this program simulates the heat transfer process of rectangular plates and reports how much time was needed to reach thermal equilibrium.
+In short, this program simulates the heat transfer process of rectangular plates and reports how much time was needed to reach thermal equilibrium, updated *with the newly added possibility of concurrent processing of plates*.
 
 An example of the simulation of a plate is shown below:
 
