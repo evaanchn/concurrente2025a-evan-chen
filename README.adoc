@@ -29,6 +29,7 @@ s|# s|Id s|Tipo s|Descripcion
 |15 m|link:pthreads/birthday_pinata[birthday_pinata] | Ejercicio corto |Representa una fiesta de hilos, donde solo uno de estos tiene permitido pegar la pinata a la vez y se turnan hasta que se quiebre.
 |16 m|link:pthreads/building_tasks[building_tasks] | Ejemplo de clase |Se representa la construccion de una casa, donde las tareas a hacer tienen dependencia de algunas anteriores. Se trata de completar la obra de manera concurrente, respetando las dependencias de cada tarea.
 |17 m|link:pthreads/prod_cons_bound[prod_cons_bound] | Ejemplo comentado |Se resuelve el problema del buffer acotado con dos semaforos, uno para el productor y otro para el consumidor.
+|18 m|link:pthreads/prod_cons_unbound[prod_cons_unbound] | Ejemplo comentado |En contraste con el ejemplo anterior, este es la version no acotada del problema productor-consumidor. 
 |===
 
 == Tareas
@@ -40,6 +41,7 @@ s|# s|Id s|Titulo s|Descripcion
 |===
 
 == Glosario
+=== Oficiales
     1. *Programación serial*: es una manera de programar tal que las instrucciones se ejecutan en secuencia, una despues de la otra (No comienza uno si el anterior no ha terminado). *Analogia*: Una coreografia de baile donde hay una serie de pasos determinados que se deben de ejecutar una tras otra.
 
     2. *Programación concurrente*: un metaparadigma que implica la programacion #**no serial**#. Una forma de concurrencia es dividir el problema en pedacitos e intercalar entre estos. *Analogia*: Cocinar uno o varios platillos, llevando a cabo pasos de las recetas a la misma vez pero cambiando entre ellas (corto la lechuga de la ensalada mientras se terminan de cocinar el espagueti, y voy alternando entre ambas recetas). 
@@ -87,3 +89,7 @@ s|# s|Id s|Titulo s|Descripcion
     Comunicación colectiva entre procesos.
 
     Reducción.
+
+=== Extra
+
+    1. Monitor: Cola threadsafe, o una cola con un mutex para regular el producir y consumir en una cola.
