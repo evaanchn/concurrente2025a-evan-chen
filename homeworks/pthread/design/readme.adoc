@@ -70,3 +70,19 @@ Finally, we can look at the procedure called by each thread, which is in charge 
 ----
 include::pseudocode/equilibrate_rows.pseudo[]
 ----
+
+[[results_analysis]]
+== Results Analysis
+After implementing the concurrent solution, several tests were made to check if the program's performance improved. At first, I tried to run the smaller job files (001-003), but it turned out they were slower than the simulations without concurrence.
+
+However, with a bigger job like 020, a significant improvement in runtime could be identified (with 50 threads), compared to the serial runtime of the job. However, with 100 threads (or more), things were different, and some plates required a longer processing time than its serial counterpart. The following table shows the recorded runtimes for each plate of job020.
+
+[#durations_table]
+.Recorded durations upong simulating job020.txt with different parameters
+image::durations_table.png[align="center"]
+
+As it was mentioned before, running the simulation with 50 threads proved to have an overall improvement of almost 140 minutes from the serial version's duration, albeit with an increase in processing duration for the first plate.
+
+Conversely, running the simulation with 100 threads proved to be slower, with an increase of almost an hour of total simulation time. From this experiment, I can conclude that the cost of creating and joining threads multiple times for each plate can prove to be more time-consuming than just processing the simulation with one thread: the more threads to manage, the slower the simulation will be.
+
+To avoid this, and perhaps optimize runtime, an optimization option could be creating threads before simulating each plate and coordinating the team so that they don't stop working until the plate is equilibrated. In other words, if I could organize and reuse threads properly, execution times for each job could significantly improve.
