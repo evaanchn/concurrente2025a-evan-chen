@@ -27,8 +27,7 @@ int simulate(char* job_file_path, uint64_t thread_count) {
   clock_gettime(CLOCK_MONOTONIC, &finish_time);
 
   // Set elapsed time
-  double elapsed_time = finish_time.tv_sec - start_time.tv_sec +
-    (finish_time.tv_nsec - start_time.tv_nsec) * 1e-9;
+  double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
 
   // Report elapsed time
   printf("Completed job in: %.9lfs\n", elapsed_time);
@@ -69,8 +68,7 @@ int process_plates(job_t* job, uint64_t thread_count) {
     clock_gettime(CLOCK_MONOTONIC, &finish_time);
 
     // Set elapsed time
-    double elapsed_time = finish_time.tv_sec - start_time.tv_sec +
-      (finish_time.tv_nsec - start_time.tv_nsec) * 1e-9;
+    double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
 
     // Report elapsed time
     printf("Equilibrated plate %zu in: %.9lfs\n", plate_number, elapsed_time);
