@@ -13,6 +13,7 @@
 #include "common.h"
 #include "errors.h"
 #include "plate_matrix.h"
+#include "threads.h"
 
 /**
  * @struct plate_t
@@ -23,7 +24,7 @@ typedef struct {
   plate_matrix_t* plate_matrix;  ///< Pointer to plate matrix structure
   double thermal_diffusivity;    ///< Thermal diffusivity coefficient
   uint64_t interval_duration;    ///< Time step interval
-  uint64_t cells_dimension;      ///< Cell size dimension
+  double cells_dimension;      ///< Cell size dimension
   double epsilon;                ///< Threshold for equilibrium check
   uint64_t k_states;             ///< Current simulation state
 } plate_t;
@@ -42,12 +43,12 @@ int set_plate_matrix(plate_t* plate, char* source_directory);
 /**
  * @brief Updates the plate's temperature matrix using diffusion calculations.
  * 
- * Computes new temperatures for each cell and checks for equilibrium.
+ * Computes new temperatures for each cell of its designated section in the
+ * plate and checks for equilibrium.
  * 
- * @param plate Pointer to the plate structure.
- * @return True if equilibrium is reached, false otherwise.
+ * @param data Shared data with information necessary to equilibrate
  */
-bool update_plate(plate_t* plate);
+void* equilibrate_rows(void* data);
 
 /**
  * @brief Writes the updated plate matrix to a binary file.

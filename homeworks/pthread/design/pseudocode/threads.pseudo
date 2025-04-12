@@ -1,0 +1,105 @@
+struct shared_data
+  declare *plate_matrix
+  declare thread_count
+  declare epsilon
+
+struct private_data
+  declare starting_row
+  declare ending_row
+  declare equilibrated
+  declare *shared_data
+
+function init_private_data(count, data)
+  declare shared_data := cast data to shared_data_t*
+  declare last_eval_row := shared_data->plate_matrix->rows - 2
+
+  // Decide how many threads will be used based on the number of rows available
+  if last_eval_row > count do
+    shared_data->thread_count := count
+  else
+    shared_data->thread_count := last_eval_row
+  end if
+
+  // Allocate array of private_data_t for each thread
+  allocate private_data as array of private_data_t with size shared_data->thread_count
+
+  if private_data is not null then
+    // Jumps to reach ending row
+    declare interval_to_end := get_intervals(shared_data) - 1
+    declare row_pointer := 0
+
+    for index from 0 to shared_data->thread_count - 1 do
+      row_pointer := row_pointer + 1  // Moving on from previous ending row
+      private_data[index].starting_row := row_pointer
+
+      // Move row pointer to last row of its section
+      row_pointer := row_pointer + interval_to_end
+
+      // Last thread always has to reach last evaluating row
+      if index == shared_data->thread_count - 1 then
+        private_data[index].ending_row := last_eval_row
+      else
+        private_data[index].ending_row := row_pointer
+      end if
+
+      // Assume that section is equilibrated initially
+      private_data[index].equilibrated := true
+      private_data[index].shared_data := data
+    end for
+  end if
+
+  return private_data
+end function
+
+
+
+function distribute_rows(private_data*)
+  declare valid_rows = private_data->shared_data->plate_matrix->rows - 2
+  declare intervals := 1
+  if thread_count < valid_rows do 
+    intervals := valid_rows / thread_count
+  end if
+
+  return intervals
+end function
+
+
+
+function create_threads(routine, data)
+  declare private_data := cast data to private_data_t*
+  declare shared_data := cast private_data[0].shared_data to shared_data_t*
+
+  for index from 0 to shared_data->thread_count - 1 do
+    if pthread_create(private_data[index].thread_id, routine, &private_data[index]) fails do
+      print "Error: could not create thread", index
+      declare temp := true
+      call join_threads(index, private_data, &temp)
+      return ERR_CREATE_THREAD
+    end if
+  end for
+
+  return EXIT_SUCCESS
+end function
+
+
+
+function join_threads(count, private_data, reached_equilibrium)
+  declare error_count := 0
+
+  // Joins all threads in teams
+  for index from 0 to count - 1 do
+    if pthread_join(private_data[index].thread_id) fails do
+      print "Error: could not join thread", index
+      increment error_count
+    end if
+
+    // Check if equilibrium was reached across all threads
+    reached_equilibrium := reached_equilibrium AND private_data[index].equilibrated
+
+    // Reset thread equilibrium assumption for next state
+    private_data[index].equilibrated := true
+  end for
+
+  return error_count
+end function
+

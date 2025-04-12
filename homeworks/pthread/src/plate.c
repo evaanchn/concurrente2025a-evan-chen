@@ -13,7 +13,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
 
   if (!plate_file) {
     printf("Error: Plate file %s could not be opened", plate->file_name);
-    return OPEN_PLATE_FILE_FAIL;
+    return ERR_OPEN_PLATE_FILE;
   }
 
   // Read number of rows and number of columns (first 16 bytes)
@@ -24,7 +24,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
       fread(&cols, sizeof(uint64_t), 1, plate_file) != 1) {
     perror("Error: Rows and cols could not be read");
     fclose(plate_file);
-    return ROWS_COLS_READING_FAIL;
+    return ERR_ROWS_COLS;
   }
 
   // Set up plate's plate_matrix (allocate space for matrices inside,
@@ -45,53 +45,31 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
 }
 
 
-
-bool update_plate(plate_t* plate) {
-  // Get the plate matrix from the plate structure
-  plate_matrix_t* plate_matrix = plate->plate_matrix;
-
-  // Prepare the auxiliary matrix for calculations
-  // (switch so it points to current temps)
-  set_auxiliary(plate_matrix);
-
-  // Assume equilibrium unless a significant temperature change occurs
-  bool reached_equilibrium = true;
-  double biggest_change = 0;
-
-  // Precompute constant for temperature update calculations
-  double diff_times_interval =
-      plate->thermal_diffusivity * plate->interval_duration;
-  uint64_t cell_area = plate->cells_dimension * plate->cells_dimension;
-  double mult_constant = diff_times_interval / cell_area;
-
-  // Iterate over all interior cells (excluding boundary cells)
-  for (size_t row = 1; row < plate_matrix->rows - 1; ++row) {
-    for (size_t col = 1; col < plate_matrix->cols - 1; ++col) {
+void* equilibrate_rows(void* data) {
+  private_data_t* private_data = (private_data_t*) data;
+  shared_data_t* shared_data = private_data->shared_data;
+  plate_matrix_t* plate_matrix = shared_data->plate_matrix;
+  uint64_t starting_row = private_data->starting_row;
+  uint64_t ending_row = private_data->ending_row;
+  // Only work designated rows
+  for (uint64_t row = starting_row; row <= ending_row; ++row) {
+    for (uint64_t col = 1; col < plate_matrix->cols - 1; ++col) {
       // Update the cell temperature based on surrounding cells
-      update_cell(plate_matrix, row, col, mult_constant);
-
+      update_cell(plate_matrix, row, col, shared_data->mult_constant);
       // Get the new and old temperatures for comparison
       double new_temperature = plate_matrix->matrix[row][col];
       double old_temperature = plate_matrix->auxiliary_matrix[row][col];
 
       // Compute absolute difference
       double difference = fabs(new_temperature - old_temperature);
-
       // Track the maximum temperature change in this update step
-      if (difference > biggest_change) {
-        biggest_change = difference;
+      if (difference > shared_data->epsilon) {
+        private_data->equilibrated = false;
       }
     }
   }
-
-  // Determine if the plate has reached thermal equilibrium
-  if (biggest_change > plate->epsilon) {
-    reached_equilibrium = false;
-  }
-
-  return reached_equilibrium;
+  return NULL;
 }
-
 
 
 int update_plate_file(plate_t* plate, char* source_directory) {
@@ -99,7 +77,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
 
   // Generate the updated file name based on the plate's state
   char* updated_file_name = set_plate_file_name(plate);
-  if (!updated_file_name) return UPDATE_OUTPUT_FILE_NAME_FAIL;
+  if (!updated_file_name) return ERR_UPDATE_OUTPUT_FILE_NAME;
 
   char* output_file_name = build_file_path(source_directory, updated_file_name);
 
@@ -107,7 +85,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
   if (!output_file_name) {
     perror("Error: Could not build output file name");
     free(updated_file_name);
-    return BUILD_OUTPUT_FILE_NAME_FAIL;
+    return ERR_BUILD_OUTPUT_FILE_NAME;
   }
 
   // Open the file for writing in binary mode
@@ -134,7 +112,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     // Handle file opening failure
     perror("Error: Could not open output file");
     destroy_plate_matrix(plate->plate_matrix);
-    error = OPEN_OUTPUT_FILE_FAIL;
+    error = ERR_OPEN_OUTPUT_FILE;
   }
 
   // Close the file before returning

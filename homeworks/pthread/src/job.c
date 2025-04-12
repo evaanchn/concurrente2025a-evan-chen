@@ -5,22 +5,32 @@
 // ***[SIMULATION RELATED]***
 
 int simulate(char* job_file_path, uint64_t thread_count) {
-  if (thread_count > 1) {
-    printf("Concurrent solution yet to be developed\n");
-  }
   int error = EXIT_SUCCESS;
 
   // Create job struct
   job_t* job = init_job(job_file_path);
-  if (!job) return JOB_INIT_FAIL;
+  if (!job) return ERR_JOB_INIT;
 
   // Set the struct with necessary information
   error = set_job(job);
   if (error != EXIT_SUCCESS) return error;
 
+  // Record start time
+  struct timespec start_time, finish_time;
+  clock_gettime(CLOCK_MONOTONIC, &start_time);
+
   // Process the plates
-  error = process_plates(job);
+  error = process_plates(job, thread_count);
   if (error != EXIT_SUCCESS) return error;
+
+  // Record end time
+  clock_gettime(CLOCK_MONOTONIC, &finish_time);
+
+  // Set elapsed time
+  double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
+
+  // Report elapsed time
+  printf("Completed job in: %.9lfs\n", elapsed_time);
 
   // Report final results of the simulation
   report_results(job);
@@ -31,7 +41,7 @@ int simulate(char* job_file_path, uint64_t thread_count) {
 
 
 
-int process_plates(job_t* job) {
+int process_plates(job_t* job, uint64_t thread_count) {
   // For each plate stored
   for (size_t plate_number = 0; plate_number < job->plates_count;
     ++plate_number) {
@@ -44,8 +54,24 @@ int process_plates(job_t* job) {
       destroy_job(job);
       return error;
     }
+    // Record start time
+    struct timespec start_time, finish_time;
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
 
-    equilibrate_plate(job, plate_number);
+    error = equilibrate_plate(job, plate_number, thread_count);
+    if (error!= EXIT_SUCCESS) {
+      destroy_job(job);
+      return error;
+    }
+
+    // Record end time
+    clock_gettime(CLOCK_MONOTONIC, &finish_time);
+
+    // Set elapsed time
+    double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
+
+    // Report elapsed time
+    printf("Equilibrated plate %zu in: %.9lfs\n", plate_number, elapsed_time);
 
     clean_plate(job, plate_number);
   }
@@ -54,25 +80,43 @@ int process_plates(job_t* job) {
 
 
 
-void equilibrate_plate(job_t* job, size_t plate_number) {
+int equilibrate_plate(job_t* job, size_t plate_number, uint64_t thread_count) {
   plate_t* curr_plate = job->plates[plate_number];
   // Loop to simulate the plate's changes in temperature
   uint64_t k_states = 0;
   bool reached_equilibrium = false;
 
+  // Precompute constant for temperature update calculations
+  double diff_times_interval =
+      curr_plate->thermal_diffusivity * curr_plate->interval_duration;
+  double cell_area = curr_plate->cells_dimension * curr_plate->cells_dimension;
+  double mult_constant = diff_times_interval / cell_area;
+
+  shared_data_t shared_data = {curr_plate->plate_matrix, thread_count
+      , mult_constant, curr_plate->epsilon};
+  private_data_t* thread_team = init_private_data(thread_count, &shared_data);
+
+  if (!thread_team) {
+    fprintf(stderr, "Error: Could not create thread team for plate %zu"
+        , plate_number);
+    return ERR_CREATE_THREAD_TEAM;
+  }
+
   //  while not reached_equilibrium do
   while (!reached_equilibrium) {
-    //  update_plate(plate)
-    reached_equilibrium = update_plate(curr_plate);
-
+    set_auxiliary(curr_plate->plate_matrix);
+    int errors = create_threads(equilibrate_rows, thread_team);
+    if (errors > 0) return errors;
+    reached_equilibrium = true;
+    join_threads(shared_data.thread_count, thread_team, &reached_equilibrium);
     ++k_states;
   }  //  end while
+  free(thread_team);
 
   // Store k, number of states iterated until equilibrium, in plate
   curr_plate->k_states = k_states;
+  return EXIT_SUCCESS;
 }
-
-
 
 int clean_plate(job_t* job, size_t plate_number) {
   plate_t* curr_plate = job->plates[plate_number];
@@ -125,17 +169,17 @@ int set_job(job_t* job) {
   if (!job_file) {
     perror("Error: Job file could not be opened\n");
     destroy_job(job);
-    return JOB_FILE_NOT_FOUND;
+    return ERR_JOB_FILE_NOT_FOUND;
   }
   // Variables to store plate properties
   char plate_file_name[MAX_FILE_NAME_SIZE] = "\0";
   uint64_t interval_duration = 0;
   double thermal_diffusivity = 0;
-  uint64_t cells_dimension = 0;
+  double cells_dimension = 0;
   double epsilon = 0;
 
   // Read and parse each line from the job file
-  while (fscanf(job_file, "%s\t%" SCNu64 "\t%lg\t%" SCNu64 "%lg\n",
+  while (fscanf(job_file, "%s\t%" SCNu64 "\t%lg\t%lg\t%lg\n",
     plate_file_name, &interval_duration, &thermal_diffusivity,
     &cells_dimension, &epsilon) == 5) {
     // Allocate memory for a new plate
@@ -144,7 +188,7 @@ int set_job(job_t* job) {
     if (!curr_plate) {
       perror("Error: Memory for new plate could not be allocated\n");
       destroy_job(job);
-      return PLATE_ALLOCATION_FAIL;
+      return ERR_PLATE_ALLOC;
     }
 
     // Allocate memory for plate file name
@@ -153,7 +197,7 @@ int set_job(job_t* job) {
       perror("Error: Memory for plate file name could not be allocated\n");
       free(curr_plate);  // Free allocated memory before returning
       destroy_job(job);
-      return PLATE_FILE_NAME_ALLOCATION_FAIL;
+      return ERR_PLATE_FILE_NAME_ALLOC;
     }
 
     // Copy file name and set plate properties
@@ -174,7 +218,7 @@ int set_job(job_t* job) {
       perror("Error: Could not expand plates array");
       free(curr_plate);  // Free allocated memory before returning
       destroy_job(job);
-      return JOB_EXPANSION_FAIL;
+      return ERR_JOB_EXPANSION;
     }
   }
 
@@ -249,7 +293,7 @@ int report_results(job_t* job) {
 
   if (!results_file_path) {
     perror("Error: Results file path could not be built");
-    return BUILD_RESULTS_FILE_PATH_FAIL;
+    return ERR_RESULTS_FILE_PATH;
   }
 
   // Open results file for writing
@@ -262,8 +306,8 @@ int report_results(job_t* job) {
       time_t simulated_seconds = plate->k_states * plate->interval_duration;
       char formatted_time[50];
       format_time(simulated_seconds, formatted_time, 50);
-      fprintf(results_file, "%-10s\t%9" PRIu64 "\t%8.6lg\t%8" PRIu64
-          "\t%6.6lg\t%6" PRIu64 "\t%-48s\n",
+      fprintf(results_file, "%-10s\t%9" PRIu64 "\t%8.6lg\t%6.6lg\t%6.6lg\t%6"
+          PRIu64 "\t%-48s\n",
           plate->file_name,
           plate->interval_duration,
           plate->thermal_diffusivity,
@@ -276,7 +320,7 @@ int report_results(job_t* job) {
     fclose(results_file);
   } else {
     perror("Error: Could not open results file");
-    error = OPEN_RESULTS_FILE_FAIL;
+    error = ERR_OPEN_RESULTS_FILE;
   }
 
   free(results_file_path);

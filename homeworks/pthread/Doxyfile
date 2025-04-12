@@ -1,4 +1,4 @@
 @INCLUDE = ../../common/Doxyfile
-PROJECT_NAME = "Heat Transfer Simulation (Serial)"
-PROJECT_NUMBER = 1.0.0
-PROJECT_BRIEF = "Serial version of a heat transfer simulation"
+PROJECT_NAME = "Heat Transfer Simulation (Concurrent)"
+PROJECT_NUMBER = 2.0.0
+PROJECT_BRIEF = "Concurrent version of a heat transfer simulation, with pthreads"
