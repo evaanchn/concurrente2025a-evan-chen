@@ -1,0 +1,104 @@
+procedure main(argc, argv[]):
+  if argc = 8 then
+    // Set all variables needed
+    // Store args from command line
+    shared unit_count := integer(argv[1])
+    shared producer_count := integer(argv[2])
+    shared consumer_count := integer(argv[3])
+    shared producer_min_delay := integer(argv[4])
+    shared producer_max_delay := integer(argv[5])
+    shared consumer_min_delay := integer(argv[6])
+    shared consumer_max_delay := integer(argv[7])
+
+    shared queue := create_integer_queue()
+    shared can_access_queue := create_mutex()
+
+    shared next_unit := 0
+    shared can_access_next_unit := create_mutex()
+
+    shared consumed_count := 0
+    shared can_access_consumed_count := create_mutex()
+
+    shared can_consume := create_semaphore(0)
+
+    // Send producers and consumers teams to work
+    declare producers := create_threads(producer_count, produce0)
+    declare consumers := create_threads(consumer_count, consume_busywait)
+
+    // Join threads
+    join_threads(producers)
+    join_threads(consumers)
+  end if
+end procedure
+
+
+procedure produce0:
+  declare my_unit := 0
+  // Before while, decide if there is still pending work
+  // This check is in a critical region since other threads may be actively
+  // modifying
+  lock(can_access_next_unit)
+    declare is_there_pending_work := next_unit < unit_count
+    if is_there_pending_work then
+      next_unit := next_unit + 1  // Increment for next thread
+      my_unit := next_unit  // Obtain copy of unit to start
+    end if
+  unlock(can_access_next_unit)
+
+  // Will only work if it should
+  while is_there_pending_work do
+    // Simulate production
+    delay(random_between(producer_min_delay, producer_max_delay))
+    // Another critical region to access queue
+    lock(can_access_queue)
+      enqueue(queue, my_unit)  // Adds produced unit to queue
+    unlock(can_access_queue)
+    print("Produced ", my_unit)
+
+    // Checks once again if there is pending work
+    lock(can_access_next_unit)
+      is_there_pending_work := next_unit < unit_count
+      if is_there_pending_work then
+        next_unit := next_unit + 1
+        my_unit := next_unit
+      end if
+    unlock(can_access_next_unit)
+  end while
+end procedure
+
+procedure consume_busywait:
+  // This is a busy wait because there is active use of CPU during wait, while
+  // achieving nothing most of the time. Unacceptable
+  while true do
+    lock(can_access_consumed_count)
+      // Increments amount of units consumed if not reached amount specified
+      if consumed_count < unit_count then
+        consumed_count := consumed_count + 1
+      else
+        break while
+      end if
+    unlock(can_access_consumed_count)
+
+    // Will keep checking queue to see if it had something
+    // Correcting or consuming depending on that
+    // This is active waiting. Not good.
+    lock(can_access_queue)
+      if is_empty(queue) then
+        lock(can_access_consumed_count)
+          // Corrects previous increment if queue was empty this time
+          consumed_count := consumed_count - 1
+        unlock(can_access_consumed_count)
+      else
+        // Actually consumes if there was something
+        declare my_unit := dequeue(queue)
+        print("\tConsuming ", my_unit)
+        // Simulate consumption
+        delay(random_between(consumer_min_delay, consumer_max_delay))
+      end if
+    unlock(can_access_queue)
+  end while
+end procedure
+
+function random_between(min, max):
+  return min + rand() % (max - min)
+end function

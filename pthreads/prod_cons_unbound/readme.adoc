@@ -1,0 +1,89 @@
+= Producer-Consumer Problem (Unbound)
+:experimental:
+:nofooter:
+:source-highlighter: highlightjs
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+
+[[problem_statement]]
+== Problem statement
+
+Modify the simulation of the producer-consumer problem by generalizing the following restrictions.
+
+1. The buffer is not bounded, but of arbitrary or dynamic size, defined by the system's memory limits.
+
+2. There is no concept of a round. The first command-line argument indicates the number of products to simulate. Identify the products in sequential order.
+
+3. Multiple producers, specified by the user in the second command-line argument.
+
+4. Multiple consumers, specified by the user in the third command-line argument.
+
+5. Each producer and consumer indicates their number on the standard output.
+
+The following runtime simulates the construction of 5 work units by 2 producers that take between 0 and 100 milliseconds to produce, and 3 consumers that take between 0 and 750 milliseconds to consume.
+
+[example]
+====
+$ ./producer_consumer 5 2 3 0 100 0 750
+
+0 produced 1
+
+1 produced 3
+
+		1 consuming 1
+
+0 produced 2
+
+		2 consuming 3
+
+0 produced 5
+
+		0 consuming 5
+
+		1 consuming 2
+
+1 produced 4
+
+		2 consuming 4
+====
+
+Note that products are not necessarily generated in sequential order, due to the indeterminism of producers. Remember, the problem is solved if all consumers process all products in the same order in which producers generate them. You can use the following modularized code as a starting point for your solution:
+
+[[user_manual]]
+== User manual
+
+[[build]]
+=== Build
+
+Build program with command `make`
+
+[[usage]]
+=== Usage
+
+To execute program, consider the following arguments:
+
+1. Products to be made.
+
+2. The number of producers.
+
+3. The number of consumers.
+
+4. The minimum duration in milliseconds that it takes the producer to generate a product.
+
+5. The maximum duration in milliseconds that it takes the producer to generate a product.
+
+6. The minimum duration in milliseconds that it takes the consumer to consume a product.
+
+7. The maximum duration in milliseconds that it takes the consumer to consume a product.
+
+An example command could be `bin/prod_cons_unbound 5 2 3 0 100 0 750`, which means that 5 products will be produced, by 2 producers and 3 consumers. Producers have a production duration range of 0 to 100 milliseconds, consumers have a consuming duration range of 0 to 750 milliseconds.
+
+[[credits]]
+== Credits
+
+Code by Jeisson Hidalgo-Cespedes <jeisson.hidalgo@ucr.ac.cr> CC-BY-4
+
+Commented by Evan Chen

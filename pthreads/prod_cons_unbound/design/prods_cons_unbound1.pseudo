@@ -1,0 +1,87 @@
+procedure main(argc, argv[]):
+  if argc = 8 then
+    shared unit_count := integer(argv[1])
+    shared producer_count := integer(argv[2])
+    shared consumer_count := integer(argv[3])
+    shared producer_min_delay := integer(argv[4])
+    shared producer_max_delay := integer(argv[5])
+    shared consumer_min_delay := integer(argv[6])
+    shared consumer_max_delay := integer(argv[7])
+
+    shared queue := create_integer_queue()
+    shared can_access_queue := create_mutex()
+
+    shared next_unit := 0
+    shared can_access_next_unit := create_mutex()
+
+    shared consumed_count := 0
+    shared can_access_consumed_count := create_mutex()
+
+    shared can_consume := create_semaphore(0)
+
+    // Send producers and consumers teams to work
+    declare producers := create_threads(producer_count, produce1)
+    declare consumers := create_threads(consumer_count, consume1)
+
+    // Join threads
+    join_threads(producers)
+    join_threads(consumers)
+  end if
+end procedure
+
+procedure produce1:
+  // Directly take out dangerous condition from while, replace with true
+  // This allows control from inside of the cycle and reduces redundant code
+  while true do
+    declare my_unit := 0
+    lock(can_access_next_unit)
+      // If can produce unit, it produces
+      if next_unit < unit_count then
+        next_unit := next_unit + 1
+        my_unit := next_unit
+      else
+        unlock(can_access_next_unit)
+        break while
+      end if
+    unlock(can_access_next_unit)
+  
+    // Simulate production
+    delay(random_between(producer_min_delay, producer_max_delay))
+    lock(can_access_queue)
+      // Enqueues produced value
+      enqueue(queue, my_unit)
+    unlock(can_access_queue)
+    print("Produced ", my_unit)
+    signal(can_consume)  // Tells consumers there is a product to consume
+  end while
+end procedure
+
+procedure consume1:
+  // While true to control concurrency inside
+  while true do
+    lock(can_access_consumed_count)
+      // If there are still units to consume, do so
+      if consumed_count < unit_count then
+        consumed_count := consumed_count + 1
+      else
+        // If not then get out
+        unlock(can_access_consumed_count)
+        break while
+      end if
+    unlock(can_access_consumed_count)
+
+    // Waits until semaphore signals that there is a product to consume
+    wait(can_consume)
+    // Locks queue to dequeue (modify)
+    lock(can_access_queue)
+      declare my_unit := dequeue(queue)
+    unlock(can_access_queue)
+    print("\tConsuming ", my_unit)
+    // Simulate consumption
+    delay(random_between(consumer_min_delay, consumer_max_delay))
+  end while
+end procedure
+
+function random_between(min, max):
+  return min + rand() % (max - min)
+end function
