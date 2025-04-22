@@ -13,7 +13,12 @@ AssemblerTest::AssemblerTest(const int consumerDelay
 
 int AssemblerTest::run() {
   // Start the forever loop to consume all the messages that arrive
-  this->consumeLoop();
+  // Stop when two stop conditions were found
+  while (this->stopConditionCount < 2) {
+    this->consumeLoop();
+    ++this->stopConditionCount;
+    this->produce(this->stopCondition);
+  }
 
   // If the forever loop finished, no more messages will arrive
   // Print statistics
@@ -24,6 +29,7 @@ int AssemblerTest::run() {
 
 void AssemblerTest::consume(NetworkMessage data) {
   (void)data;
+  this->stopConditionCount = 0;
   // IMPORTANT: This simulation uses sleep() to mimics the process of
   // consuming a message. However, you must NEVER use sleep() for real projects
   Util::sleepFor(this->consumerDelay);

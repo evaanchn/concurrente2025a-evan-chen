@@ -23,6 +23,9 @@ class AssemblerTest : public Assembler<NetworkMessage, NetworkMessage> {
   // Number of messages lost
   size_t lostMessages = 0;
 
+  /// Number of consecutive stop conditions received. Stop when two are received
+  size_t stopConditionCount = 0;
+
  public:
   /// Constructor
   explicit AssemblerTest(const int consumerDelay

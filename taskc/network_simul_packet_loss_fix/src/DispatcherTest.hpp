@@ -16,11 +16,17 @@ class DispatcherTest : public Dispatcher<int, NetworkMessage> {
   /// Delay of dispatcher to dispatch a package, negative for max random
   int dispatcherDelay = 0;
 
+  /// Number of consecutive stop conditions received. Stop when two are received
+  size_t stopConditionCount = 0;
+
  public:
   /// Constructor
   explicit DispatcherTest(int dispatcherDelay);
   /// Start redirecting network messages
   int run() override;
+  /// Override to count stop ocnditions
+  void consume(NetworkMessage data) override;
+
   /// This method extracts the key from a data stored in the fromQueue
   int extractKey(const NetworkMessage& data) const override;
 };
