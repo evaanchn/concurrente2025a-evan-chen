@@ -14,6 +14,7 @@ AssemblerTest::AssemblerTest(const int consumerDelay
 int AssemblerTest::run() {
   // Start the forever loop to consume all the messages that arrive
   this->consumeLoop();
+  this->produce(this->stopCondition);
 
   // If the forever loop finished, no more messages will arrive
   // Print statistics
@@ -30,7 +31,7 @@ void AssemblerTest::consume(NetworkMessage data) {
   if (Util::random(0.0, 100.0) < this->packetLossProbability) {
     ++this->lostMessages;
   } else {
-    data.target = Util::random(1, this->consumerCount);
+    // data.target = Util::random(1, this->consumerCount);
     this->produce(data);
   }
 }

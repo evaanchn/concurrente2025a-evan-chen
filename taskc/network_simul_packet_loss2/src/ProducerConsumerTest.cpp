@@ -65,7 +65,7 @@ int ProducerConsumerTest::analyzeArguments(int argc, char* argv[]) {
 
 void ProducerConsumerTest::createThreadObjects() {
   this->producer = new ProducerTest(this->packageCount, this->productorDelay
-    , this->consumerCount + 1);
+    , this->consumerCount);
   this->dispatcher = new DispatcherTest(this->dispatcherDelay);
   this->dispatcher->createOwnQueue();  // Each consumer has its own queue
   // Create each consumer
@@ -76,21 +76,21 @@ void ProducerConsumerTest::createThreadObjects() {
     this->consumers[index]->createOwnQueue();
   }
   this->assembler = new AssemblerTest(this->consumerDelay
-      , this->packetLossProbability, this->consumerCount + 1);
+      , this->packetLossProbability, this->consumerCount);
   this->assembler->createOwnQueue();
 }
 
 void ProducerConsumerTest::connectQueues() {
-  // Producer push network messages to the dispatcher queue
-  this->producer->setProducingQueue(this->dispatcher->getConsumingQueue());
+  // Producer push network messages to the assembler queue
+  this->producer->setProducingQueue(this->assembler->getConsumingQueue());
   // Dispatcher delivers to each consumer, and they should be registered
   for (size_t index = 0; index < this->consumerCount; ++index) {
     // Dispatcher uses dictionary to manage consumer queues
     this->dispatcher->registerRedirect(index + 1
       , this->consumers[index]->getConsumingQueue());
   }
-  this->dispatcher->registerRedirect(this->consumerCount + 1
-    , this->assembler->getConsumingQueue());
+  // this->dispatcher->registerRedirect(this->consumerCount
+  //   , this->assembler->getConsumingQueue());
   this->assembler->setProducingQueue(this->dispatcher->getConsumingQueue());
 }
 
