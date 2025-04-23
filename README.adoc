@@ -73,17 +73,17 @@ s|# s|Id s|Titulo s|Descripcion
 
     14. *Semáforo*: Un mecanismo de control de concurrencia que permite concurrencia y orden. A diferencia del mutex, un semaforo no es booleano, sino un valor entero que puede ser positivo, nulo o negativo. Cuando un hilo trata de pasar por un semaforo, le decremente (wait), y si el valor llega a ser negativo, se bloquea. Los siguientes hilos en llegar no podran ejecutar el codigo en la region critica, hasta que los hilos que ya entraron lo vuelvan a incrementar y el valor del semaforo vuelve a ser positivo.
 
+    15. *Descomposición*: Separar un problema en partes luego de identificar unidades de trabajo independientes, tal que se puedan resolver concurrentemente. Puede tratarse de una descomposicion de la solucion, los datos, una exploracion, o los eventos posibles. La descomposicion podria resultar en muchas tareas pequeñas (granulidad fina), o en pocas tareas grandes (granulidad gruesa), los cuales se deben de emplear correctamente dependiendo del problema a resolver.
+
+    Mapeo.
+
+    Incremento de velocidad (speedup).
+
     Barrera.
 
     Variable de condición.
 
     Candado de lectura y escritura.
-
-    Descomposición.
-
-    Mapeo.
-
-    Incremento de velocidad (speedup).
 
     Eficiencia.
 
