@@ -29,7 +29,10 @@ s|# s|Id s|Tipo s|Descripcion
 |15 m|link:pthreads/birthday_pinata[birthday_pinata] | Ejercicio corto |Representa una fiesta de hilos, donde solo uno de estos tiene permitido pegar la pinata a la vez y se turnan hasta que se quiebre.
 |16 m|link:pthreads/building_tasks[building_tasks] | Ejemplo de clase |Se representa la construccion de una casa, donde las tareas a hacer tienen dependencia de algunas anteriores. Se trata de completar la obra de manera concurrente, respetando las dependencias de cada tarea.
 |17 m|link:pthreads/prod_cons_bound[prod_cons_bound] | Ejemplo comentado |Se resuelve el problema del buffer acotado con dos semaforos, uno para el productor y otro para el consumidor.
-|18 m|link:pthreads/prod_cons_unbound[prod_cons_unbound] | Ejemplo comentado |En contraste con el ejemplo anterior, este es la version no acotada del problema productor-consumidor. 
+|18 m|link:pthreads/prod_cons_unbound[prod_cons_unbound] | Ejemplo comentado |En contraste con el ejemplo anterior, este es la version no acotada del problema productor-consumidor.
+|19 m|link:pthreads/network_simul_packet_loss[network_simul_packet_loss] | Ejemplo en clase |Representa una simulacion de red que involucra un productor, un repartidor, varios consumidores y un ensamblador (pierde o convierte paquetes). El programa tiene un fallo de control de concurrencia que causa que ciertos paquetes no se consuman.
+|20 m|link:pthreads/network_simul_packet_loss_fix[network_simul_packet_loss_fix] | Ejemplo en clase |Se corrige el defecto del ejemplo pasado, tal que se consumen todos los paquetes creados.
+|21 m|link:pthreads/network_simul_packet_loss2[network_simul_packet_loss2] | Ejemplo en clase |Similar al link:pthreads/network_simul_packet_loss[network_simul_packet_loss], pero se traslada al ensamblador tal que primero se ensambla y luego se reparte.
 |===
 
 == Tareas
@@ -37,7 +40,7 @@ s|# s|Id s|Tipo s|Descripcion
 |=== 
 s|# s|Id s|Titulo s|Descripcion
 |1 |link:homeworks/serial[serial] |Simulacion de calor (serial) |Se simula el proceso de equilibrio de laminas, reportando los parametros utilizados, la cantidad de estados transcurridas y la duracion de simulacion.
-|2 |link:homeworks/pthrads[pthreads] |Simulacion de calor (concurrente) |Se habilita la opcion de utilizar hilos de ejecucion durante la misma simulacion de calor resuelta en la primera tarea.
+|2 |link:homeworks/pthreads[pthreads] |Simulacion de calor (concurrente) |Se habilita la opcion de utilizar hilos de ejecucion durante la misma simulacion de calor resuelta en la primera tarea.
 |===
 
 == Glosario
