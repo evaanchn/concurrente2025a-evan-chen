@@ -77,15 +77,15 @@ s|# s|Id s|Titulo s|Descripcion
 
     16. *Mapeo*: La distribucion del problema descompuesto a distintos ejecutantes para que cumplan el trabajo concurrentemente. Se divide en mapeo estatico (se sabe cuantas unidades de trabajo y trabajadores hay antes de comenzar a trabajar) y mapeo dinamico (se asignan unidades conforme terminan sus trabajos). El primero tiene la ventaja de disminuir la interaccion entre hilos, ser facil de implementar y ser menos costoso, mientras que el segundo rinde mejores distribuciones, aunque sea mas costoso.
 
-    Incremento de velocidad (speedup).
+    17. *Incremento de velocidad (speedup)*: La comparacion entre el tiempo de ejecucion de un programa serial y su variacion concurrente que representa una metrica de mejora en rendimiento. Se define como S = Tiempo serial / Tiempo paralelo, con un S grande indicando un incrememnto de velocidad mayor.
+
+    18. *Eficiencia*: Otra metrica que indaga si la cantidad de recursos empleados para el incremento de velocidad vale la pena. Se define como E = Tiempo serial / (Tiempo paralelo * Cantidad de hilos) (mayor E, mayor eficiencia alcanzada). Si se alcanza un buen incremento de velocidad pero se tiene un E demasiado bajo, es un indicador de que se debe de cambiar de solucion.
 
     Barrera.
 
     Variable de condición.
 
     Candado de lectura y escritura.
-
-    Eficiencia.
 
     Comunicación punto a punto entre procesos.
 
