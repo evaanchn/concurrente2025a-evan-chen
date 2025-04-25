@@ -21,7 +21,11 @@ const char* const usage =
   "Delays are in milliseconds, negatives are maximums for random delays\n";
 
 ProducerConsumerTest::~ProducerConsumerTest() {
-  delete this->producer;
+  // For index is more efficient than for each
+  // , which uses iterators that cost more
+  for (ProducerTest* producer : this-> producers) {
+    delete producer;
+  }
   delete this->dispatcher;
   for (ConsumerTest* consumer : this->consumers) {
     delete consumer;
@@ -47,13 +51,14 @@ int ProducerConsumerTest::start(int argc, char* argv[]) {
 }
 
 int ProducerConsumerTest::analyzeArguments(int argc, char* argv[]) {
-  // 5 + 1 arguments are mandatory
-  if (argc != 7) {
+  // 7 + 1 arguments are mandatory
+  if (argc != 8) {
     std::cout << usage;
     return EXIT_FAILURE;
   }
   int index = 1;
   this->packageCount = std::strtoull(argv[index++], nullptr, 10);
+  this->producerCount = std::strtoull(argv[index++], nullptr, 10);
   this->consumerCount = std::strtoull(argv[index++], nullptr, 10);
   this->productorDelay = std::atoi(argv[index++]);
   this->dispatcherDelay = std::atoi(argv[index++]);
@@ -64,8 +69,15 @@ int ProducerConsumerTest::analyzeArguments(int argc, char* argv[]) {
 }
 
 void ProducerConsumerTest::createThreadObjects() {
-  this->producer = new ProducerTest(this->packageCount, this->productorDelay
-    , this->consumerCount);
+  this->producers.resize(this->producerCount);
+  for (size_t index = 0; index < this->producerCount; ++index) {
+    this->producers[index] = new ProducerTest(this->packageCount
+        , this->productorDelay
+        , this->consumerCount
+        , this->producerCount
+        , this->producedCount
+        , this->canAccessProducedCount);
+  }
   this->dispatcher = new DispatcherTest(this->dispatcherDelay);
   this->dispatcher->createOwnQueue();  // Each consumer has its own queue
   // Create each consumer
@@ -81,21 +93,23 @@ void ProducerConsumerTest::createThreadObjects() {
 }
 
 void ProducerConsumerTest::connectQueues() {
-  // Producer push network messages to the assembler queue
-  this->producer->setProducingQueue(this->assembler->getConsumingQueue());
+  // Producers must know where to produce
+  for (size_t index = 0; index < this->producerCount; ++index) {
+    this->producers[index]->setProducingQueue(this->assembler->getConsumingQueue());
+  }
   // Dispatcher delivers to each consumer, and they should be registered
   for (size_t index = 0; index < this->consumerCount; ++index) {
     // Dispatcher uses dictionary to manage consumer queues
     this->dispatcher->registerRedirect(index + 1
       , this->consumers[index]->getConsumingQueue());
   }
-  // this->dispatcher->registerRedirect(this->consumerCount
-  //   , this->assembler->getConsumingQueue());
   this->assembler->setProducingQueue(this->dispatcher->getConsumingQueue());
 }
 
 void ProducerConsumerTest::startThreads() {
-  this->producer->startThread();
+  for (size_t index = 0; index < this->producerCount; ++index) {
+    this->producers[index]->startThread();
+  }
   this->dispatcher->startThread();
   for (size_t index = 0; index < this->consumerCount; ++index) {
     this->consumers[index]->startThread();
@@ -104,10 +118,14 @@ void ProducerConsumerTest::startThreads() {
 }
 
 void ProducerConsumerTest::joinThreads() {
-  this->producer->waitToFinish();
+  for (size_t index = 0; index < this->producerCount; ++index) {
+    this->producers[index]->waitToFinish();
+  }
+
   this->dispatcher->waitToFinish();
   for (size_t index = 0; index < this->consumerCount; ++index) {
     this->consumers[index]->waitToFinish();
   }
   this->assembler->waitToFinish();
 }
+

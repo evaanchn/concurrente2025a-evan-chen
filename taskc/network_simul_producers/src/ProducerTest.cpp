@@ -4,24 +4,43 @@
 #include "Log.hpp"
 #include "Util.hpp"
 
-ProducerTest::ProducerTest(size_t packageCount, int productorDelay
-  , size_t consumerCount)
+ProducerTest::ProducerTest(size_t packageCount
+  , int productorDelay
+  , size_t consumerCount
+  , size_t producerCount
+  , size_t& producedCount
+  , std::mutex& canAccessProducedCount)
   : packageCount(packageCount)
   , productorDelay(productorDelay)
-  , consumerCount(consumerCount) {
+  , consumerCount(consumerCount)
+  , producerCount(producerCount)
+  , producedCount(producedCount)
+  , canAccessProducedCount(canAccessProducedCount)
+  {
 }
 
 int ProducerTest::run() {
-  // Produce each asked message
-  for (size_t index = 0; index < this->packageCount; ++index) {
-    this->produce(this->createMessage(index));
+  size_t lastProduced = this->packageCount + this->producerCount;
+  size_t myMessageNumber = 0, messageCount = 0;
+  while (true) {
+    this->canAccessProducedCount.lock();
+    myMessageNumber = ++this->producedCount;
+    this->canAccessProducedCount.unlock();
+
+    if (myMessageNumber <= this->packageCount) {
+      this->produce(this->createMessage(myMessageNumber));
+      ++messageCount;
+    } else {
+      if (myMessageNumber == lastProduced) {
+        // Produce an empty message to communicate we finished
+        this->produce(NetworkMessage());
+      }
+      break;
+    } 
   }
 
-  // Produce an empty message to communicate we finished
-  this->produce(NetworkMessage());
-
   // Report production is done
-  Log::append(Log::INFO, "Producer", std::to_string(this->packageCount)
+  Log::append(Log::INFO, "Producer", std::to_string(messageCount)
     + " messages sent");
   return EXIT_SUCCESS;
 }

@@ -3,6 +3,8 @@
 #ifndef PRODUCERTEST_HPP
 #define PRODUCERTEST_HPP
 
+#include <mutex>
+
 #include "NetworkMessage.hpp"
 #include "Producer.hpp"
 
@@ -20,10 +22,21 @@ class ProducerTest : public Producer<NetworkMessage> {
   int productorDelay = 0;
   /// Number of consumer threads
   size_t consumerCount = 0;
+  /// Number of producers available
+  size_t producerCount = 0;
+  /// Reference to number of produced network messages
+  size_t& producedCount;
+  /// Reference to mutex that protects produced count
+  std::mutex& canAccessProducedCount;
 
  public:
   /// Constructor
-  ProducerTest(size_t packageCount, int productorDelay, size_t consumerCount);
+  ProducerTest(size_t packageCount
+      , int productorDelay
+      , size_t consumerCount
+      , size_t producerCount
+      , size_t& producedCount
+      , std::mutex& canAccessProducedCount);
   /// Do the message production in its own execution thread
   int run() override;
   /// Creates a simulation message to be sent by the network
