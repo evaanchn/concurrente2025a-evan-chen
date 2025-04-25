@@ -3,6 +3,7 @@
 #ifndef PRODUCERCONSUMERTEST_HPP
 #define PRODUCERCONSUMERTEST_HPP
 
+#include <climits>
 #include <cstddef>
 #include <mutex>
 #include <vector>
@@ -37,6 +38,8 @@ class ProducerConsumerTest {
   int consumerDelay = 0;
   /// Probability of packet loss
   double packetLossProbability = 0.0;
+  /// Queue capactiy
+  unsigned queueCapacity = SEM_VALUE_MAX;  // SEM_VALUE_MAX = 2^31
 
  private:
   /// Number of produced network messages
