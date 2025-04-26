@@ -26,21 +26,25 @@ class Queue {
   Semaphore canConsume;
   /// Contains the actual data shared between producer and consumer
   std::queue<DataType> queue;
+  /// Indicates if there is space to consume
+  Semaphore canProduce;
 
  public:
   /// Constructor
-  Queue()
-    : canConsume(0) {
+  // Explicit tells compiler to not convert queueCapacity into queue to assign
+  explicit Queue(const unsigned queueCapacity)
+    : canConsume(0)
+    , canProduce(queueCapacity){
   }
 
   /// Destructor
   ~Queue() {
-    // TODO(jhc): clear()?
   }
 
   /// Produces an element that is pushed in the queue
   /// The semaphore is increased to wait potential consumers
   void enqueue(const DataType& data) {
+    this->canProduce.wait();
     this->mutex.lock();
     this->queue.push(data);
     this->mutex.unlock();
@@ -56,6 +60,7 @@ class Queue {
     DataType result = this->queue.front();
     this->queue.pop();
     this->mutex.unlock();
+    this->canProduce.signal();
     return result;
   }
 };
