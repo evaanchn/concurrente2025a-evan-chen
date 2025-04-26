@@ -1,7 +1,7 @@
 = Simulación de pérdida de paquetes de red
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:

@@ -1,7 +1,7 @@
-= Simulación de pérdida de paquetes de red
+= Simulación de pérdida de paquetes de red (Arreglado)
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:
@@ -17,9 +17,10 @@ Tome en cuenta que el hilo ensamblador que extravía paquetes no es parte de la 
 
 [source,sh]
 ----
-bin/network_simul_packet_loss 1000 2 1 -2 0 50
-Info	Producer	1000 messages sent
-Info	Consumer	416 messages consumed
-Info	Consumer	404 messages consumed
-Info	Assembler	180 messages lost
+bin/network_simul_packet_loss_fix 1000 3 1 -2 0 50
+Info    Producer        1000 messages sent
+Info    Assembler       139 messages lost
+Info    Consumer        291 messages consumed
+Info    Consumer        277 messages consumed
+Info    Consumer        293 messages consumed
 ----

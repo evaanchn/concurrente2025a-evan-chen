@@ -47,7 +47,7 @@ int ProducerConsumerTest::start(int argc, char* argv[]) {
 }
 
 int ProducerConsumerTest::analyzeArguments(int argc, char* argv[]) {
-  // 5 + 1 arguments are mandatory
+  // 6 + 1 arguments are mandatory
   if (argc != 7) {
     std::cout << usage;
     return EXIT_FAILURE;
@@ -67,17 +67,17 @@ void ProducerConsumerTest::createThreadObjects() {
   this->producer = new ProducerTest(this->packageCount, this->productorDelay
     , this->consumerCount + 1);
   this->dispatcher = new DispatcherTest(this->dispatcherDelay);
-  this->dispatcher->createOwnQueue();  // Each consumer has its own queue
+  this->dispatcher->createOwnQueue(SEM_VALUE_MAX);  // Each consumer has its own queue
   // Create each consumer
   this->consumers.resize(this->consumerCount);
   for (size_t index = 0; index < this->consumerCount; ++index) {
     this->consumers[index] = new ConsumerTest(this->consumerDelay);
     assert(this->consumers[index]);
-    this->consumers[index]->createOwnQueue();
+    this->consumers[index]->createOwnQueue(SEM_VALUE_MAX);
   }
   this->assembler = new AssemblerTest(this->consumerDelay
       , this->packetLossProbability, this->consumerCount + 1);
-  this->assembler->createOwnQueue();
+  this->assembler->createOwnQueue(SEM_VALUE_MAX);
 }
 
 void ProducerConsumerTest::connectQueues() {

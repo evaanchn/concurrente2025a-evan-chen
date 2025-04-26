@@ -79,17 +79,17 @@ void ProducerConsumerTest::createThreadObjects() {
         , this->canAccessProducedCount);
   }
   this->dispatcher = new DispatcherTest(this->dispatcherDelay);
-  this->dispatcher->createOwnQueue();  // Each consumer has its own queue
+  this->dispatcher->createOwnQueue(SEM_VALUE_MAX);  // Each consumer has its own queue
   // Create each consumer
   this->consumers.resize(this->consumerCount);
   for (size_t index = 0; index < this->consumerCount; ++index) {
     this->consumers[index] = new ConsumerTest(this->consumerDelay);
     assert(this->consumers[index]);
-    this->consumers[index]->createOwnQueue();
+    this->consumers[index]->createOwnQueue(SEM_VALUE_MAX);
   }
   this->assembler = new AssemblerTest(this->consumerDelay
       , this->packetLossProbability, this->consumerCount);
-  this->assembler->createOwnQueue();
+  this->assembler->createOwnQueue(SEM_VALUE_MAX);
 }
 
 void ProducerConsumerTest::connectQueues() {

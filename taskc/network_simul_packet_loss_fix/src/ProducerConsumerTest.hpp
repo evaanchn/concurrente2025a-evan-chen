@@ -3,6 +3,7 @@
 #ifndef PRODUCERCONSUMERTEST_HPP
 #define PRODUCERCONSUMERTEST_HPP
 
+#include <climits>
 #include <cstddef>
 #include <vector>
 
