@@ -33,6 +33,8 @@ s|# s|Id s|Tipo s|Descripcion
 |19 m|link:pthreads/network_simul_packet_loss[network_simul_packet_loss] | Ejemplo en clase |Representa una simulacion de red que involucra un productor, un repartidor, varios consumidores y un ensamblador (pierde o convierte paquetes). El programa tiene un fallo de control de concurrencia que causa que ciertos paquetes no se consuman.
 |20 m|link:pthreads/network_simul_packet_loss_fix[network_simul_packet_loss_fix] | Ejemplo en clase |Se corrige el defecto del ejemplo pasado, tal que se consumen todos los paquetes creados.
 |21 m|link:pthreads/network_simul_packet_loss2[network_simul_packet_loss2] | Ejemplo en clase |Similar al link:pthreads/network_simul_packet_loss[network_simul_packet_loss], pero se traslada al ensamblador tal que primero se ensambla y luego se reparte.
+|22 m|link:pthreads/network_simul_producers[network_simul_producers] | Ejemplo en clase |Se modifica el codigo de link:pthreads/network_simul_packet_loss2[network_simul_packet_loss2] tal que se pueden solicitar multiples productores.
+|23 m|link:pthreads/network_simul_bound[network_simul_bound] | Ejemplo en clase |Se modifica el codigo de link:pthreads/network_simul_producers[network_simul_producers], de forma que las colas pueden ser acotadas.
 |===
 
 == Tareas
