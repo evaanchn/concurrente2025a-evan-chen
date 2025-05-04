@@ -11,18 +11,18 @@
 #include "plate_matrix.h"
 
 typedef struct shared_data {
-  plate_matrix_t* plate_matrix;
-  uint64_t thread_count;
-  double mult_constant;
-  double epsilon;
+  plate_matrix_t* plate_matrix; /**< Plate matrix being equilibrated */
+  uint64_t thread_count;        /**< Total amount of threads */
+  double mult_constant;         /**< Constant in new temp formula */
+  double epsilon;               /**< Epsilon associated to the plate */
 } shared_data_t;
 
 typedef struct private_data {
-  pthread_t thread_id;
-  uint64_t starting_row;
-  uint64_t ending_row;
-  bool equilibrated;
-  shared_data_t* shared_data;
+  pthread_t thread_id;         /**< POSIX thread ID. */
+  uint64_t starting_row;       /**< Index of the first row assigned to thread */
+  uint64_t ending_row;         /**< Index of the last row assigned to thread */
+  bool equilibrated;           /**< Indicates if section reached equilibrium */
+  shared_data_t* shared_data;  /**< Pointer to the shared data structure. */
 } private_data_t;
 
 /**
