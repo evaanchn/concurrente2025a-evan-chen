@@ -23,7 +23,7 @@ typedef struct {
   plate_matrix_t* plate_matrix;  ///< Pointer to plate matrix structure
   double thermal_diffusivity;    ///< Thermal diffusivity coefficient
   uint64_t interval_duration;    ///< Time step interval
-  uint64_t cells_dimension;      ///< Cell size dimension
+  double cells_dimension;      ///< Cell size dimension
   double epsilon;                ///< Threshold for equilibrium check
   uint64_t k_states;             ///< Current simulation state
 } plate_t;

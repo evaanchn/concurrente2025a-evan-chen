@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #define REPORTS_DIRECTORY "reports"
 
@@ -43,5 +44,15 @@ char* extract_file_name(const char* path);
  *         Returns NULL if no extension exists in the original filename.
  */
 char* modify_extension(const char* file_name, const char* new_extension);
+
+/**
+ * @brief Caluclated the elapsed seconds of a certain operation.
+ * 
+ * @param start_time Starting time.
+ * @param finish_time Finishing time of process.
+ * @return The conversion to seconds of the duration, a double.
+ */
+double get_elapsed_seconds(struct timespec* start_time
+    , struct timespec* finish_time);
 
 #endif  // COMMON_H

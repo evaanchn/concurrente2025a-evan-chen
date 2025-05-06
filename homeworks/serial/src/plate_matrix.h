@@ -15,8 +15,8 @@
 typedef struct {
     uint64_t rows;          /**< Number of rows in the matrix */
     uint64_t cols;          /**< Number of columns in the matrix */
-    double** matrix;        /**< Pointer to the primary matrix */
-    double** auxiliary_matrix; /**< Pointer to the auxiliary matrix */
+    double* matrix;        /**< Pointer to the primary matrix */
+    double* auxiliary_matrix; /**< Pointer to the auxiliary matrix */
 } plate_matrix_t;
 
 /**
@@ -57,25 +57,11 @@ void update_cell(plate_matrix_t* plate_matrix, uint64_t row,
     uint64_t col, double mult_constant);
 
 /**
- * @brief Creates a 2D matrix initialized with zeros.
- * @param rows Number of rows.
- * @param cols Number of columns.
- * @return Pointer to the allocated matrix or NULL on failure.
- */
-double** create_double_matrix(const size_t rows, const size_t cols);
-
-/**
  * @brief Frees memory allocated for both matrices in plate_matrix 
  * and then plate_matrix
  * @param plate_matrix Pointer to the plate matrix.
  */
 void destroy_plate_matrix(plate_matrix_t* plate_matrix);
 
-/**
- * @brief Frees memory allocated for a 2D matrix of doubles.
- * @param matrix Pointer to the matrix.
- * @param rows Number of rows.
- */
-void destroy_double_matrix(double** matrix, const uint64_t rows);
 
 #endif  // PLATE_MATRIX_H

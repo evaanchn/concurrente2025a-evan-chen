@@ -16,7 +16,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
     return OPEN_PLATE_FILE_FAIL;
   }
 
-  // Read number of rows and number of columns (first 16 bytes)
+  // Read ndumber of rows and number of columns (first 16 bytes)
   uint64_t rows = 0, cols = 0;
 
   // Handle exception if reading is unsuccessful
@@ -30,11 +30,12 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
   // Set up plate's plate_matrix (allocate space for matrices inside,
   // store rows and cols)
   plate->plate_matrix = init_plate_matrix(rows, cols);
-  double** matrix = plate->plate_matrix->matrix;
+  double* row_start = plate->plate_matrix->matrix;
 
   for (size_t row = 0; row < rows; ++row) {
     // Read cols amount of doubles (a row) from plate_file to store
-    fread(matrix[row], sizeof(double), cols, plate_file);
+    fread(row_start, sizeof(double), cols, plate_file);
+    row_start += plate->plate_matrix->cols;
   }
 
   // Copy matrix's borders to auxiliary, to prepare for matrix switches
@@ -61,7 +62,7 @@ bool update_plate(plate_t* plate) {
   // Precompute constant for temperature update calculations
   double diff_times_interval =
       plate->thermal_diffusivity * plate->interval_duration;
-  uint64_t cell_area = plate->cells_dimension * plate->cells_dimension;
+  double cell_area = plate->cells_dimension * plate->cells_dimension;
   double mult_constant = diff_times_interval / cell_area;
 
   // Iterate over all interior cells (excluding boundary cells)
@@ -69,10 +70,11 @@ bool update_plate(plate_t* plate) {
     for (size_t col = 1; col < plate_matrix->cols - 1; ++col) {
       // Update the cell temperature based on surrounding cells
       update_cell(plate_matrix, row, col, mult_constant);
-
+      uint64_t accessed_cell_index = row * plate_matrix->cols + col;
       // Get the new and old temperatures for comparison
-      double new_temperature = plate_matrix->matrix[row][col];
-      double old_temperature = plate_matrix->auxiliary_matrix[row][col];
+      double new_temperature = plate_matrix->matrix[accessed_cell_index];
+      double old_temperature = plate_matrix->
+          auxiliary_matrix[accessed_cell_index];
 
       // Compute absolute difference
       double difference = fabs(new_temperature - old_temperature);
@@ -125,10 +127,12 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     fwrite(&plate_matrix->rows, sizeof(uint64_t), 1, output_file);
     fwrite(&plate_matrix->cols, sizeof(uint64_t), 1, output_file);
 
+    double* row_start = plate_matrix->matrix;
     // Write the matrix data to the file row by row
     for (uint64_t row = 0; row < plate_matrix->rows; ++row) {
-      fwrite(plate_matrix->matrix[row], sizeof(double),
+      fwrite(row_start, sizeof(double),
           plate_matrix->cols, output_file);
+      row_start += plate_matrix->cols;
     }
   } else {
     // Handle file opening failure
