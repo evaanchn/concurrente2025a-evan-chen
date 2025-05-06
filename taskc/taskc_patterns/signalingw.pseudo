@@ -1,8 +1,19 @@
 procedure main()
   input shared thread_count
-  create_threads(thread_count, secondary)
+  shared can_do_a := array(semaphore, thread_count)
+  can_do_a[0] := create_semaphore(1)
+  for i from 1 to thread_count - 1 do
+    can_do_a[i] := create_semaphore(0)
+  end for
+  // ALT: shared can_do_a := create_semaphores(thread_count, 0)
+  //      signal(can_do_a[0])
+  join_thread(create_threads(thread_count, secondary))
 end procedure
 
 procedure secondary(thread_number)
+  // Wait for my semaphore to be signaled by previous thread
+  wait(can_do_a[thread_number])
   statement a
+  // Signal next thread's semaphore in cyclic fashion
+  signal(can_do_a[mod((thread_number + 1), thread_count)])
 end procedure

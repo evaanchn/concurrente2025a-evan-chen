@@ -1,7 +1,7 @@
 = Patrones básicos de concurrencia de tareas
 :experimental:
 :nofooter:
-:source-highlighter: pygments
+:source-highlighter: highlightjs
 :sectnums:
 :stem: latexmath
 :toc:
@@ -26,6 +26,7 @@ include::execution_paths.pseudo[]
 include::execution_paths.adoc[]
 ****
 
+Si lo que se busca es cierta ruta, por ejemplo, imprimir 7, hay que usar control de concurrencia para asegurar que los demas casos no ocurran.
 
 
 
@@ -44,12 +45,18 @@ include::for_count.pseudo[]
 +
 ****
 *Respuesta*: 
+10000, si los hilos van uno por uno, serial (puede ser que habia solo una CPU)
 ****
 
 . ¿Cuál es el menor valor que la variable compartida `count` podría llegar a obtener? ¿En qué rutas de ejecución se alcanza este valor?
 +
 ****
 *Respuesta*: 
+100, si:
+
+a. hay sincronizacion perfecta de hilos
+
+b. un hilo se queda con un 0 al inicio y sobreescribe el trabajo de todos los demas luego de que terminen y toma CPU otra vez.
 ****
 
 
@@ -90,7 +97,7 @@ include::signalingw.pseudo[]
 ----
 
 Una solución a este problema se había hecho antes en el curso ¿recuerda en cuál ejemplo? +
-*Respuesta*: 
+*Respuesta*: hello_world_semaphore, donde hay un arreglo de semaforos, con el primero inicializado en 1 y el resto en 0. Cuando termina un hilo, avisa al semaforo del siguiente que puede trabajar.
 
 
 

@@ -1,7 +1,33 @@
-Ruta 1:
+*Ruta 1: Primero thread_a, luego thread_b*
 
 ----
-instr 1
-instr 2
-instr ...
+x := 5
+print(x = 5)
+x := 7
 ----
+
+(Imprime 5, queda 7 en x)
+
+
+*Ruta 2: Primero thread_a, luego thread_a*
+
+----
+x := 7
+x := 5
+print(x = 5)
+
+----
+
+(Imprime 5, queda 5 en x)
+
+*Ruta 3: Thread_b se cola en medio de thread_a*
+
+----
+
+x := 5
+x := 7
+print(x = 7)
+
+----
+
+(Imprime 7, queda 7 en x)
