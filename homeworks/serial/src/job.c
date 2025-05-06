@@ -18,9 +18,22 @@ int simulate(char* job_file_path, uint64_t thread_count) {
   error = set_job(job);
   if (error != EXIT_SUCCESS) return error;
 
+  // Record start time
+  struct timespec start_time, finish_time;
+  clock_gettime(CLOCK_MONOTONIC, &start_time);
+
   // Process the plates
   error = process_plates(job);
   if (error != EXIT_SUCCESS) return error;
+
+  // Record end time
+  clock_gettime(CLOCK_MONOTONIC, &finish_time);
+
+  // Set elapsed time
+  double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
+
+  // Report elapsed time
+  printf("Completed job in: %.9lfs\n", elapsed_time);
 
   // Report final results of the simulation
   report_results(job);
@@ -45,7 +58,20 @@ int process_plates(job_t* job) {
       return error;
     }
 
+    // Record start time
+    struct timespec start_time, finish_time;
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
+
     equilibrate_plate(job, plate_number);
+
+    // Record end time
+    clock_gettime(CLOCK_MONOTONIC, &finish_time);
+
+    // Set elapsed time
+    double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
+
+    // Report elapsed time
+    printf("Equilibrated plate %zu in: %.9lfs\n", plate_number, elapsed_time);
 
     clean_plate(job, plate_number);
   }
@@ -131,11 +157,11 @@ int set_job(job_t* job) {
   char plate_file_name[MAX_FILE_NAME_SIZE] = "\0";
   uint64_t interval_duration = 0;
   double thermal_diffusivity = 0;
-  uint64_t cells_dimension = 0;
+  double cells_dimension = 0;
   double epsilon = 0;
 
   // Read and parse each line from the job file
-  while (fscanf(job_file, "%s\t%" SCNu64 "\t%lg\t%" SCNu64 "%lg\n",
+  while (fscanf(job_file, "%s\t%" SCNu64 "\t%lg\t%lg\t%lg\n",
     plate_file_name, &interval_duration, &thermal_diffusivity,
     &cells_dimension, &epsilon) == 5) {
     // Allocate memory for a new plate
@@ -262,15 +288,15 @@ int report_results(job_t* job) {
       time_t simulated_seconds = plate->k_states * plate->interval_duration;
       char formatted_time[50];
       format_time(simulated_seconds, formatted_time, 50);
-      fprintf(results_file, "%-10s\t%9" PRIu64 "\t%8.6lg\t%8" PRIu64
-          "\t%6.6lg\t%6" PRIu64 "\t%-48s\n",
-          plate->file_name,
-          plate->interval_duration,
-          plate->thermal_diffusivity,
-          plate->cells_dimension,
-          plate->epsilon,
-          plate->k_states,
-          formatted_time);
+      fprintf(results_file, "%-10s\t%9" PRIu64 "\t%8.6lg\t%6.6lg\t%6.6lg\t%6"
+        PRIu64 "\t%-48s\n",
+        plate->file_name,
+        plate->interval_duration,
+        plate->thermal_diffusivity,
+        plate->cells_dimension,
+        plate->epsilon,
+        plate->k_states,
+        formatted_time);
     }
     printf("Results stored in: %s\n", results_file_path);
     fclose(results_file);

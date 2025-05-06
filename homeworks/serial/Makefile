@@ -1,4 +1,4 @@
 include ../../common/Makefile
 
 FLAG += -pthread
-ARGS = jobs/job002b/job002.txt
+ARGS = jobs/job020b/job020.txt

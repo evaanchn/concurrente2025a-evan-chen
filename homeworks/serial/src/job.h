@@ -3,6 +3,8 @@
 #ifndef JOB_H
 #define JOB_H
 
+#define _DEFAULT_SOURCE
+
 #include <assert.h>
 #include <stdlib.h>
 #include <time.h>
