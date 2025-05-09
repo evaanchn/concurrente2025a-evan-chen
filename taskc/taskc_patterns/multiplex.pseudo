@@ -1,9 +1,12 @@
 procedure main()
   input const skater_count, const room_capacity
-  create_threads(skater_count, skater)
+  shared can_skate := create_semaphore(room_capacity)
+  join_threads(create_threads(skater_count, skater))
 end procedure
 
 procedure skater()
-  // Concurrency-bounded region
-  skate()
+  wait(can_skate)
+    // Concurrency-bounded region
+    skate()
+  signal(can_skate)
 end procedure

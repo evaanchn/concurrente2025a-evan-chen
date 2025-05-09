@@ -4,7 +4,8 @@ procedure main()
   // Protects the increment of the count
   shared can_access_count := create_semaphore(1)
   // Locked (0) until all threads arrive, then it is unlocked (1)
-  shared barrier := create_semaphore(0)
+  shared barrier_entry := create_semaphore(0)
+  shared barrier_exit := create_semaphore(1)
   // Read thread count from standard input
   input shared const thread_count
   // Create a thread team running secondary
@@ -18,9 +19,20 @@ procedure secondary()
   wait(can_access_count)
     count := count + 1
     if (count = thread_count) do
-      signal(barrier, thread_count)
+      wait(barrier_exit)
+      signal(barrier_entry, thread_count)
     end if
   signal(can_access_count)
-  wait(barrier)
+  wait(barrier_entry)
+
   Statement B
+
+  wait(can_access_count)
+    count := count - 1
+    if (count = 0) do
+      wait(barrier_entry)
+      signal(barrier_exit, thread_count)
+    end if
+  signal(can_access_count)
+  wait(barrier_exit)
 end procedure
