@@ -30,11 +30,12 @@ s|# s|Id s|Tipo s|Descripcion
 |16 m|link:pthreads/building_tasks[building_tasks] | Ejemplo de clase |Se representa la construccion de una casa, donde las tareas a hacer tienen dependencia de algunas anteriores. Se trata de completar la obra de manera concurrente, respetando las dependencias de cada tarea.
 |17 m|link:pthreads/prod_cons_bound[prod_cons_bound] | Ejemplo comentado |Se resuelve el problema del buffer acotado con dos semaforos, uno para el productor y otro para el consumidor.
 |18 m|link:pthreads/prod_cons_unbound[prod_cons_unbound] | Ejemplo comentado |En contraste con el ejemplo anterior, este es la version no acotada del problema productor-consumidor.
-|19 m|link:pthreads/network_simul_packet_loss[network_simul_packet_loss] | Ejemplo en clase |Representa una simulacion de red que involucra un productor, un repartidor, varios consumidores y un ensamblador (pierde o convierte paquetes). El programa tiene un fallo de control de concurrencia que causa que ciertos paquetes no se consuman.
-|20 m|link:pthreads/network_simul_packet_loss_fix[network_simul_packet_loss_fix] | Ejemplo en clase |Se corrige el defecto del ejemplo pasado, tal que se consumen todos los paquetes creados.
-|21 m|link:pthreads/network_simul_packet_loss2[network_simul_packet_loss2] | Ejemplo en clase |Similar al link:pthreads/network_simul_packet_loss[network_simul_packet_loss], pero se traslada al ensamblador tal que primero se ensambla y luego se reparte.
-|22 m|link:pthreads/network_simul_producers[network_simul_producers] | Ejemplo en clase |Se modifica el codigo de link:pthreads/network_simul_packet_loss2[network_simul_packet_loss2] tal que se pueden solicitar multiples productores.
-|23 m|link:pthreads/network_simul_bound[network_simul_bound] | Ejemplo en clase |Se modifica el codigo de link:pthreads/network_simul_producers[network_simul_producers], de forma que las colas pueden ser acotadas.
+|19 m|link:taskc/network_simul_packet_loss[network_simul_packet_loss] | Ejemplo en clase |Representa una simulacion de red que involucra un productor, un repartidor, varios consumidores y un ensamblador (pierde o convierte paquetes). El programa tiene un fallo de control de concurrencia que causa que ciertos paquetes no se consuman.
+|20 m|link:taskc/network_simul_packet_loss_fix[network_simul_packet_loss_fix] | Ejemplo en clase |Se corrige el defecto del ejemplo pasado, tal que se consumen todos los paquetes creados.
+|21 m|link:taskc/network_simul_packet_loss2[network_simul_packet_loss2] | Ejemplo en clase |Similar al link:taskc/network_simul_packet_loss[network_simul_packet_loss], pero se traslada al ensamblador tal que primero se ensambla y luego se reparte.
+|22 m|link:taskc/network_simul_producers[network_simul_producers] | Ejemplo en clase |Se modifica el codigo de link:taskc/network_simul_packet_loss2[network_simul_packet_loss2] tal que se pueden solicitar multiples productores.
+|23 m|link:taskc/network_simul_bound[network_simul_bound] | Ejemplo en clase |Se modifica el codigo de link:taskc/network_simul_producers[network_simul_producers], de forma que las colas pueden ser acotadas.
+|24 m|link:taskc/taskc_patterns/readme.adoc[taskc_patterns] | Ejemplo en clase |Se analizan varios patrones simples relacionados al control de concurrencia.
 |===
 
 == Tareas
@@ -83,7 +84,7 @@ s|# s|Id s|Titulo s|Descripcion
 
     18. *Eficiencia*: Otra metrica que indaga si la cantidad de recursos empleados para el incremento de velocidad vale la pena. Se define como E = Tiempo serial / (Tiempo paralelo * Cantidad de hilos) (mayor E, mayor eficiencia alcanzada). Si se alcanza un buen incremento de velocidad pero se tiene un E demasiado bajo, es un indicador de que se debe de cambiar de solucion.
 
-    Barrera.
+    19. *Barrera*: Punto de encuentro (rendezvous) generalizado, donde *todos* los hilos paran hasta que llegue el ultimo, que debe de avisar a los demas que pueden pasar por la barrera.
 
     Variable de condición.
 
@@ -97,4 +98,6 @@ s|# s|Id s|Titulo s|Descripcion
 
 === Extra
 
-    1. Monitor: Cola threadsafe, o una cola con un mutex para regular el producir y consumir en una cola.
+    1. *Monitor*: Cola threadsafe, o una cola con un mutex para regular el producir y consumir en una cola.
+
+    2. *Torniquete*: Conocido tambien como turnstile en ingles, es un semaforo que bloquea el paso de todos los hilos que llegan a el, pero cuando pasa un hilo por esta, deja paso al siguiente automaticamente, lo que causa que todos los que estaban esperando pasen uno por uno.
