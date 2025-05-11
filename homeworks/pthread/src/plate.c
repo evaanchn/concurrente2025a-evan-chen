@@ -30,11 +30,12 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
   // Set up plate's plate_matrix (allocate space for matrices inside,
   // store rows and cols)
   plate->plate_matrix = init_plate_matrix(rows, cols);
-  double** matrix = plate->plate_matrix->matrix;
+  double* row_start = plate->plate_matrix->matrix;
 
   for (size_t row = 0; row < rows; ++row) {
     // Read cols amount of doubles (a row) from plate_file to store
-    fread(matrix[row], sizeof(double), cols, plate_file);
+    fread(row_start, sizeof(double), cols, plate_file);
+    row_start += plate->plate_matrix->cols;
   }
 
   // Copy matrix's borders to auxiliary, to prepare for matrix switches
@@ -52,13 +53,14 @@ void* equilibrate_rows(void* data) {
   uint64_t starting_row = private_data->starting_row;
   uint64_t ending_row = private_data->ending_row;
   // Only work designated rows
-  for (uint64_t row = starting_row; row <= ending_row; ++row) {
+  for (uint64_t row = starting_row; row < ending_row; ++row) {
     for (uint64_t col = 1; col < plate_matrix->cols - 1; ++col) {
       // Update the cell temperature based on surrounding cells
       update_cell(plate_matrix, row, col, shared_data->mult_constant);
       // Get the new and old temperatures for comparison
-      double new_temperature = plate_matrix->matrix[row][col];
-      double old_temperature = plate_matrix->auxiliary_matrix[row][col];
+      uint64_t accessed_index = row * plate_matrix->cols + col;
+      double new_temperature = plate_matrix->matrix[accessed_index];
+      double old_temperature = plate_matrix->auxiliary_matrix[accessed_index];
 
       // Compute absolute difference
       double difference = fabs(new_temperature - old_temperature);
@@ -102,11 +104,11 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     // Write matrix dimensions to the file (first 16 bytes)
     fwrite(&plate_matrix->rows, sizeof(uint64_t), 1, output_file);
     fwrite(&plate_matrix->cols, sizeof(uint64_t), 1, output_file);
-
+    double* row_start = plate_matrix->matrix;
     // Write the matrix data to the file row by row
     for (uint64_t row = 0; row < plate_matrix->rows; ++row) {
-      fwrite(plate_matrix->matrix[row], sizeof(double),
-          plate_matrix->cols, output_file);
+      fwrite(row_start, sizeof(double), plate_matrix->cols, output_file);
+      row_start += plate_matrix->cols;
     }
   } else {
     // Handle file opening failure
@@ -153,3 +155,4 @@ char* set_plate_file_name(plate_t* plate) {
 
   return new_filename;
 }
+
