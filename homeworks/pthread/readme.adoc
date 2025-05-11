@@ -134,8 +134,9 @@ s|_Error code_ s|_Error_ s|_Output Message_
 |23 | *Rows and cols values in plate file incorrect or failed to store* m|`Error: Rows and cols could not be read`
 |24 | Plate output file's path could not be built m|`Error: Could not build output file name`
 |25 | Plate output file could not be opened m|`Error: Could not open output file`
-|31 | Thread team could not be created m|`Error: Could not create thread team for plate ##`
-|32 | Thread could not be created m|`Error: could not create thread ##`
+|31 | Shared data could not be initialzed m|`Error: Could not initialize shared data for plate ##`
+|32 | Thread team could not be created m|`Error: Could not create thread team for plate ##`
+|33 | Thread could not be created m|`Error: could not create thread ##`
 |## | Threads failed to join (## is amount that failed to join) m|`Error: could not join thread ##`
 
 |===
