@@ -1,58 +1,74 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
 
 #include "threads.h"
+// TODO add init_shared_data procedure
 
-/**
- * @brief Calculates the interval of rows each thread should process.
- *
- * Determines how many rows each thread should evaluate based on the
- * number of available rows and the number of threads.
- *
- * @param shared_data A pointer to the shared_data_t structure.
- * @return The number of rows to be evaluated per thread.
- */
-uint64_t get_intervals(shared_data_t* shared_data);
+uint64_t get_finish_row(size_t thread_number, uint64_t evaluated_rows
+    , size_t thread_count);
+
+int init_shared_data(shared_data_t* shared_data, plate_t* plate
+    , uint64_t thread_count) {
+
+  // Precompute constant for temperature update calculations
+  double diff_times_interval =
+      plate->thermal_diffusivity * plate->interval_duration;
+  double cell_area = plate->cells_dimension * plate->cells_dimension;
+  double mult_constant = diff_times_interval / cell_area;
+
+  shared_data->plate_matrix = plate->plate_matrix;
+  shared_data->mult_constant = mult_constant;
+  shared_data->epsilon = plate->epsilon;
+
+  uint64_t evaluated_rows = plate->plate_matrix->rows - 2;
+  // Thread count depends on whether there are more threads solicited
+  // or more rows to evaluates
+  shared_data->thread_count = evaluated_rows > thread_count ?
+      thread_count : evaluated_rows;
+  shared_data->k_states = 0;
+
+  int error = EXIT_SUCCESS;
+  error = pthread_mutex_init(&shared_data->can_access_equilibrated
+      , /*attr*/ NULL);
+  if (error != EXIT_SUCCESS) return error;
+
+  error = pthread_barrier_init(&shared_data->can_continue, /*attr*/ NULL
+      , shared_data->thread_count);
+  if (error != EXIT_SUCCESS) {
+    pthread_mutex_destroy(&shared_data->can_access_equilibrated);
+    return error;
+  }
+
+  return error;
+}
 
 private_data_t* init_private_data(const size_t count, void* data) {
   shared_data_t* shared_data = (shared_data_t*) data;
-  // last eval row will be rows - 2, the row before last row
-  uint64_t last_eval_row = shared_data->plate_matrix->rows - 2;
-  // Thread count depends on whether there are more threads solicited
-  // or more rows to evaluate: if the last evaluating row is greater,
-  // then we can only set thread_count as the ones solicited
-  // if there are more threads than rows, then we limit the count to
-  // rows needed
-  shared_data->thread_count = last_eval_row > count ? count : last_eval_row;
-
+  // Excluding first and last row, the rest of the rows are evaluated.
+  uint64_t evaluated_rows = shared_data->plate_matrix->rows - 2;
   private_data_t* private_data = (private_data_t*)
       calloc(shared_data->thread_count, sizeof(private_data_t));
   if (private_data) {
-    uint64_t interval_to_end = get_intervals(shared_data) - 1;
-    uint64_t row_pointer = 0;  // Starts at first row
-
-    for (size_t index = 0; index < shared_data->thread_count; ++index) {
-      private_data[index].starting_row = ++row_pointer;  // Inc prev ending
-      row_pointer += interval_to_end;
-      private_data[index].ending_row = (index == shared_data->thread_count - 1)
-          ? last_eval_row  // If it's the last one, set it to the last eval row
-          : row_pointer;
-      private_data[index].equilibrated = true;  // Assume reached equilibrium
-      private_data[index].shared_data = data;
+    uint64_t prev_finish_row = 1;  // Initialize in 1, as row 0 is not evaluated
+    for (uint64_t thread_number = 0; thread_number < shared_data->thread_count;
+        ++thread_number) {
+      // Starting row will be last one's finish row
+      private_data[thread_number].starting_row = prev_finish_row;
+      private_data[thread_number].finish_row = get_finish_row(thread_number + 1
+          , evaluated_rows, shared_data->thread_count) + 1;
+      prev_finish_row = private_data[thread_number].finish_row;
+      private_data[thread_number].equilibrated = true;
+      private_data[thread_number].shared_data = data;
     }
   }
   return private_data;
 }
 
-uint64_t get_intervals(shared_data_t* shared_data) {
-  // Eliminate first and last row from calculations
-  uint64_t evaluating_rows = shared_data->plate_matrix->rows - 2;
-  uint64_t intervals = 1;  // Assume intervals are 1 first
-  // If thread count solicited is greater than evaluating rows,
-  // intervals of 1 would stay valid, if not, must change
-  if (shared_data->thread_count < evaluating_rows) {
-    intervals = evaluating_rows / shared_data->thread_count;
-  }
-  return intervals;
+uint64_t get_finish_row(size_t thread_number, uint64_t evaluated_rows
+  , size_t thread_count) {
+  // Add the residue if thread number exceeds it
+  size_t added = thread_number < evaluated_rows % thread_count ? thread_number
+      : evaluated_rows % thread_count;
+  return thread_number * (evaluated_rows / thread_count) + added;
 }
 
 // MODIFIED FROM IN-CLASS EXAMPLE
@@ -64,7 +80,7 @@ int create_threads(void*(*routine)(void*), void* data) {
       , &private_data[index]) != 0) {
       fprintf(stderr, "Error: could not create thread %zu\n", index);
       bool temp = true;
-      join_threads(index, private_data, &temp);
+      join_threads(index, private_data);
       return ERR_CREATE_THREAD;
     }
   }
@@ -72,19 +88,21 @@ int create_threads(void*(*routine)(void*), void* data) {
 }
 
 // MODIFIED FROM IN-CLASS EXAMPLE
-int join_threads(const size_t count, private_data_t* private_data
-  , bool* reached_equilibrium) {
+int join_threads(const size_t count, private_data_t* private_data) {
+  shared_data_t* shared_data = private_data[0].shared_data;
+
   int error_count = 0;
   for (size_t index = 0; index < count; ++index) {
     const int error = pthread_join(private_data[index].thread_id, NULL);
     if (error) {
+      pthread_mutex_destroy(&shared_data->can_access_equilibrated);
+      pthread_barrier_destroy(&shared_data->can_continue);
       fprintf(stderr, "Error: could not join thread %zu\n", index);
       ++error_count;
     }
-    *reached_equilibrium = *reached_equilibrium
-        && private_data[index].equilibrated;
-    private_data[index].equilibrated = true;
   }
+
+  pthread_mutex_destroy(&shared_data->can_access_equilibrated);
+  pthread_barrier_destroy(&shared_data->can_continue);
   return error_count;
 }
-
