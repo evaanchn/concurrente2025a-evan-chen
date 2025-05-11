@@ -1,6 +1,8 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
 
 #include "plate.h"
+#include "threads.h"
+
 int set_plate_matrix(plate_t* plate, char* source_directory) {
   // Concatenate plate file name with same directory specified for job
   char* plate_file_path = build_file_path(source_directory, plate->file_name);
@@ -30,11 +32,12 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
   // Set up plate's plate_matrix (allocate space for matrices inside,
   // store rows and cols)
   plate->plate_matrix = init_plate_matrix(rows, cols);
-  double** matrix = plate->plate_matrix->matrix;
+  double* row_start = plate->plate_matrix->matrix;
 
   for (size_t row = 0; row < rows; ++row) {
     // Read cols amount of doubles (a row) from plate_file to store
-    fread(matrix[row], sizeof(double), cols, plate_file);
+    fread(row_start, sizeof(double), cols, plate_file);
+    row_start += plate->plate_matrix->cols;
   }
 
   // Copy matrix's borders to auxiliary, to prepare for matrix switches
@@ -50,15 +53,16 @@ void* equilibrate_rows(void* data) {
   shared_data_t* shared_data = private_data->shared_data;
   plate_matrix_t* plate_matrix = shared_data->plate_matrix;
   uint64_t starting_row = private_data->starting_row;
-  uint64_t ending_row = private_data->ending_row;
+  uint64_t ending_row = private_data->finish_row;
   // Only work designated rows
   for (uint64_t row = starting_row; row <= ending_row; ++row) {
     for (uint64_t col = 1; col < plate_matrix->cols - 1; ++col) {
       // Update the cell temperature based on surrounding cells
       update_cell(plate_matrix, row, col, shared_data->mult_constant);
+      uint64_t accessed_index = row * plate_matrix->cols + col;
       // Get the new and old temperatures for comparison
-      double new_temperature = plate_matrix->matrix[row][col];
-      double old_temperature = plate_matrix->auxiliary_matrix[row][col];
+      double new_temperature = plate_matrix->matrix[accessed_index];
+      double old_temperature = plate_matrix->auxiliary_matrix[accessed_index];
 
       // Compute absolute difference
       double difference = fabs(new_temperature - old_temperature);
@@ -70,6 +74,59 @@ void* equilibrate_rows(void* data) {
   }
   return NULL;
 }
+void* equilibrate_plate_concurrent(void* data) {
+  private_data_t* private_data = (private_data_t*) data;
+  shared_data_t* shared_data = private_data->shared_data;
+  plate_matrix_t* plate_matrix = shared_data->plate_matrix;
+
+  while (true) {
+    // Reset local flag for this round
+    private_data->equilibrated = true;
+    // Update rows; this may set equilibrated = false
+    equilibrate_rows(data);
+
+    // Combine result into shared flag
+    pthread_mutex_lock(&shared_data->can_access_equilibrated);
+      shared_data->equilibrated_plate &= private_data->equilibrated;
+    pthread_mutex_unlock(&shared_data->can_access_equilibrated);
+
+    // First barrier: sync all threads after work
+    // Second barrier: ensure all threads see updated matrix and equilibrium result
+    printf("Thread %lu reached barrier 1\n", private_data->thread_id);
+    int barrier_result = pthread_barrier_wait(&shared_data->can_continue1);
+    printf("Thread %lu passed barrier 1\n", private_data->thread_id);
+    if (barrier_result == PTHREAD_BARRIER_SERIAL_THREAD) {
+      ++shared_data->k_states;
+      set_auxiliary(plate_matrix);
+      printf("Equilibrated state %" PRIu64 "\n", shared_data->k_states);
+    }
+
+    // Second barrier: ensure all threads see updated matrix and equilibrium result
+    printf("Thread %lu reached barrier 2\n", private_data->thread_id);
+    pthread_barrier_wait(&shared_data->can_continue2);
+    printf("Thread %lu passed barrier 2\n", private_data->thread_id);
+
+
+    // Check if we’re done
+    pthread_mutex_lock(&shared_data->can_access_equilibrated);
+      bool done = shared_data->equilibrated_plate;
+    pthread_mutex_unlock(&shared_data->can_access_equilibrated);
+
+    if (done) {
+      printf("Thread %lu left\n", private_data->thread_id);
+      break;
+    }
+    else printf("Thread %lu moved on\n", private_data->thread_id);
+
+    if (pthread_barrier_wait(&shared_data->can_continue1)
+        == PTHREAD_BARRIER_SERIAL_THREAD) {
+      shared_data->equilibrated_plate = true;
+    }
+  }
+
+  return NULL;
+}
+
 
 
 int update_plate_file(plate_t* plate, char* source_directory) {
@@ -102,11 +159,12 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     // Write matrix dimensions to the file (first 16 bytes)
     fwrite(&plate_matrix->rows, sizeof(uint64_t), 1, output_file);
     fwrite(&plate_matrix->cols, sizeof(uint64_t), 1, output_file);
-
+    double* row_start = plate_matrix->matrix;
     // Write the matrix data to the file row by row
     for (uint64_t row = 0; row < plate_matrix->rows; ++row) {
-      fwrite(plate_matrix->matrix[row], sizeof(double),
+      fwrite(row_start, sizeof(double),
           plate_matrix->cols, output_file);
+      row_start += plate_matrix->cols;
     }
   } else {
     // Handle file opening failure

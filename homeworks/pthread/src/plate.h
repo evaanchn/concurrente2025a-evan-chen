@@ -3,6 +3,8 @@
 #ifndef PLATE_H
 #define PLATE_H
 
+#define _GNU_SOURCE
+
 #include <assert.h>
 #include <inttypes.h>
 #include <math.h>
@@ -13,7 +15,6 @@
 #include "common.h"
 #include "errors.h"
 #include "plate_matrix.h"
-#include "threads.h"
 
 /**
  * @struct plate_t
@@ -49,6 +50,8 @@ int set_plate_matrix(plate_t* plate, char* source_directory);
  * @param data Shared data with information necessary to equilibrate
  */
 void* equilibrate_rows(void* data);
+
+void* equilibrate_plate_concurrent(void* data);
 
 /**
  * @brief Writes the updated plate matrix to a binary file.
