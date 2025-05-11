@@ -55,7 +55,7 @@ void* equilibrate_rows(void* data) {
   uint64_t starting_row = private_data->starting_row;
   uint64_t ending_row = private_data->finish_row;
   // Only work designated rows
-  for (uint64_t row = starting_row; row <= ending_row; ++row) {
+  for (uint64_t row = starting_row; row < ending_row; ++row) {
     for (uint64_t col = 1; col < plate_matrix->cols - 1; ++col) {
       // Update the cell temperature based on surrounding cells
       update_cell(plate_matrix, row, col, shared_data->mult_constant);
@@ -74,6 +74,7 @@ void* equilibrate_rows(void* data) {
   }
   return NULL;
 }
+
 void* equilibrate_plate_concurrent(void* data) {
   private_data_t* private_data = (private_data_t*) data;
   shared_data_t* shared_data = private_data->shared_data;
@@ -120,7 +121,9 @@ void* equilibrate_plate_concurrent(void* data) {
 
     if (pthread_barrier_wait(&shared_data->can_continue1)
         == PTHREAD_BARRIER_SERIAL_THREAD) {
+      pthread_mutex_lock(&shared_data->can_access_equilibrated);
       shared_data->equilibrated_plate = true;
+      pthread_mutex_unlock(&shared_data->can_access_equilibrated);
     }
   }
 

@@ -3,7 +3,9 @@
 #ifndef PLATE_H
 #define PLATE_H
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 
 #include <assert.h>
 #include <inttypes.h>

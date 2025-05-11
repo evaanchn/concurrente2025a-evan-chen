@@ -3,7 +3,9 @@
 #ifndef JOB_H
 #define JOB_H
 
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#endif  // _DEFAULT_SOURCE
 
 #include <assert.h>
 #include <stdlib.h>
