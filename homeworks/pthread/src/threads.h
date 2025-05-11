@@ -22,7 +22,8 @@ typedef struct shared_data {
   double epsilon;               /**< Epsilon associated to the plate */
   bool equilibrated_plate;
   pthread_mutex_t can_access_equilibrated;
-  pthread_barrier_t can_continue;
+  pthread_barrier_t can_continue1;
+  pthread_barrier_t can_continue2;
   uint64_t k_states;
 } shared_data_t;
 
@@ -34,6 +35,17 @@ typedef struct private_data {
   shared_data_t* shared_data;  /**< Pointer to the shared data structure. */
 } private_data_t;
 
+/**
+ * @brief Initializes a shared data struct
+ *
+ * This procedure sets up a shared data struct by initializing values
+ * and concurrency control tools.
+ *
+ * @param shared_data The shared data struct to initialize
+ * @param plate Plate to equilibrate, with important information for the struct
+ * @param thread_count Amount of threads requested from args.
+ * @return Success or failure of the intialization.
+ */
 int init_shared_data(shared_data_t* shared_data, plate_t* plate
     , uint64_t thread_count);
 
@@ -50,7 +62,7 @@ int init_shared_data(shared_data_t* shared_data, plate_t* plate
  * @return A pointer to an array of initialized private_data_t structures,
  *         or NULL on failure.
  */
-private_data_t* init_private_data(const size_t count, void* data);
+private_data_t* init_private_data(void* data);
 
 /**
  * @brief Creates and starts threads using the specified routine.

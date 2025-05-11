@@ -1,14 +1,11 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
-
 #include "threads.h"
-// TODO add init_shared_data procedure
 
 uint64_t get_finish_row(size_t thread_number, uint64_t evaluated_rows
     , size_t thread_count);
 
 int init_shared_data(shared_data_t* shared_data, plate_t* plate
     , uint64_t thread_count) {
-
   // Precompute constant for temperature update calculations
   double diff_times_interval =
       plate->thermal_diffusivity * plate->interval_duration;
@@ -31,8 +28,10 @@ int init_shared_data(shared_data_t* shared_data, plate_t* plate
       , /*attr*/ NULL);
   if (error != EXIT_SUCCESS) return error;
 
-  error = pthread_barrier_init(&shared_data->can_continue, /*attr*/ NULL
+  error = pthread_barrier_init(&shared_data->can_continue1, /*attr*/ NULL
       , shared_data->thread_count);
+  error = pthread_barrier_init(&shared_data->can_continue2, /*attr*/ NULL
+    , shared_data->thread_count);
   if (error != EXIT_SUCCESS) {
     pthread_mutex_destroy(&shared_data->can_access_equilibrated);
     return error;
@@ -41,7 +40,7 @@ int init_shared_data(shared_data_t* shared_data, plate_t* plate
   return error;
 }
 
-private_data_t* init_private_data(const size_t count, void* data) {
+private_data_t* init_private_data(void* data) {
   shared_data_t* shared_data = (shared_data_t*) data;
   // Excluding first and last row, the rest of the rows are evaluated.
   uint64_t evaluated_rows = shared_data->plate_matrix->rows - 2;
@@ -79,7 +78,6 @@ int create_threads(void*(*routine)(void*), void* data) {
     if (pthread_create(&private_data[index].thread_id, NULL, routine
       , &private_data[index]) != 0) {
       fprintf(stderr, "Error: could not create thread %zu\n", index);
-      bool temp = true;
       join_threads(index, private_data);
       return ERR_CREATE_THREAD;
     }
@@ -96,13 +94,17 @@ int join_threads(const size_t count, private_data_t* private_data) {
     const int error = pthread_join(private_data[index].thread_id, NULL);
     if (error) {
       pthread_mutex_destroy(&shared_data->can_access_equilibrated);
-      pthread_barrier_destroy(&shared_data->can_continue);
+      pthread_barrier_destroy(&shared_data->can_continue1);
+      pthread_barrier_destroy(&shared_data->can_continue2);
+
       fprintf(stderr, "Error: could not join thread %zu\n", index);
       ++error_count;
     }
   }
 
   pthread_mutex_destroy(&shared_data->can_access_equilibrated);
-  pthread_barrier_destroy(&shared_data->can_continue);
+  pthread_barrier_destroy(&shared_data->can_continue1);
+  pthread_barrier_destroy(&shared_data->can_continue2);
+
   return error_count;
 }
