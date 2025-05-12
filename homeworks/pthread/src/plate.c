@@ -93,20 +93,13 @@ void* equilibrate_plate_concurrent(void* data) {
 
     // First barrier: sync all threads after work
     // Second barrier: ensure all threads see updated matrix and equilibrium result
-    printf("Thread %lu reached barrier 1\n", private_data->thread_id);
     int barrier_result = pthread_barrier_wait(&shared_data->can_continue1);
-    printf("Thread %lu passed barrier 1\n", private_data->thread_id);
     if (barrier_result == PTHREAD_BARRIER_SERIAL_THREAD) {
       ++shared_data->k_states;
       set_auxiliary(plate_matrix);
-      printf("Equilibrated state %" PRIu64 "\n", shared_data->k_states);
     }
 
-    // Second barrier: ensure all threads see updated matrix and equilibrium result
-    printf("Thread %lu reached barrier 2\n", private_data->thread_id);
     pthread_barrier_wait(&shared_data->can_continue2);
-    printf("Thread %lu passed barrier 2\n", private_data->thread_id);
-
 
     // Check if we’re done
     pthread_mutex_lock(&shared_data->can_access_equilibrated);
@@ -114,17 +107,18 @@ void* equilibrate_plate_concurrent(void* data) {
     pthread_mutex_unlock(&shared_data->can_access_equilibrated);
 
     if (done) {
-      printf("Thread %lu left\n", private_data->thread_id);
       break;
     }
-    else printf("Thread %lu moved on\n", private_data->thread_id);
 
     if (pthread_barrier_wait(&shared_data->can_continue1)
         == PTHREAD_BARRIER_SERIAL_THREAD) {
       pthread_mutex_lock(&shared_data->can_access_equilibrated);
-      shared_data->equilibrated_plate = true;
+        shared_data->equilibrated_plate = true;
       pthread_mutex_unlock(&shared_data->can_access_equilibrated);
     }
+
+    // Prevent equilibrated plate change during simul
+    pthread_barrier_wait(&shared_data->can_continue2);
   }
 
   return NULL;
@@ -163,6 +157,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     fwrite(&plate_matrix->rows, sizeof(uint64_t), 1, output_file);
     fwrite(&plate_matrix->cols, sizeof(uint64_t), 1, output_file);
     double* row_start = plate_matrix->matrix;
+  
     // Write the matrix data to the file row by row
     for (uint64_t row = 0; row < plate_matrix->rows; ++row) {
       fwrite(row_start, sizeof(double),
