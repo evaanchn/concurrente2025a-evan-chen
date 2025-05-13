@@ -38,6 +38,13 @@ s|# s|Id s|Tipo s|Descripcion
 |24 m|link:taskc/taskc_patterns/readme.adoc[taskc_patterns] | Ejemplo en clase |Se analizan varios patrones simples relacionados al control de concurrencia.
 |===
 
+== Open MP
+
+[%autowidth]
+|=== 
+s|# s|Id s|Tipo s|Descripcion
+|1 m|link:omp/omp_team[omp_team] | Ejemplo de clase |Implemented hello exercise with thread team in Open MP.
+|===
 == Tareas
 [%autowidth]
 |=== 
