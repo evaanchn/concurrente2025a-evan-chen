@@ -47,7 +47,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
 
 
 
-bool update_plate(plate_t* plate) {
+bool update_plate(plate_t* plate, double mult_constant) {
   // Get the plate matrix from the plate structure
   plate_matrix_t* plate_matrix = plate->plate_matrix;
 
@@ -58,12 +58,6 @@ bool update_plate(plate_t* plate) {
   // Assume equilibrium unless a significant temperature change occurs
   bool reached_equilibrium = true;
   double biggest_change = 0;
-
-  // Precompute constant for temperature update calculations
-  double diff_times_interval =
-      plate->thermal_diffusivity * plate->interval_duration;
-  double cell_area = plate->cells_dimension * plate->cells_dimension;
-  double mult_constant = diff_times_interval / cell_area;
 
   // Iterate over all interior cells (excluding boundary cells)
   for (size_t row = 1; row < plate_matrix->rows - 1; ++row) {

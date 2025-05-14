@@ -86,10 +86,16 @@ void equilibrate_plate(job_t* job, size_t plate_number) {
   uint64_t k_states = 0;
   bool reached_equilibrium = false;
 
+  // Precompute constant for temperature update calculations
+  double diff_times_interval =
+      curr_plate->thermal_diffusivity * curr_plate->interval_duration;
+  double cell_area = curr_plate->cells_dimension * curr_plate->cells_dimension;
+  double mult_constant = diff_times_interval / cell_area;
+
   //  while not reached_equilibrium do
   while (!reached_equilibrium) {
     //  update_plate(plate)
-    reached_equilibrium = update_plate(curr_plate);
+    reached_equilibrium = update_plate(curr_plate, mult_constant);
 
     ++k_states;
   }  //  end while

@@ -45,9 +45,10 @@ int set_plate_matrix(plate_t* plate, char* source_directory);
  * Computes new temperatures for each cell and checks for equilibrium.
  * 
  * @param plate Pointer to the plate structure.
+ * @param mult_constant Constant during equilibrating process.
  * @return True if equilibrium is reached, false otherwise.
  */
-bool update_plate(plate_t* plate);
+bool update_plate(plate_t* plate, double mult_constant);
 
 /**
  * @brief Writes the updated plate matrix to a binary file.
