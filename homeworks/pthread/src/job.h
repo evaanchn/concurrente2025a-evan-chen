@@ -15,7 +15,7 @@
 #include "threads.h"
 
 /** @brief Initial capacity for plates allocation. */
-#define STARTING_CAPACITY 10
+#define STARTING_CAPACITY 50
 
 /** @brief Maximum file name size. */
 #define MAX_FILE_NAME_SIZE 256
