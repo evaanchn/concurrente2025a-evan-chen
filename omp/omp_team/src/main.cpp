@@ -1,4 +1,4 @@
-// Copyright 2024 ECCI-UCR CC-BY 4.0
+// Copyright 2024 ECCI-UCR CC-BY Evan Chen 4.0
 #include <iostream>
 #include <omp.h>
 
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
   // use firstprivate() instead, which assigns the value of original variable
   #pragma omp parallel num_threads(thread_count) \
       default(none) shared(std::cout) firstprivate(thread_count)
-  {
+  {  // NOLINT(whitespace/braces)
     heavy_task();  // Hypothetical subroutine
     // Prints this thread_count of times in parallel
 
