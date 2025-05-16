@@ -13,7 +13,12 @@ int main(int argc, char* argv[]) {
   // Open MP is declarative: we don't have as much control but it's easy
   // PARALLEL IMPLIES THREAD TEAM CREATION
   // numm_threads clause sets thread count as amount of threads used
-  #pragma omp parallel num_threads(thread_count)
+  // Everything is shared by default, so we disactivate with default(none)
+  // std::cout must be shared, so that cursor is not distributed to diff threads
+  // private() does not initialize, does not really work
+  // use firstprivate() instead, which assigns the value of original variable
+  #pragma omp parallel num_threads(thread_count) \
+      default(none) shared(std::cout) firstprivate(thread_count)
   {
     heavy_task();  // Hypothetical subroutine
     // Prints this thread_count of times in parallel
