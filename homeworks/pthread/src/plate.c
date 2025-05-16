@@ -92,7 +92,8 @@ void* equilibrate_plate_concurrent(void* data) {
     pthread_mutex_unlock(&shared_data->can_access_equilibrated);
 
     // First barrier: sync all threads after work
-    // Second barrier: ensure all threads see updated matrix and equilibrium result
+    // Second barrier: ensure all threads see updated matrix
+    // and equilibrium result
     int barrier_result = pthread_barrier_wait(&shared_data->can_continue1);
     if (barrier_result == PTHREAD_BARRIER_SERIAL_THREAD) {
       ++shared_data->k_states;
@@ -157,7 +158,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     fwrite(&plate_matrix->rows, sizeof(uint64_t), 1, output_file);
     fwrite(&plate_matrix->cols, sizeof(uint64_t), 1, output_file);
     double* row_start = plate_matrix->matrix;
-  
+
     // Write the matrix data to the file row by row
     for (uint64_t row = 0; row < plate_matrix->rows; ++row) {
       fwrite(row_start, sizeof(double),

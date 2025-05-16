@@ -89,7 +89,7 @@ int equilibrate_plate(job_t* job, size_t plate_number, uint64_t thread_count) {
         , plate_number);
     return ERR_INIT_SHARED_DATA;
   }
-  
+
   private_data_t* thread_team = init_private_data(&shared_data);
 
   if (!thread_team) {
@@ -107,11 +107,13 @@ int equilibrate_plate(job_t* job, size_t plate_number, uint64_t thread_count) {
 
   join_threads(shared_data.thread_count, thread_team);
 
+  set_auxiliary(curr_plate->plate_matrix);
+
   // Store k, number of states iterated until equilibrium, in plate
   curr_plate->k_states = shared_data.k_states;
 
   free(thread_team);
-  
+
   return EXIT_SUCCESS;
 }
 
