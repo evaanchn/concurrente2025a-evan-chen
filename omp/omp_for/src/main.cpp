@@ -1,4 +1,4 @@
-// Copyright 2024 ECCI-UCR CC-BY Evan Chen 4.0
+// Copyright 2024 ECCI-UCR CC-BY 4.0
 #include <iostream>
 #include <omp.h>
 
