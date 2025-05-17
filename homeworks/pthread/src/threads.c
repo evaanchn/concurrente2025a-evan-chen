@@ -4,31 +4,39 @@
 
 int init_shared_data(shared_data_t* shared_data, uint64_t thread_count) {
   shared_data->thread_count = thread_count;
-  if (queue_init(shared_data->rows_queue) != EXIT_SUCCESS) {
-    return EXIT_FAILURE; // TODO ADD ERROR CODE LATER
+  shared_data->stop_condition = 0;
+  if (queue_init(&shared_data->rows_queue) != EXIT_SUCCESS) {
+    fprintf(stderr, "Error: could not initialize queue");
+    return ERR_QUEUE_INIT;
   }
 
+  // Initialize in 0 since main thread must signal to allow consumption
   if (sem_init(&shared_data->can_get_working_row, /*pshared*/ 0
       , /*value*/ 0) != EXIT_SUCCESS) {
-    return EXIT_FAILURE; // TODO ADD ERROR CODE LATER
+    fprintf(stderr, "Error: could not initialize queue semaphore");
+    return ERR_CONSUME_SEM_INIT;
   }
 
   if (pthread_mutex_init(&shared_data->can_access_equilibrated, /*attr*/ NULL)
       != EXIT_SUCCESS) {
-    return EXIT_FAILURE; // TODO ADD ERROR CODE LATER
+    fprintf(stderr, "Error: could not initialize mutex");
+    return ERR_EQULIBRATED_PLATE_MUTEX_INIT;
   }
 
+  // Initialize in 0 given it is a signal system
   if (sem_init(&shared_data->state_done, /*pshared*/ 0
       , /*value*/ 0) != EXIT_SUCCESS) {
-    return EXIT_FAILURE; // TODO ADD ERROR CODE LATER
+    fprintf(stderr, "Error: could not initialize states semaphore");
+    return ERR_STATE_DONE_SEM_INIT;
   }
+  return EXIT_SUCCESS;
 }
 
 private_data_t* init_private_data(const size_t count, void* data) {
   shared_data_t* shared_data = (shared_data_t*) data;
   
   private_data_t* private_data = (private_data_t*)
-      calloc(shared_data->thread_count, sizeof(private_data_t));
+      calloc(count, sizeof(private_data_t));
   if (private_data) {
     for (size_t index = 0; index < shared_data->thread_count; ++index) {
       private_data[index].shared_data = data;
@@ -65,11 +73,8 @@ int join_threads(const size_t count, private_data_t* private_data) {
   return error_count;
 }
 
-int destroy_shared_data(shared_data_t* shared_data) {
-  if (shared_data->rows_queue) {
-    destroy_queue(shared_data->rows_queue);
-  }
-
+void destroy_shared_data(shared_data_t* shared_data) {
+  queue_destroy(&shared_data->rows_queue);
   sem_destroy(&shared_data->can_get_working_row);
   pthread_mutex_destroy(&shared_data->can_access_equilibrated);
   sem_destroy(&shared_data->state_done);

@@ -17,8 +17,9 @@ typedef struct shared_data {
   uint64_t thread_count;        /**< Total amount of threads */
   double mult_constant;         /**< Constant in new temp formula */
   double epsilon;               /**< Epsilon associated to the plate */
-  queue_t* rows_queue;          /**< Thread safe queue with indicator  */
+  queue_t rows_queue;          /**< Thread safe queue with indicator  */
   sem_t can_get_working_row;    /**< Permits thread to dequeue */
+  uint64_t stop_condition;      /**< To terminate thread once cocnsumed */
   bool equilibrated_plate;      /**< Indicates if plate has been equilibrated */
   pthread_mutex_t can_access_equilibrated; /*< Mutex for equilibrated plate */
   sem_t state_done;             /**< Permits main thread to continue balance */
@@ -77,7 +78,6 @@ int join_threads(const size_t count, private_data_t* private_data);
 
 /// @brief Destroys a shared data struct with its attributes
 /// @param shared_data The struct to initialize
-/// @see init_shared_data
-int destroy_shared_data(shared_data_t* shared_data);
+void destroy_shared_data(shared_data_t* shared_data);
 
 #endif  // THREADS_H
