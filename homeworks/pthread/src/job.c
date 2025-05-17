@@ -42,6 +42,23 @@ int simulate(char* job_file_path, uint64_t thread_count) {
 
 
 int process_plates(job_t* job, uint64_t thread_count) {
+  int error = EXIT_SUCCESS;
+  shared_data_t shared_data;
+  error = init_shared_data(&shared_data, thread_count);
+  if (error != EXIT_SUCCESS) return error;
+  private_data_t* thread_team = init_private_data(thread_count, &shared_data);
+
+  if (!thread_team) {
+    fprintf(stderr, "Error: Could not create thread team");
+    return ERR_CREATE_THREAD_TEAM;
+  }
+  // Send threads to wait for production to start
+  error = create_threads(equilibrate_row, thread_team);
+  if (error != EXIT_SUCCESS) {
+    free(thread_team);
+    return error;
+  }
+
   // For each plate stored
   for (size_t plate_number = 0; plate_number < job->plates_count;
     ++plate_number) {
@@ -52,16 +69,16 @@ int process_plates(job_t* job, uint64_t thread_count) {
     int error = set_plate_matrix(curr_plate, job->source_directory);
     if (error != EXIT_SUCCESS) {
       destroy_job(job);
-      return error;
+      break;
     }
     // Record start time
     struct timespec start_time, finish_time;
     clock_gettime(CLOCK_MONOTONIC, &start_time);
 
-    error = equilibrate_plate(job, plate_number, thread_count);
-    if (error!= EXIT_SUCCESS) {
+    error = equilibrate_plate(job, plate_number, thread_team);
+    if (error != EXIT_SUCCESS) {
       destroy_job(job);
-      return error;
+      break;
     }
 
     // Record end time
@@ -75,46 +92,62 @@ int process_plates(job_t* job, uint64_t thread_count) {
 
     clean_plate(job, plate_number);
   }
-  return EXIT_SUCCESS;
+
+  // Send stop conditions
+  for (uint64_t thread = 0; thread < thread_count; ++thread) {
+    queue_enqueue(&shared_data.rows_queue, 0);
+    sem_post(&shared_data.can_get_working_row);
+  }
+
+  join_threads(thread_count, thread_team);
+  destroy_shared_data(&shared_data);
+
+  free(thread_team);
+  return error;
 }
 
 
 
-int equilibrate_plate(job_t* job, size_t plate_number, uint64_t thread_count) {
+int equilibrate_plate(job_t* job, size_t plate_number
+    , private_data_t* private_data) {
   plate_t* curr_plate = job->plates[plate_number];
-  // Loop to simulate the plate's changes in temperature
-  uint64_t k_states = 0;
-  bool reached_equilibrium = false;
+  shared_data_t* shared_data = private_data->shared_data;
+  plate_matrix_t* plate_matrix = curr_plate->plate_matrix;
 
   // Precompute constant for temperature update calculations
   double diff_times_interval =
       curr_plate->thermal_diffusivity * curr_plate->interval_duration;
   double cell_area = curr_plate->cells_dimension * curr_plate->cells_dimension;
-  double mult_constant = diff_times_interval / cell_area;
+  shared_data->mult_constant = diff_times_interval / cell_area;
+  shared_data->plate_matrix = curr_plate->plate_matrix;
+  shared_data->epsilon = curr_plate->epsilon;
+  shared_data->equilibrated_plate = true;
 
-  shared_data_t shared_data = {curr_plate->plate_matrix, thread_count
-      , mult_constant, curr_plate->epsilon};
-  private_data_t* thread_team = init_private_data(thread_count, &shared_data);
+  while (true) {
+    set_auxiliary(plate_matrix);
 
-  if (!thread_team) {
-    fprintf(stderr, "Error: Could not create thread team for plate %zu"
-        , plate_number);
-    return ERR_CREATE_THREAD_TEAM;
+    // Enqueue evaluated rows into queue
+    for (uint64_t row = 1; row < plate_matrix->rows - 1; ++row) {
+      queue_enqueue(&shared_data->rows_queue, row);
+      sem_post(&shared_data->can_get_working_row);
+    }
+
+    // Wait for the same amount of times of rows sent
+    for (uint64_t row = 1; row < plate_matrix->rows - 1; ++row) {
+      sem_wait(&shared_data->state_done);
+    }
+    ++curr_plate->k_states;  // Update states
+
+    // Evaluate if plate is equilibrated, and reset to true
+    pthread_mutex_lock(&shared_data->can_access_equilibrated);
+      bool equilibrated_plate = shared_data->equilibrated_plate;
+      if (!equilibrated_plate) shared_data->equilibrated_plate = true;
+    pthread_mutex_unlock(&shared_data->can_access_equilibrated);
+
+    // If equilibrated, break
+    if (equilibrated_plate) break;
   }
-
-  //  while not reached_equilibrium do
-  while (!reached_equilibrium) {
-    set_auxiliary(curr_plate->plate_matrix);
-    int errors = create_threads(equilibrate_rows, thread_team);
-    if (errors > 0) return errors;
-    reached_equilibrium = true;
-    join_threads(shared_data.thread_count, thread_team, &reached_equilibrium);
-    ++k_states;
-  }  //  end while
-  free(thread_team);
-
-  // Store k, number of states iterated until equilibrium, in plate
-  curr_plate->k_states = k_states;
+  
   return EXIT_SUCCESS;
 }
 
