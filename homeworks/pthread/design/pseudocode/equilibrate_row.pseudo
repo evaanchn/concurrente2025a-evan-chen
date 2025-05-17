@@ -1,0 +1,52 @@
+procedure equilibrate_row(data)
+  // Cast data and initialize references
+  declare private_data := cast data to private_data_t*
+  declare shared_data := private_data->shared_data
+  declare stop_condition := shared_data->stop_condition
+  declare working_row := 0
+
+  while true do
+    // Wait until a row is available for processing
+    wait(shared_data->can_get_working_row)
+    
+    // Get a row index from the work queue
+    queue_dequeue(shared_data->rows_queue, &working_row)
+
+    // If we get the stop condition, exit
+    if working_row == stop_condition do
+      break
+    end if
+
+    declare plate_matrix := shared_data->plate_matrix
+    declare equilibrated_row := true
+
+    // Process all columns in the row (except borders)
+    for col from 1 to plate_matrix->cols - 2 do
+      // Update temperature value at cell based on neighbors
+      update_cell(plate_matrix, working_row, col, shared_data->mult_constant)
+
+      // Fetch updated and previous temperature values
+      declare new_temperature := plate_matrix->matrix[working_row][col]
+      declare old_temperature := plate_matrix->auxiliary_matrix[working_row][col]
+
+      // Compute temperature difference
+      declare difference := abs(new_temperature - old_temperature)
+
+      // Mark as not equilibrated if difference exceeds threshold
+      if difference > shared_data->epsilon then
+        equilibrated_row := false
+      end if
+    end for
+
+    // Update shared equilibrated plate flag with mutex protection
+    lock(shared_data->can_access_equilibrated)
+      shared_data->equilibrated_plate
+          := shared_data->equilibrated_plate AND equilibrated_row
+    unlock(shared_data->can_access_equilibrated)
+
+    // Signal that processing of this row is complete
+    signal(shared_data->state_done)
+  end while
+
+  return null
+end procedure

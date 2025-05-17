@@ -1,20 +1,47 @@
-procedure equilibrate_plate(job, plate_number, thread_count)
-  declare curr_plate := job->plates[plate_number]
+function equilibrate_plate(job, plate_number, private_data)
+  // Set up working data structures
+  declare curr_plate := job.plates[plate_number]
+  declare shared_data := private_data.shared_data
+  declare plate_matrix := curr_plate.plate_matrix
 
-  initialize shared_data  // Add different components
-  declare thread_team := init_private_data(shared_data)
+  // Precompute update constants for this plate
+  declare diff_times_interval := curr_plate.thermal_diffusivity * curr_plate.interval_duration
+  declare cell_area := curr_plate.cells_dimension * curr_plate.cells_dimension
+  shared_data.mult_constant := diff_times_interval / cell_area
 
-  declare reached_equilibrium = false
-  while not reached_equilibrium do
-    create_threads(update_rows, thread_team)
-    update_plate(plate_matrix)
-    reached_equilibrium = true  // assume that it would be equilibrated
-    join_threads(thread_count, private_data, &reached_equilibrium)
-    k_states := k_states + 1
+  // Share plate matrix and epsilon with threads
+  shared_data.plate_matrix := plate_matrix
+  shared_data.epsilon := curr_plate.epsilon
+  shared_data.equilibrated_plate := true
+
+  // Start equilibrium loop
+  while true do
+    // Copy current matrix values to auxiliary matrix for comparison
+    set_auxiliary(plate_matrix)
+
+    // Assign rows to worker threads
+    for row from 1 to plate_matrix.rows - 2 do
+      queue_enqueue(shared_data.rows_queue, row)
+      signal(shared_data.can_get_working_row)
+    end for
+
+    // Wait for rows to be processed
+    for row from 1 to plate_matrix.rows - 2 do
+      wait(shared_data.state_done)
+    end for
+
+    // Advance simulation step for plate
+    curr_plate.k_states := curr_plate.k_states + 1
+
+    // Check if the plate has reached equilibrium
+    declare equilibrated_plate := shared_data.equilibrated_plate
+
+    if NOT equilibrated_plate do
+      shared_data.equilibrated_plate := true  // Reset for next iteration
+    else
+      break  // Stop if equilibrated
+    end if
   end while
 
-  free(thread_team)
-
-  curr_plate->k_states = k_states
-  update_plate_file(curr_plate)
-end procedure
+  return SUCCESS
+end function
