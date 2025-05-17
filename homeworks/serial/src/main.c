@@ -1,4 +1,9 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
+
+#ifndef _DEFAULT_SOURCE
+#define _DEFAULT_SOURCE
+#endif
+
 #include <assert.h>
 #include <inttypes.h>
 #include <stdbool.h>
@@ -22,7 +27,7 @@ int main(int argc, char* argv[]) {
   if (argc < 2) {
     // print "Error: No job file specified"
     perror("ERROR: No job file specified\n");
-    return NO_JOB_FILE_SPECIFIED;
+    return ERR_NO_JOB_FILE;
   }  // else if (argc == 2) {
   //   // Taken from hello_w example, calls sysconf to get available cores.
   //   thread_count = sysconf(_SC_NPROCESSORS_ONLN);
@@ -31,6 +36,20 @@ int main(int argc, char* argv[]) {
   //   sscanf(argv[2], "%" SCNu64, &thread_count);
   // }
 
+  // Record start time
+  struct timespec start_time, finish_time;
+  clock_gettime(CLOCK_MONOTONIC, &start_time);
+
   int error = simulate(argv[1], thread_count);
+
+  // Record end time
+  clock_gettime(CLOCK_MONOTONIC, &finish_time);
+
+  // Set elapsed time
+  double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
+
+  // Report elapsed time
+  printf("Completed job in: %.9lfs\n", elapsed_time);
+
   return error;
 }

@@ -3,7 +3,9 @@
 #ifndef JOB_H
 #define JOB_H
 
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#endif
 
 #include <assert.h>
 #include <stdlib.h>
@@ -13,26 +15,14 @@
 #include "errors.h"
 #include "plate.h"
 
-/** @brief Initial capacity for plates allocation. */
-#define STARTING_CAPACITY 50
-
 /** @brief Maximum file name size. */
 #define MAX_FILE_NAME_SIZE 256
 
 /** @brief Folder name for report files. */
 #define REPORTS_DIRECTORY "reports"
 
-/**
- * @struct job_t
- * @brief Represents a job containing multiple plates.
- */
-typedef struct {
-    char* file_name;        /**< Job file name. */
-    char* source_directory; /**< Directory containing job files. */
-    size_t plates_count;    /**< Number of plates. */
-    size_t plates_capacity; /**< Capacity of plates array. */
-    plate_t** plates;       /**< Array of plate pointers. */
-} job_t;
+#define REPORT_HEADER "PLATE NAME\tINTERVAL\tTHERMAL DIFF\tCELLS DIM" \
+                     "\tEPSILON\tSIM STATES\tSIM TIME\n"
 
 /**
  * @brief Carries out simulation of each plate in an indicated job.
@@ -43,60 +33,6 @@ typedef struct {
  */
 int simulate(char* job_file_path, uint64_t thread_count);
 
-/**
- * @brief Loops through all of the plates recorded to simulate.
- * 
- * @param job current working job
- * @return Success or failure of processing
- */
-int process_plates(job_t* job);
-
-/**
- * @brief Equilibrates current plate
- * 
- * @param job current working job
- * @param plate_number current plate's index
- */
-void equilibrate_plate(job_t* job, size_t plate_number);
-
-/// @brief Carries out recording of updated plate and freeing of memory.
-/// @see equilibrate_plates
-/// @return if clean up if successful
-int clean_plate(job_t* job, size_t plate_number);
-
-/**
- * @brief Initializes a job from a given job file name.
- * @param job_file_name Name of the job file.
- * @return Pointer to the initialized job, or NULL on failure.
- */
-job_t* init_job(char* job_file_name);
-
-/**
- * @brief Sets up a job by reading plates from a file.
- * @param job Pointer to the job structure.
- * @return EXIT_SUCCESS on success, error code on failure.
- */
-int set_job(job_t* job);
-
-/**
- * @brief Checks if job needs expansion and expands if necessary.
- * @param job Pointer to the job structure.
- * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
- */
-int check_capacity(job_t* job);
-
-/**
- * @brief Expands the job's plate capacity.
- * @param job Pointer to the job structure.
- * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
- */
-int expand_job(job_t* job);
-
-/**
- * @brief Destroys a job and frees allocated memory.
- * @param job Pointer to the job structure.
- */
-void destroy_job(job_t* job);
 
 /**
  * @brief Formats a time value into a human-readable string.
@@ -112,13 +48,13 @@ char* format_time(const time_t seconds, char* text, const size_t capacity);
  * @param job Pointer to the job structure.
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
  */
-int report_results(job_t* job);
+int report_plate_result(FILE* results_file, plate_t* plate);
 
 /**
  * @brief Calls upon common functions to build the report file's paths.
- * @param job Pointer to the job structure.
+ * @param job_file_path Path of the job
  * @return Report file path built.
  */
-char* build_report_file_path(job_t* job);
+char* build_report_file_path(const char* job_file_path);
 
 #endif  // JOB_H
