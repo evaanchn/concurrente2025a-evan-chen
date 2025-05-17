@@ -44,30 +44,46 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
   return EXIT_SUCCESS;
 }
 
-
-void* equilibrate_rows(void* data) {
+#include "threads.h"
+void* equilibrate_row(void* data) {
+  // Obtain variables that will not change
   private_data_t* private_data = (private_data_t*) data;
   shared_data_t* shared_data = private_data->shared_data;
-  plate_matrix_t* plate_matrix = shared_data->plate_matrix;
-  uint64_t starting_row = private_data->starting_row;
-  uint64_t ending_row = private_data->ending_row;
-  // Only work designated rows
-  for (uint64_t row = starting_row; row <= ending_row; ++row) {
-    for (uint64_t col = 1; col < plate_matrix->cols - 1; ++col) {
+  uint64_t stop_condition = shared_data->stop_condition;
+  uint64_t working_row = 0;  // Row obtained from queue consumption
+
+  while(true) {
+    sem_wait(&shared_data->can_get_working_row);
+    queue_dequeue(&shared_data->rows_queue, &working_row);
+    if (working_row == stop_condition) {
+      break;  // Stop if indicated
+    }
+    plate_matrix_t* plate_matrix = shared_data->plate_matrix;
+    bool equilibrated_row = true;
+
+    for (uint64_t col = 1; col < plate_matrix->cols - 1; ++ col) {
       // Update the cell temperature based on surrounding cells
-      update_cell(plate_matrix, row, col, shared_data->mult_constant);
+      update_cell(plate_matrix, working_row, col
+          , shared_data->mult_constant);
       // Get the new and old temperatures for comparison
-      double new_temperature = plate_matrix->matrix[row][col];
-      double old_temperature = plate_matrix->auxiliary_matrix[row][col];
+      double new_temperature = plate_matrix->matrix[working_row][col];
+      double old_temperature = plate_matrix->auxiliary_matrix[working_row][col];
 
       // Compute absolute difference
       double difference = fabs(new_temperature - old_temperature);
       // Track the maximum temperature change in this update step
       if (difference > shared_data->epsilon) {
-        private_data->equilibrated = false;
+        equilibrated_row = false;
       }
     }
+
+    pthread_mutex_lock(&shared_data->can_access_equilibrated);
+      shared_data->equilibrated_plate &= equilibrated_row;
+    pthread_mutex_unlock(&shared_data->can_access_equilibrated);
+
+    sem_post(&shared_data->state_done);
   }
+ 
   return NULL;
 }
 

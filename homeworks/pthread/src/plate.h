@@ -13,7 +13,6 @@
 #include "common.h"
 #include "errors.h"
 #include "plate_matrix.h"
-#include "threads.h"
 
 /**
  * @struct plate_t
@@ -48,7 +47,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory);
  * 
  * @param data Shared data with information necessary to equilibrate
  */
-void* equilibrate_rows(void* data);
+void* equilibrate_row(void* data);
 
 /**
  * @brief Writes the updated plate matrix to a binary file.
