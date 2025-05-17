@@ -1,11 +1,35 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
 
 #include "plate.h"
-int set_plate_matrix(plate_t* plate, char* source_directory) {
+
+int set_plate(plate_t* plate, char* plate_file_name
+    , const uint64_t interval_duration, const double thermal_diffusivity
+    , double cells_dimension, double epsilon) {
+  // Allocate memory for plate file name
+  plate->file_name = (char*) calloc(1, strlen(plate_file_name) + 1);
+  if (!plate->file_name) {
+    perror("Error: Memory for plate file name could not be allocated\n");
+    free(plate);  // Free allocated memory before returning
+    return ERR_PLATE_FILE_NAME_ALLOC;
+  }
+
+  // Copy file name and set plate properties
+  snprintf(plate->file_name, strlen(plate_file_name) + 1, "%s",
+      plate_file_name);
+
+  plate->interval_duration = interval_duration;
+  plate->thermal_diffusivity = thermal_diffusivity;
+  plate->cells_dimension = cells_dimension;
+  plate->epsilon = epsilon;
+  
+  return EXIT_SUCCESS;
+}
+
+int set_plate_matrix(plate_t* plate, const char* source_directory) {
   // Concatenate plate file name with same directory specified for job
   char* plate_file_path = build_file_path(source_directory, plate->file_name);
 
-  if (!plate_file_path) return EXIT_FAILURE;
+  if (!plate_file_path) return ERR_PLATE_FILE_PATH_ALLOC;
 
   // Open file to read from
   FILE* plate_file = fopen(plate_file_path, "rb");
@@ -13,7 +37,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
 
   if (!plate_file) {
     printf("Error: Plate file %s could not be opened", plate->file_name);
-    return OPEN_PLATE_FILE_FAIL;
+    return ERR_OPEN_PLATE_FILE;
   }
 
   // Read ndumber of rows and number of columns (first 16 bytes)
@@ -24,7 +48,7 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
       fread(&cols, sizeof(uint64_t), 1, plate_file) != 1) {
     perror("Error: Rows and cols could not be read");
     fclose(plate_file);
-    return ROWS_COLS_READING_FAIL;
+    return ERR_ROWS_COLS;
   }
 
   // Set up plate's plate_matrix (allocate space for matrices inside,
@@ -45,6 +69,31 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
   return EXIT_SUCCESS;
 }
 
+
+
+void equilibrate_plate(plate_t* plate) {
+  // Loop to simulate the plate's changes in temperature
+  uint64_t k_states = 0;
+  bool reached_equilibrium = false;
+
+  // Precompute constant for temperature update calculations
+  double diff_times_interval =
+      plate->thermal_diffusivity * plate->interval_duration;
+  double cell_area = plate->cells_dimension * plate->cells_dimension;
+  double mult_constant = diff_times_interval / cell_area;
+
+  //  while not reached_equilibrium do
+  while (!reached_equilibrium) {
+    //  update_plate(plate)
+    reached_equilibrium = update_plate(plate, mult_constant);
+
+    ++k_states;
+  }  //  end while
+
+  // Store k, number of states iterated until equilibrium, in plate
+  plate->k_states = k_states;
+
+}
 
 
 bool update_plate(plate_t* plate, double mult_constant) {
@@ -95,7 +144,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
 
   // Generate the updated file name based on the plate's state
   char* updated_file_name = set_plate_file_name(plate);
-  if (!updated_file_name) return UPDATE_OUTPUT_FILE_NAME_FAIL;
+  if (!updated_file_name) return ERR_UPDATE_OUTPUT_FILE_NAME;
 
   char* output_file_name = build_file_path(source_directory, updated_file_name);
 
@@ -103,7 +152,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
   if (!output_file_name) {
     perror("Error: Could not build output file name");
     free(updated_file_name);
-    return BUILD_OUTPUT_FILE_NAME_FAIL;
+    return ERR_BUILD_OUTPUT_FILE_NAME;
   }
 
   // Open the file for writing in binary mode
@@ -132,7 +181,7 @@ int update_plate_file(plate_t* plate, char* source_directory) {
     // Handle file opening failure
     perror("Error: Could not open output file");
     destroy_plate_matrix(plate->plate_matrix);
-    error = OPEN_OUTPUT_FILE_FAIL;
+    error = ERR_OPEN_OUTPUT_FILE;
   }
 
   // Close the file before returning

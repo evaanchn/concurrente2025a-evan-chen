@@ -28,6 +28,10 @@ typedef struct {
   uint64_t k_states;             ///< Current simulation state
 } plate_t;
 
+int set_plate(plate_t* plate, char* plate_file_name
+    , const uint64_t interval_duration, const double thermal_diffusivity
+    , double cells_dimension, double epsilon);
+
 /**
  * @brief Loads the plate matrix from a binary file.
  * 
@@ -37,7 +41,14 @@ typedef struct {
  * @param source_directory Directory containing the plate file.
  * @return EXIT_SUCCESS on success, error code otherwise.
  */
-int set_plate_matrix(plate_t* plate, char* source_directory);
+int set_plate_matrix(plate_t* plate, const char* source_directory);
+
+/**
+ * @brief Equilibrates current plate
+ * 
+ * @param plate Current plate
+ */
+void equilibrate_plate(plate_t* plate);
 
 /**
  * @brief Updates the plate's temperature matrix using diffusion calculations.
