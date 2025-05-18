@@ -17,7 +17,7 @@ s|# s|Id s|Branch s|Folder s|Description
 | 2 | Serial1 m| SerialOptimizations m| serial/ | Added flattened matrix and avoided unnecessary calculations
 | 3 | Conc1 (hw02) m| main m|pthread/ | Attempt of static map without formula and no thread reutilization
 | 4 | Conc2 m| ConcurrentStaticNoBarrier m|pthread/ | Added static map formula usage and flattened matrix to Conc1
-| 5 | Conc3 m| ConcurrentStatic m|pthread/ | Added barriers and thread reutilization (static map by blocks)
+| 5 | Conc3 m| main m|optimized/pthread_optimized | Added barriers and thread reutilization (static map by blocks)
 | 6 | Conc4 m| ConcurrentDynamic m|pthread/ | Modify Conc1 to implement dynamic map with producer-consumer pattern
 |===
 
