@@ -1,0 +1,43 @@
+function equilibrate_plate(job, plate_number, thread_count)
+  declare curr_plate := job.plates[plate_number]
+  declare shared_data as shared_data_t
+
+  // Initialize shared data for multithreaded simulation
+  if init_shared_data(shared_data, curr_plate, thread_count) fails do
+    print "Error: Could not initialize shared data for plate", plate_number
+    return ERR_INIT_SHARED_DATA
+  end if
+
+  // Create thread team and assign work
+  declare thread_team := init_private_data(shared_data)
+
+  if thread_team is null then
+    print "Error: Could not create thread team for plate", plate_number
+    return ERR_CREATE_THREAD_TEAM
+  end if
+
+  // Prepare auxiliary matrix for simulation
+  call set_auxiliary(curr_plate.plate_matrix)
+
+  // Start thread simulation
+  declare errors := create_threads(equilibrate_plate_concurrent, thread_team)
+
+  if errors > 0 then
+    free(thread_team)
+    return errors
+  end if
+
+  // Wait for threads to finish
+  call join_threads(shared_data.thread_count, thread_team)
+
+  // Copy final matrix into auxiliary
+  call set_auxiliary(curr_plate.plate_matrix)
+
+  // Store number of iterations that were simulated
+  curr_plate.k_states := shared_data.k_states
+
+  // Clean up
+  free(thread_team)
+
+  return EXIT_SUCCESS
+end function
