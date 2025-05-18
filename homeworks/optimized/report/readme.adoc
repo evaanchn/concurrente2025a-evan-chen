@@ -29,7 +29,7 @@ The initial serial version had potential optimization points, like reducing acce
 
 [[img_profiling]]
 .Screenshot of profiling with Kcachegrind in initial serial version (hw01)
-image::images/profiling_serial.png[]
+image::images/profiling/profiling_serial.png[]
 
 For instance, the update_plate procedure calculated the multiplication constant every equilibrating iteration, when it could be done once only, before invoking the procedure.
 
@@ -77,13 +77,85 @@ s| Itr s| Tag s| Duration s| Speedup s| Brief Description
 Similarly, this second table shows the changes between the equilibrium durations of each plate in seconds and minutes, often improvements, but with the occasional exception of a worse duration.
 
 [[img_serial_table]]
-.Detailed table with specific durations for each plate across serial version
+.Detailed table with durations for each plate across serial versions
 image::images/serial_executions/serial_executions_table.png[]
 
 == Concurrent Optimizations
+Upon executing the initial concurrent version of the program (hw02) with `job020` three times, the best duration was *2208.77 seconds*, or rougbly *37 minutes*. This was a *1 hour 26 minutes* improvement from the final serial version, which was unexpected, given the inadequate distribution of rows and the creates and joins for each state of the simulation. 
 
-== Static vs Dynamic Map
+This is better demonstrated with the callgrind profiling, executed with the `job002` file.
+
+[[img_profiling_conc_main]]
+.Main thread part profiling
+image::images/profiling/profiling_concurrent_hw02.png[]
+
+In <<img_profiling_conc_main>>, it's evident that the pthread_create() function occupies the CPU more, and the procedures to create and join threads are called several times. Thus, this will be one of the main points to optimize.
+
+=== Conc2: Proper use of static by blocks formula
+The initial concurrent version implemented a static map by blocks, but without using the proper formula. Thus, the first optimization that could be done was properly distributing the rows with the formula. This optimization was implemented by only changing the distribution process for each plate, and resulted in a minimal improvement in execution time (*2118.08 seconds*, around *36 minutes*) relative to the initial concurrent version.
+
+=== Conc3: Thread reuse with barriers
+The previous optimization's poor performance could be due to the thread creation and join process, which was still hindering the program's execution time. Thus, the next step was to avoid that, by reusing the threads and coordinating with barriers. This meant that threads were created once and joined once, and the procedure each thread ran would not stop until the plate was equilibrated.
+
+The results for this optimization were not as groundbreaking as expected, with a best duration of *2044.78302451 seconds*, or approximately *35 minutes*, a mere 1 minute improvement from Conc2 and 2 minutes compared to the initial version. However, it was the optimization that yielded the best speedup (3.61 times faster) and efficiency (0.90 or 90%) relative to the final serial version.
+
+=== Dynamic map: Production consumer pattern
+To test out the alternative map type, a producer consumer pattern was identified in the simulation: the main thread assigned rows by enqueing them to a monitor and secondary threads consumed from them. After completing each state, the main thread would determine if the plate was equilibrated, and moved on to the next one if it was ready. After simulating all plates, the main thread would send stop conditions to the threads through the queue, and then join them.
+
+This solution assured a singular point of creation and termination (join) for threads, even less than the thread reuse approach. However, the results of executing the program with the same job as the static map versions proved to have longer durations on average, with the fastest time being *2533.100336547 seconds* (almost *43 minutes*).
+
+Though still a 1 hour and 20 minute improvement compared to the final serial version, it had the worst speedup (*2.91 times faster*) and efficiency (*0.73 or 73% more efficient*) from all of the concurrent optimizations.
+
+=== Static vs Dynamic Map
+As it was mentioned before, the dynamic map approach had worse duration, speedup and efficiency compared to the static map one, with a 0.7 difference in speedup and 0.17 difference for efficiency, totalling an 8 minute difference between the two.
+
+Nonetheless, this was an expected outcome, given that dynamic mapping is more unpredicatble than static mapping. Moreover, for this problem, where plates have fixed equilibrium times, the ideal map type is static.
+
+In summary, both map types incremented the simulation's speed, but *static mapping by blocks proved to be more efficient*.
+
+=== Comparison table
+The following table summarizes the total duration, speedup, and efficiency of each concurrent optimization, using the final serial version as a baseline.
+
+[%autowidth]
+|===
+s| Itr s| Tag s| Duration s| Speedup s| Efficiency s| Brief Description
+|- | Serial2 | 7379.81 | 1.00 | 1.00 | Final serial version
+|1 | Conc1 | 2208.77 | 3.34 | 0.84 | Initial concurrent version (hw02)
+|2 | Conc2 | 2118.08 | 3.48 | 0.87 | Static map (no thread reuse)
+|3 | Conc3 | 2044.78 | 3.61 | 0.90 | Static map with barriers
+|4 | - | 2533.10 | 2.91 | 0.73 | Dynamic map
+|===
+
+Moreover, this table shows more specific durations for each plate's heat transfer simulation, for the executions with the best times across concurrent versions.
+
+[[img_conc_table]]
+.Detailed table with durations for each plate across concurrent versions
+image::images/conc_executions/conc_executions_table.png[]
+
+NOTE: Screenshots of all concurrent executions, made in the Poas cluster with the same amount of threads as cores available (4), can be found in the `images/conc_executions/` folder.
+
+To summarize, the proper static map by blocks solution had the best results of the concurrent optimizations, and thus will be considered the final concurrent version.
 
 == Comparing Optimizations
+To properly show the potential of optimizing with concurrency, a comparison between the serial and concurrent optimizations can be made. The difference in duration, speedup, and efficiency between each relevant version (initial serial, final serial, initial concurrent, and final concurrent) will be visualized with graphs. Two comparisons will be presented: duration with speedup, and efficiency with speedup.
 
-== Comparing Degree of Concurrence
+=== Duration vs Speedup
+As it has been stated, there was a significant improvement in duration from the initial serial version (SerialI), to the final concurrent version (static-map-b). The following graph (<<graph_dur_vs_speedup>>) traces the decrease in execution time working the same "heavy" job file, *from 2 hours to just half an hour*, along with a notable increase in speedup across versions, calculated by dividing the initial time (Serial1's duration) with the optimization's duration. static-map-b, which implemented static mapping by blocks, was 3.61 times faster than the original version, proving to be the best of all the versions of the program.
+
+[[graph_dur_vs_speedup]]
+.Graph for duration-speedup comparison
+image::images/duration_vs_speedup.svg[]
+
+NOTE: static-map-n, has n standing for no barriers, and the final version has a b at the end for barriers.
+
+=== Efficiency vs Speedup
+Efficiency, calculated by dividing the speedup with the amount of threads used in the execution, represents whether the speedup was acceptable in relation to the resources used to achieve it. In <<graph_eff_vs_speedup>>, one can notice that for the concurrent versions, the efficiency is maintained fairly high for both, meaning that using an amount of threads equal to the amount of cores available (in this case, 4) in the simulation is worth the considerable speedup both achieve.
+
+[[graph_eff_vs_speedup]]
+.Graph for efficiency-speedup comparison
+image::images/efficiency_vs_speedup.svg[]
+
+NOTE: Though normally a number bellow 1, the efficiency is reported as a percentage in the graph.
+
+== Comparing Degrees of Concurrency
+
