@@ -104,7 +104,7 @@ If the program executed without errors, a message indicating where the report fi
 
 [example]
 ====
-`quilibrated plate {plate_number} in {seconds}s`
+`Equilibrated plate {plate_number} in {seconds}s`
 
 `...`
 
