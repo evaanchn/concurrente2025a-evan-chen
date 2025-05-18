@@ -34,7 +34,7 @@ int init_shared_data(shared_data_t* shared_data, uint64_t thread_count) {
 
 private_data_t* init_private_data(const size_t count, void* data) {
   shared_data_t* shared_data = (shared_data_t*) data;
-  
+
   private_data_t* private_data = (private_data_t*)
       calloc(count, sizeof(private_data_t));
   if (private_data) {

@@ -147,7 +147,7 @@ int equilibrate_plate(job_t* job, size_t plate_number
     // If equilibrated, break
     if (equilibrated_plate) break;
   }
-  
+
   return EXIT_SUCCESS;
 }
 

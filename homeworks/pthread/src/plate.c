@@ -53,7 +53,7 @@ void* equilibrate_row(void* data) {
   uint64_t stop_condition = shared_data->stop_condition;
   uint64_t working_row = 0;  // Row obtained from queue consumption
 
-  while(true) {
+  while (true) {
     sem_wait(&shared_data->can_get_working_row);
     queue_dequeue(&shared_data->rows_queue, &working_row);
     if (working_row == stop_condition) {
@@ -62,7 +62,7 @@ void* equilibrate_row(void* data) {
     plate_matrix_t* plate_matrix = shared_data->plate_matrix;
     bool equilibrated_row = true;
 
-    for (uint64_t col = 1; col < plate_matrix->cols - 1; ++ col) {
+    for (uint64_t col = 1; col < plate_matrix->cols - 1; ++col) {
       // Update the cell temperature based on surrounding cells
       update_cell(plate_matrix, working_row, col
           , shared_data->mult_constant);
@@ -85,7 +85,7 @@ void* equilibrate_row(void* data) {
 
     sem_post(&shared_data->state_done);
   }
- 
+
   return NULL;
 }
 

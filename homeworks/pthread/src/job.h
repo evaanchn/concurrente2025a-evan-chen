@@ -54,10 +54,11 @@ int simulate(char* job_file_path, uint64_t thread_count);
 int process_plates(job_t* job, uint64_t thread_count);
 
 /**
- * @brief Equilibrates current plate
+ * @brief Equilibrates current plate, acting as a producer
  * 
  * @param job current working job
  * @param plate_number current plate's index
+ * @param private_data Private data with info to equilibrate plate
  * @return Success or failure of equilibrate
  */
 int equilibrate_plate(job_t* job, size_t plate_number

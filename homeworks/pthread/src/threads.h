@@ -39,10 +39,8 @@ int init_shared_data(shared_data_t* shared_data, uint64_t thread_count);
 /**
  * @brief Initializes an array of private_data_t structures.
  *
- * This function sets up the private data for each thread based on
- * the number of rows in the matrix and the desired thread count.
- * It evenly divides the work among threads and sets starting and ending
- * row indices accordingly.
+ * This function initializes and sets up the private data for each thread
+ * by adding the shared data pointer to the array
  *
  * @param count The number of threads requested.
  * @param data  A pointer to the shared_data_t structure.
