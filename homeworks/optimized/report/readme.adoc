@@ -158,4 +158,51 @@ image::images/efficiency_vs_speedup.svg[]
 NOTE: Though normally a number bellow 1, the efficiency is reported as a percentage in the graph.
 
 == Comparing Degrees of Concurrency
+Apart from comparing optimizations, another variable one could compare is the effect of the degree of concurrency (amount of threads utilized) on the execution of the program. To test this out, different thread amounts were defined based on the amount of CPU's in the executing computer. Given that the Poas cluster was used, and the nodes had 4 cores, 4 threads would be the 1C that adjusted the other thread counts.
 
+=== Comparison table
+Index for the comparison table, presenting the specific thread amounts given the case we are trying to test.
+[%autowidth]
+|===
+s| Tag s| Amount of threads
+| S | 1 thread (final serial version)
+| 1 | 1 thread (ran with final concurrent version)
+| hC | As many threads as half the amount of the CPU's in the executing computer (2)
+| 1C | As many threads the amount CPU's in the executing computer (4)
+| 2C | Twice as many threads as the amount of CPU's in the executing computer (8)
+| 4C | Four times as many threads as the amount of CPU's in the executing computer (16)
+| D | As many threads as the max amount of decomposition units in job (8190)
+|===
+
+The following table presents the best speedups and efficiencies from executing the final concurrent version to complete `job020` with different amount of threads, using the final serial version as a baseline.
+
+[%autowidth]
+|===
+s| Tag s| Duration (seconds) s| Speedup (times) s| Efficiency (%)
+|S | 7379.82 | 1.00 | 1.00
+|1 | 6281.27 | 1.17 | 1.00
+|hC | 3431.15 | 2.15 | 1.08
+|1C | 2044.78| 3.61 | 0.90
+|2C | 2142.34 | 3.44 | 0.43
+|4C | 2267.211806733| 3.26 | 0.2
+|D | > 7200 | 1.02 | 0
+|===
+
+NOTE: All concurrent versions were at least executed twice. Screenshots of these executions, made in the Poas cluster, can be found in the `images/conc_executions/conc_final_threads/` folder.
+
+=== Graph
+[[graph_conc_degree]]
+.Graph for degree of concurrence comparison
+image::images/conc_degree_comp.svg[]
+
+=== Unexpected cases
+TWo of the results stand out due to their peculiarty. First of all, the executions with half as many threads as CPU's were available in the nodes of the cluster always resulted in an efficiency greater than 1 (relative to the final serial version), despite implementing the same algorithm as the serial version.
+
+Moreover, the executions with D amount of threads (in this case, 8190), exceeded the two hours of execution time, thus it was terminated by the cluster. Nonetheless, the efficiency proved to be 0 even if the minimum value: two hours, was temporarily placed in its place.
+
+=== Results analysis
+After analyzing <<graph_conc_degree>>, and the charts, it's clear that the intersection between efficiency and speedup regarding thread amount, occurs in 1C, where the "default" amount of threads are used. It's interesting to note that this was also an inflection point, where amounts leading up had better and better results, and the amounts following it caused no increase in speedup, with the efficiency quickly crashing down to 0 by the tests.
+
+This is likely due to the fact that 1C made the most out of the CPU's available without having to share them with other threads. Also, given the many serialized parts in the final concurrent version (barriers and mutex), coordination between more threads made the waits longer, thus the execution times were worse.
+
+In conclusion, for this program, the degree of concurrency with the best performance is equal to the amount of CPU's available in the executing machine.
