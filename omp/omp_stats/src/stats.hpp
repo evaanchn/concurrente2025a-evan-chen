@@ -7,6 +7,8 @@
 #include <vector>
 #include <omp.h>
 
+#include "mergesort.hpp"
+
 template <typename Type>
 Type minimum(const std::vector<Type>& values) {
   Type result = std::numeric_limits<Type>::max();
@@ -102,6 +104,7 @@ double median(std::vector<Type>& values) {
   const size_t count = values.size();
   if (count > 0) {
     std::sort(values.begin(), values.end());
+    // ::mergesort(values);  // :: indicates it's independent
     if (count % 2) {
       return values[count / 2];
     } else {
