@@ -43,7 +43,11 @@ s|# s|Id s|Tipo s|Descripcion
 [%autowidth]
 |=== 
 s|# s|Id s|Tipo s|Descripcion
-|1 m|link:omp/omp_team[omp_team] | Ejemplo de clase |Implemented hello exercise with thread team in Open MP.
+|1 m|link:omp/omp_team[omp_team] | Ejemplo de clase |Implementar el ejercicio de hello con un thread team creado con OpenMP
+|2 m|link:omp/omp_for[omp_for] | Ejemplo de clase |Se indaga la forma de implementar diferentes formas de mapeo estatico con omp for.
+|3 m|link:omp/omp_several_for_stages[omp_several_for_stages] | Ejemplo de clase |Se reutilizan hilos para distintos ciclos for.
+|4 m|link:omp/omp_stats[omp_stats] | Ejemplo de clase |En un programa para obtener estadisticos, se usa omp para paralelizar distintos procesos.
+|5 m|link:omp/omp_mergesort[omp_mergesort] | Ejemplo de clase |Se paraleliza el mergesort con OpenMP.
 |===
 == Tareas
 [%autowidth]
@@ -51,6 +55,7 @@ s|# s|Id s|Tipo s|Descripcion
 s|# s|Id s|Titulo s|Descripcion
 |1 |link:homeworks/serial[serial] |Simulacion de calor (serial) |Se simula el proceso de equilibrio de laminas, reportando los parametros utilizados, la cantidad de estados transcurridas y la duracion de simulacion.
 |2 |link:homeworks/pthreads[pthreads] |Simulacion de calor (concurrente) |Se habilita la opcion de utilizar hilos de ejecucion durante la misma simulacion de calor resuelta en la primera tarea.
+|3 |link:homeworks/optimized[pthreads] |Simulacion de calor (optimizado) |Se optimizan la version serial y concurrente de la simulacion de calor.
 |===
 
 == Glosario
