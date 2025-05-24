@@ -98,7 +98,9 @@ s|# s|Id s|Titulo s|Descripcion
 
     19. *Barrera*: Punto de encuentro (rendezvous) generalizado, donde *todos* los hilos paran hasta que llegue el ultimo, que debe de avisar a los demas que pueden pasar por la barrera.
 
-    Variable de condición.
+    20. *Variable de condición*: Un mecanismo de control de concurrencia que bloquea los hilos que lo esperan, los cuales se pueden desbloquear con signal (aviso a un hilo) o broadcast (aviso a todos los hilos que espera). A diferencia del semaforo, los avisos no son acumulados: solo afecta a los hilos que esperan a la variable de condicion en el momento de aviso. Es importante notar que deben de estar dentro de regiones criticas (protegido por mutex).
+
+    21. *Cluster de computadores*: Consiste en una red de computadoras identicos en configuracion en hardware y software, tal que se pueden ejecutar programas de forma distribuida en paralelo y sin modificaciones.
 
     Candado de lectura y escritura.
 
