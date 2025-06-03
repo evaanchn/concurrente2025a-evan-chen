@@ -1,3 +1,4 @@
 procedure main()
-  print "Hello from main thread of process {0} of {1} on {localhost}"
+  print "Hello from main thread of process {process_number} of {process_count}"
+      " on {localhost}"
 end procedure
