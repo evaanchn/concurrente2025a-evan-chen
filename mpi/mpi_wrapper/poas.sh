@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --overcommit          # Allow more processes than CPUs per node
-#SBATCH -J hello              # Job name
+#SBATCH -J hellowrapper       # Job name
 #SBATCH -o job.%j.txt         # Stdout output file (%j expands to jobId)
 #SBATCH -N 7                  # Total number of nodes requested
 #SBATCH -n 7                  # Total number of processes requested
