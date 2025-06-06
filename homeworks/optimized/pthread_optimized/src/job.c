@@ -226,7 +226,7 @@ int set_job(job_t* job) {
 }
 
 
-
+// TODO comment this 
 int check_capacity(job_t* job) {
   if (job->plates_count == job->plates_capacity) {
     return expand_job(job);
