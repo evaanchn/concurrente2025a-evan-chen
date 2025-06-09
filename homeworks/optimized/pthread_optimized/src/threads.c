@@ -1,7 +1,22 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
+
 #include "threads.h"
 
-// TODO add doxygen
+/**
+ * @brief Calculates the last row index (exclusive) a thread should process
+ *        in a row-wise data partitioning.
+ *
+ * This function evenly divides `evaluated_rows` among `thread_count` threads.
+ * If the division leaves a remainder (i.e., `evaluated_rows % thread_count`),
+ * the first few threads (with `thread_number` < remainder) get one extra row.
+ *
+ * In short, it represents the distribution formula for static map by blocks
+ *
+ * @param thread_number The index of the current thread (0-based).
+ * @param evaluated_rows Total number of rows to be distributed among threads.
+ * @param thread_count Total number of threads participating in the task.
+ * @return The exclusive finish row index assigned to the thread.
+ */
 uint64_t get_finish_row(size_t thread_number, uint64_t evaluated_rows
     , size_t thread_count);
 
@@ -17,7 +32,7 @@ int init_shared_data(shared_data_t* shared_data, plate_t* plate
   shared_data->mult_constant = mult_constant;
   shared_data->epsilon = plate->epsilon;
   shared_data->equilibrated_plate = true;
-  
+
   uint64_t evaluated_rows = plate->plate_matrix->rows - 2;
   // Thread count depends on whether there are more threads solicited
   // or more rows to evaluates

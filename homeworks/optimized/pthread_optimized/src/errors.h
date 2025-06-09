@@ -5,7 +5,7 @@
 
 #include <stdlib.h>
 
-// TODO add label to enum
+// ARGS RELATED
 enum {
   ERR_NO_JOB_FILE = EXIT_FAILURE + 1,
   ERR_INVALID_THREAD_COUNT

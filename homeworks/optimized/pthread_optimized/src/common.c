@@ -89,9 +89,10 @@ char* modify_extension(const char *file_name, const char *new_extension) {
 
   return new_filename;
 }
-// TODO comment this function
+
 double get_elapsed_seconds(struct timespec* start_time
   , struct timespec* finish_time) {
+  // Add seconds, then add nano seconds converted to seconds
   return finish_time->tv_sec - start_time->tv_sec +
       (finish_time->tv_nsec - start_time->tv_nsec) * 1e-9;
 }

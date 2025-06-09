@@ -106,8 +106,8 @@ void update_cell(plate_matrix_t* plate_matrix, uint64_t row,
   plate_matrix->matrix[accessed_cell_index] = result;
 }
 
-// TODO comment
 void destroy_plate_matrix(plate_matrix_t* plate_matrix) {
+  // Frees dynamically allocated memory for matrices and plate_matrix register
   free(plate_matrix->matrix);
   free(plate_matrix->auxiliary_matrix);
   free(plate_matrix);

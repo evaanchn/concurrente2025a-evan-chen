@@ -226,9 +226,10 @@ int set_job(job_t* job) {
 }
 
 
-// TODO comment this 
 int check_capacity(job_t* job) {
+  // If we've reached capacity for storage
   if (job->plates_count == job->plates_capacity) {
+    // Call array expanding function
     return expand_job(job);
   }
   return EXIT_SUCCESS;
