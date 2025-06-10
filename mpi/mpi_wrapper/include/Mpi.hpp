@@ -12,21 +12,35 @@ class Mpi {
   std::string hostName;
 
  public:
+  class Error: public std::runtime_error {
+   public:
+    explicit Error(const std::string& message)
+      : runtime_error(message) {
+    }
+    Error(const std::string& message, const Mpi& mpi)
+      : runtime_error(mpi.getHostname() + ':' + std::to_string(mpi.rank())
+      + ':' + message) {}
+    Error(const std::string& message, const Mpi& mpi, const int threadNumber)
+      : runtime_error(mpi.getHostname() + ':' + std::to_string(mpi.rank())
+      + '.' + std::to_string(threadNumber) + ':' + message) {}
+  };
+
+ public:
   /// @brief Constructor
   /// @param argc Reference to argument count
   /// @param argv Pointer to arguments vector
   Mpi(int& argc, char**argv) {
     // Initialize MPI
     if (MPI_Init(&argc, &argv) != MPI_SUCCESS) {
-      throw std::runtime_error("could not init MPI");
+      throw Error("could not init MPI");
     }
     // Set process number
     if (MPI_Comm_rank(MPI_COMM_WORLD, &this->processNumber) != MPI_SUCCESS) {
-      throw std::runtime_error("could not get MPI rank");
+      throw Error("could not get MPI rank");
     }
     // Set process count
     if (MPI_Comm_size(MPI_COMM_WORLD, &this->processCount) != MPI_SUCCESS) {
-      throw std::runtime_error("could not get MPI size");
+      throw Error("could not get MPI size");
     }
     // Set host name
     char processHostname[MPI_MAX_PROCESSOR_NAME] = { '\0' };
@@ -35,7 +49,6 @@ class Mpi {
         != MPI_SUCCESS) {
       throw std::runtime_error("could not get MPI processor name");
     }
-
     this->hostName = processHostname;
   }
 
