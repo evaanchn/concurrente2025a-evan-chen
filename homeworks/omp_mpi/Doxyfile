@@ -1,0 +1,4 @@
+@INCLUDE = ../../../common/Doxyfile
+PROJECT_NAME = "Heat Transfer Simulation (Concurrent)"
+PROJECT_NUMBER = 4.0.0
+PROJECT_BRIEF = "Concurrent version of a heat transfer simulation, with pthreads, implementing declarative concurrency and distribution"

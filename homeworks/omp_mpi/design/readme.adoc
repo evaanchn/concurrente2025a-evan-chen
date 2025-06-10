@@ -1,0 +1,81 @@
+= Design of solution
+:experimental:
+:nofooter:
+:source-highlighter: highlightjs
+:sectnums:
+:stem: latexmath
+:toc:
+:xrefstyle: short
+
+[[analysis]]
+== Initial Analysis (Brainstorm)
+To add concurrency to the simulation, static mapping by blocks was considered as a good choice, preferrably with thread reuse. Thus, the distribution of rows had to follow the formula, and the threads had to coordinate with each other via barriers. The following figure is an informal sketch of the creation of the thread team and the coordination between the worker threads.
+
+[#concurrency_design]
+.Informal sketch of concurrency with static map 
+image::heat_simul_static_design.svg[align="center"]
+
+
+[[object_design]]
+== Object-oriented design
+The class diagram for the program can be found below, where the private_data and shared_data structs are used by threads in the invocation of the equilibrate_plate() function to properly equilibrate the plate.
+
+[#class_diagram]
+.UML class diagram for the program
+image::heat_simul_static_uml.svg[align="center"]
+
+NOTE: 
+
+[[concurrent_design]]
+== Concurrent Design
+=== Memory distribution
+<<distribution_example>> is an example of how rows would be distributed for a matrix with 6 rows. Excluding the first and last row, we have 4 rows to evaluate. If two threads were solicited, then each would take half of the plate: upper two rows (1-2) and bottom two (3-4). Note that thread_id was not included in this visualization.
+
+[#distribution_example]
+.Example of distributions
+image::heat_simul_static_uml.svg[align="center"]
+
+The distribution of rows, as mentioned before, is done using the formula for static mapping by blocks:
+
+[latexmath]
+++++
+\begin{align*}
+\text{start}(i, D, w) &= i \left\lfloor \frac{D}{w} \right\rfloor + \min \left(i, \, \text{mod}(D, w) \right) \\
+\text{finish}(i, D, w) &= \text{start}(i+1, D, w)
+\end{align*}
+++++
+
+Where the get_finish_row() formula applies the start(i, D, w) calculation, but it's invoked with the i+1, in a way that the finishing row set for the thread i is the start of the next one (threads finish before stepping into another thead's region).
+
+
+[[threads_pseudo]]
+== Pseudocode
+=== Changes to simulation
+First of all, the simulation-related procedure with the most changes was equilibrate_plate(), which now received an extra parameter thread_count. It is in charge of setting private and shared data, before actually simulating the plate. The pseudocode can be found below
+
+[source,delphi]
+----
+include::pseudocode/simulate.pseudo[]
+----
+
+=== Thread related
+The following pseudocode is related to the described threads manipulation procedures.
+
+[source,delphi]
+----
+include::pseudocode/threads.pseudo[]
+----
+
+=== Equilibrate plate and equilibrate rows
+Finally, we can look at the procedure called by each thread: equilibrate_plate(), which is in charge of simulating the heat transfer of a designated section in the plate, and determines if said area was equilibrated. It calls equilibrate_rows() to simulate the rows, and then manages the rest of the concurrency control.
+
+Refer to the initial analysis section for a more visual representation of the equilibrate_plate() function.
+
+[source,delphi]
+----
+include::pseudocode/equilibrate_rows.pseudo[]
+----
+
+[[Results]]
+== Results
+This implementation proved to be the most efficient for the simulation, tielding the best execution times. This is likely because of the nature of the problem, For more information, refer to the report regarding optimizations.

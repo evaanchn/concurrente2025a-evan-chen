@@ -1,0 +1,115 @@
+struct shared_data
+  declare *plate_matrix
+  declare thread_count
+  declare epsilon
+  declare mult_constant
+  declare k_states
+  declare mutex can_access_equilibrated
+  declare barrier can_continue1
+  declare barrier can_continue2
+
+struct private_data
+  declare starting_row
+  declare ending_row
+  declare equilibrated
+  declare *shared_data
+  declare thread_id
+
+function get_finish_row(thread_number, evaluated_rows, thread_count)
+  // Compute how many extra rows to assign to the first few threads
+  if thread_number < mod(evaluated_rows, thread_count) do
+    added := thread_number
+  else
+    added := evaluated_rows % thread_count
+  end if
+  return thread_number * (evaluated_rows / thread_count) + added
+end function
+
+function init_shared_data(shared_data, plate, thread_count)
+  declare diff_times_interval := plate.thermal_diffusivity * plate.interval_duration
+  declare cell_area := plate.cells_dimension * plate.cells_dimension
+  declare mult_constant := diff_times_interval / cell_area
+
+  shared_data.plate_matrix := plate.plate_matrix
+  shared_data.mult_constant := mult_constant
+  shared_data.epsilon := plate.epsilon
+
+  declare evaluated_rows := plate.plate_matrix.rows - 2
+
+  if evaluated_rows > thread_count then
+    shared_data.thread_count := thread_count
+  else
+    shared_data.thread_count := evaluated_rows
+  end if
+
+  shared_data.k_states := 0
+
+  if pthread_mutex_init(&shared_data.can_access_equilibrated) fails then
+    return error
+  end if
+
+  if pthread_barrier_init(&shared_data.can_continue1, shared_data.thread_count) fails OR
+     pthread_barrier_init(&shared_data.can_continue2, shared_data.thread_count) fails then
+    destroy shared_data.can_access_equilibrated
+    return error
+  end if
+
+  return SUCCESS
+end function
+
+function init_private_data(data)
+  declare shared_data := cast data to shared_data_t*
+  declare evaluated_rows := shared_data.plate_matrix.rows - 2
+
+  allocate private_data as array of private_data_t with size shared_data.thread_count
+
+  if private_data is not null then
+    declare prev_finish_row := 1
+
+    for thread_number from 0 to shared_data.thread_count - 1 do
+      private_data[thread_number].starting_row := prev_finish_row
+      private_data[thread_number].ending_row :=
+        get_finish_row(thread_number + 1, evaluated_rows, shared_data.thread_count) + 1
+      prev_finish_row := private_data[thread_number].ending_row
+
+      private_data[thread_number].equilibrated := true
+      private_data[thread_number].shared_data := data
+    end for
+  end if
+
+  return private_data
+end function
+
+function create_threads(routine, data)
+  declare private_data := cast data to private_data_t*
+  declare shared_data := cast private_data[0].shared_data to shared_data_t*
+
+  for index from 0 to shared_data.thread_count - 1 do
+    if pthread_create(private_data[index].thread_id, routine, &private_data[index]) fails then
+      print "Error: could not create thread", index
+      call join_threads(index, private_data)
+      return ERR_CREATE_THREAD
+    end if
+  end for
+
+  return EXIT_SUCCESS
+end function
+
+function join_threads(count, private_data)
+  declare shared_data := private_data[0].shared_data
+  declare error_count := 0
+
+  for index from 0 to count - 1 do
+    if pthread_join(private_data[index].thread_id) fails do
+      print "Error: could not join thread", index
+      increment error_count
+    end if
+  end for
+
+  // Cleanup shared resources
+  destroy shared_data.can_access_equilibrated
+  destroy shared_data.can_continue1
+  destroy shared_data.can_continue2
+
+  return error_count
+end function
