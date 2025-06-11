@@ -44,16 +44,6 @@ typedef struct {
 int set_plate_matrix(plate_t* plate, char* source_directory);
 
 /**
- * @brief Updates the plate's temperature matrix using diffusion calculations.
- * 
- * Computes new temperatures for each cell of its designated section in the
- * plate and checks for equilibrium.
- * 
- * @param data PRivate data with information necessary to equilibrate
- */
-void* equilibrate_rows(void* data);
-
-/**
  * @brief Simulates heat transfer of a plate until equilibrium
  * 
  * Represents job of a thread, where it coordinates with the others
@@ -62,6 +52,9 @@ void* equilibrate_rows(void* data);
  * @param data Private data with information necessary to equilibrate
  */
 void* equilibrate_plate_concurrent(void* data);
+
+
+void equilibrate_plate(plate_t* plate, uint64_t thread_count);
 
 /**
  * @brief Writes the updated plate matrix to a binary file.

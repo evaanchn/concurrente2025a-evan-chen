@@ -17,7 +17,7 @@
 #include "threads.h"
 
 /** @brief Initial capacity for plates allocation. */
-#define STARTING_CAPACITY 10
+#define STARTING_CAPACITY 50
 
 /** @brief Maximum file name size. */
 #define MAX_FILE_NAME_SIZE 256
@@ -54,16 +54,6 @@ int simulate(char* job_file_path, uint64_t thread_count);
  * @return Success or failure of processing
  */
 int process_plates(job_t* job, uint64_t thread_count);
-
-/**
- * @brief Equilibrates current plate
- * 
- * @param job current working job
- * @param plate_number current plate's index
- * @param thread_count Amount of threads available for use
- * @return Success or failure of equilibrate
- */
-int equilibrate_plate(job_t* job, size_t plate_number,  uint64_t thread_count);
 
 /// @brief Carries out recording of updated plate and freeing of memory.
 /// @see equilibrate_plates

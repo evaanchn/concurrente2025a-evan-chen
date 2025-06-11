@@ -1,0 +1,16 @@
+procedure equilibrate_plate()
+  // Thread creation and distribution is handled my omp
+  #pragma omp parallel num_threads(thread_count)
+  {
+    equilibrate_plate_concurrent(k_states)
+  }
+
+  // #pragma omp for default(none) num_threads(shared_data->thread_count)
+  //     shared(shared_data->plate_matrix) 
+  // #pragma omp atomic: use for the &=
+  // #pragma omp barrier: use after threads are done equilibrating
+  // #pragma omp single: use for ++iterations and set_auxiliary()
+  // #pragma omp atomic: use for the copy
+  // 
+
+end procedure

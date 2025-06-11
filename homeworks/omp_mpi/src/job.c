@@ -1,6 +1,7 @@
 // Copyright 2025 Evan Chen Cheng <evan.chen@ucr.ac.cr>
 
 #include "job.h"
+#include <omp.h>
 
 // ***[SIMULATION RELATED]***
 
@@ -54,15 +55,12 @@ int process_plates(job_t* job, uint64_t thread_count) {
       destroy_job(job);
       return error;
     }
+
     // Record start time
     struct timespec start_time, finish_time;
     clock_gettime(CLOCK_MONOTONIC, &start_time);
 
-    error = equilibrate_plate(job, plate_number, thread_count);
-    if (error!= EXIT_SUCCESS) {
-      destroy_job(job);
-      return error;
-    }
+    equilibrate_plate(curr_plate, thread_count);
 
     // Record end time
     clock_gettime(CLOCK_MONOTONIC, &finish_time);
@@ -79,43 +77,6 @@ int process_plates(job_t* job, uint64_t thread_count) {
 }
 
 
-
-int equilibrate_plate(job_t* job, size_t plate_number, uint64_t thread_count) {
-  plate_t* curr_plate = job->plates[plate_number];
-  shared_data_t shared_data;
-  if (init_shared_data(&shared_data, curr_plate, thread_count)
-      != EXIT_SUCCESS) {
-    fprintf(stderr, "Error: Could not initialize shared data for plate %zu"
-        , plate_number);
-    return ERR_INIT_SHARED_DATA;
-  }
-
-  private_data_t* thread_team = init_private_data(&shared_data);
-
-  if (!thread_team) {
-    fprintf(stderr, "Error: Could not create thread team for plate %zu"
-        , plate_number);
-    return ERR_CREATE_THREAD_TEAM;
-  }
-
-  set_auxiliary(curr_plate->plate_matrix);
-  int errors = create_threads(equilibrate_plate_concurrent, thread_team);
-  if (errors > 0) {
-    free(thread_team);
-    return errors;
-  }
-
-  join_threads(shared_data.thread_count, thread_team);
-
-  set_auxiliary(curr_plate->plate_matrix);
-
-  // Store k, number of states iterated until equilibrium, in plate
-  curr_plate->k_states = shared_data.k_states;
-
-  free(thread_team);
-
-  return EXIT_SUCCESS;
-}
 
 int clean_plate(job_t* job, size_t plate_number) {
   plate_t* curr_plate = job->plates[plate_number];

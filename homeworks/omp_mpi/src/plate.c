@@ -2,6 +2,7 @@
 
 #include "plate.h"
 #include "threads.h"
+#include <omp.h>
 
 int set_plate_matrix(plate_t* plate, char* source_directory) {
   // Concatenate plate file name with same directory specified for job
@@ -48,84 +49,53 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
 }
 
 
-void* equilibrate_rows(void* data) {
-  private_data_t* private_data = (private_data_t*) data;
-  shared_data_t* shared_data = private_data->shared_data;
-  plate_matrix_t* plate_matrix = shared_data->plate_matrix;
-  uint64_t starting_row = private_data->starting_row;
-  uint64_t ending_row = private_data->finish_row;
-  // Only work designated rows
-  for (uint64_t row = starting_row; row < ending_row; ++row) {
-    for (uint64_t col = 1; col < plate_matrix->cols - 1; ++col) {
-      // Update the cell temperature based on surrounding cells
-      update_cell(plate_matrix, row, col, shared_data->mult_constant);
-      uint64_t accessed_index = row * plate_matrix->cols + col;
-      // Get the new and old temperatures for comparison
-      double new_temperature = plate_matrix->matrix[accessed_index];
-      double old_temperature = plate_matrix->auxiliary_matrix[accessed_index];
 
-      // Compute absolute difference
-      double difference = fabs(new_temperature - old_temperature);
-      // Track the maximum temperature change in this update step
-      if (difference > shared_data->epsilon) {
-        private_data->equilibrated = false;
+void equilibrate_plate(plate_t* plate, uint64_t thread_count) {
+  plate_matrix_t* plate_matrix = plate->plate_matrix;
+  bool equilibrated_plate = true;
+  // Precompute constant for temperature update calculations
+  double diff_times_interval =
+      plate->thermal_diffusivity * plate->interval_duration;
+  double cell_area = plate->cells_dimension * plate->cells_dimension;
+  double mult_constant = diff_times_interval / cell_area;
+
+  #pragma omp parallel num_threads(thread_count) default(none) \
+        shared(plate, plate_matrix, equilibrated_plate, mult_constant)
+  {
+    while (true) {
+      #pragma omp single
+      {
+        ++plate->k_states;
+        set_auxiliary(plate_matrix);
+        equilibrated_plate = true;
       }
+
+      #pragma omp for reduction(&:equilibrated_plate)
+      for (size_t row = 1; row < plate_matrix->rows - 1; ++row) {
+        for (size_t col = 1; col < plate_matrix->cols - 1; ++col) {
+          // Update the cell temperature based on surrounding cells
+          update_cell(plate_matrix, row, col, mult_constant);
+          size_t accessed = row * plate_matrix->cols + col;
+          // Get the new and old temperatures for comparison
+          double new_temperature = plate_matrix->matrix[accessed];
+          double old_temperature = plate_matrix->auxiliary_matrix[accessed];
+
+          // Compute absolute difference
+          double difference = fabs(new_temperature - old_temperature);
+
+          // Track the maximum temperature change in this update step
+          if (difference > plate->epsilon) {
+            equilibrated_plate = false;
+          }
+        }
+      }
+      
+      if (equilibrated_plate) break;
+
+      #pragma omp barrier
     }
   }
-  return NULL;
 }
-
-void* equilibrate_plate_concurrent(void* data) {
-  private_data_t* private_data = (private_data_t*) data;
-  shared_data_t* shared_data = private_data->shared_data;
-  plate_matrix_t* plate_matrix = shared_data->plate_matrix;
-
-  while (true) {
-    // Reset local flag for this round
-    private_data->equilibrated = true;
-    // Update rows; this may set equilibrated = false
-    equilibrate_rows(data);
-
-    // Combine result into shared flag
-    pthread_mutex_lock(&shared_data->can_access_equilibrated);
-      shared_data->equilibrated_plate &= private_data->equilibrated;
-    pthread_mutex_unlock(&shared_data->can_access_equilibrated);
-
-    // First barrier: sync all threads after work
-    // Second barrier: ensure all threads see updated matrix
-    // and equilibrium result
-    int barrier_result = pthread_barrier_wait(&shared_data->can_continue1);
-    if (barrier_result == PTHREAD_BARRIER_SERIAL_THREAD) {
-      ++shared_data->k_states;
-      set_auxiliary(plate_matrix);
-    }
-
-    pthread_barrier_wait(&shared_data->can_continue2);
-
-    // Check if we’re done
-    pthread_mutex_lock(&shared_data->can_access_equilibrated);
-      bool done = shared_data->equilibrated_plate;
-    pthread_mutex_unlock(&shared_data->can_access_equilibrated);
-
-    if (done) {
-      break;
-    }
-
-    if (pthread_barrier_wait(&shared_data->can_continue1)
-        == PTHREAD_BARRIER_SERIAL_THREAD) {
-      pthread_mutex_lock(&shared_data->can_access_equilibrated);
-        shared_data->equilibrated_plate = true;
-      pthread_mutex_unlock(&shared_data->can_access_equilibrated);
-    }
-
-    // Prevent equilibrated plate change during simul
-    pthread_barrier_wait(&shared_data->can_continue2);
-  }
-
-  return NULL;
-}
-
-
 
 int update_plate_file(plate_t* plate, char* source_directory) {
   int error = EXIT_SUCCESS;
