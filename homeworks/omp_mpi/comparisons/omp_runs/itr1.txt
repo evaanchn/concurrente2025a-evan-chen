@@ -1,0 +1,32 @@
+Equilibrated plate 0 in: 136.541799405s
+Equilibrated plate 1 in: 464.616727048s
+Equilibrated plate 2 in: 185.934302382s
+Equilibrated plate 3 in: 344.793731455s
+Equilibrated plate 4 in: 69.093580703s
+Equilibrated plate 5 in: 50.102230837s
+Equilibrated plate 6 in: 138.361377089s
+Equilibrated plate 7 in: 170.713702999s
+Equilibrated plate 8 in: 1.815087478s
+Equilibrated plate 9 in: 139.177005419s
+Equilibrated plate 10 in: 0.081053371s
+Completed job in: 2031.476653996s
+Results stored in: reports/job020.tsv
+
+
+ Performance counter stats for 'bin/omp_mpi jobs/job020/job020.txt':
+
+      6,801,236.16 msec task-clock:u              #    3.348 CPUs utilized          
+                 0      context-switches:u        #    0.000 /sec                   
+                 0      cpu-migrations:u          #    0.000 /sec                   
+            10,347      page-faults:u             #    1.521 /sec                   
+24,340,112,863,787      cycles:u                  #    3.579 GHz                    
+61,526,504,609,146      instructions:u            #    2.53  insn per cycle         
+ 4,109,554,109,614      branches:u                #  604.236 M/sec                  
+       777,942,797      branch-misses:u           #    0.02% of all branches        
+
+    2031.582765852 seconds time elapsed
+
+    6780.956911000 seconds user
+       1.992633000 seconds sys
+
+
