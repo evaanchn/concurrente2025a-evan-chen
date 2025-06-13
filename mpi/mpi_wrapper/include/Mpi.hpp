@@ -3,6 +3,7 @@
 
 #include <mpi.h>
 #include <string>
+#include <vector>
 #include <stdexcept>
 
 class Mpi {
@@ -113,24 +114,108 @@ class Mpi {
   static inline MPI_Datatype map(long double) { return MPI_LONG_DOUBLE; }
 
  public:  // Send
+  /// Send a scalar value to another process
   template <typename Type>
   void send(const Type& value, const int toProcess, const int tag = 0) {
-    // int MPI_Send(const void* buff, int count, MPI_Datatype datatype
-        // , int dest, int tag, MPI_Comm comm)
-    if (MPI_Send(&value, /*count*/ 1, Mpi::map(value), toProcess
-          , tag, MPI_COMM_WORLD) != MPI_SUCCESS) {
-      throw Error("could not send value");
-    }
+    return this->send(&value, 1, toProcess, tag, "value");
   }
 
+  /// Send an array of count values to another process
+  template <typename Type>
+  void send(const Type* values, const int count, const int toProcess
+      , const int tag = 0) {
+    return this->send(values, count, toProcess, tag, "array");
+  }
+
+  /// Send an array of count values to another process (mutable)
+  template <typename Type>
+  void send(Type* values, const int count, const int toProcess
+      , const int tag = 0) {
+    return this->send(values, count, toProcess, tag, "array");
+  }
+
+  /// Send an array of values to another process
+  template <typename Type>
+  void send(const std::vector<Type>& values, const int toProcess
+      , const int tag = 0) {
+    // send vector's internal array instead of vector's address
+    return this->send(values.data(), values.size(), toProcess, tag, "vector");
+  }
+
+  /// Send a text to another process
+  void send(const std::string& text, const int toProcess, const int tag = 0) {
+    // send text's array of chars
+    return this->send(text.data(), text.size(), toProcess, tag, "text");
+  }
+
+
  public:  // Receive
+  /// Wait until it receives a scalar value from other process
   template <typename Type>
   void receive(Type& value, const int fromProcess = MPI_ANY_SOURCE
       , const int tag = MPI_ANY_TAG) {
-    if (MPI_Recv(&value, /*count*/ 1, Mpi::map(value)
+    return this->receive(&value, /*capacity*/ 1, fromProcess, tag, "value");
+  }
+
+  /// Wait until it receives at most capacity values from another process
+  template <typename Type>
+  void receive(Type* values, const int capacity
+      , const int fromProcess = MPI_ANY_SOURCE, const int tag 
+      = MPI_ANY_TAG ) {
+    return this->receive(values, capacity, fromProcess, tag, "array");
+
+  }
+
+  /// Wait until it receives at most capacity values from another process
+  template <typename Type>
+  void receive(std::vector<Type>& values, const int capacity
+      , const int fromProcess = MPI_ANY_SOURCE, const int tag = MPI_ANY_TAG) {
+    // Match vector's capacity if necessary
+    if (values.size() < capacity) values.resize(capacity);
+    return this->receive(values.data(), capacity, fromProcess, tag, "vector");
+  }
+
+  /// Wait until it receives a text of at most length chars from another process
+  void receive(std::string& text, const int capacity
+      , const int fromProcess = MPI_ANY_SOURCE, const int tag = MPI_ANY_TAG) {
+    std::vector<char> buffer(capacity, '\0');
+    this->receive(buffer, capacity, fromProcess, tag);
+    text = buffer.data();  // Copy vector's data into text
+  }
+
+ private:
+  /// Send an array of count values to another process
+  template <typename Type>
+  void send(const Type* values, const int count, const int toProcess
+      , const int tag, const std::string& type) {
+    // Verify if array has at least s1 value
+    if (count <= 0) {
+      throw Error("invalid count of elements to send");
+    }
+
+    // int MPI_Send(const void* buff, int count, MPI_Datatype datatype
+        // , int dest, int tag, MPI_Comm comm)
+    if (MPI_Send(values, count, Mpi::map(values[0]), toProcess
+          , tag, MPI_COMM_WORLD) != MPI_SUCCESS) {
+      throw Error("could not send " + type);
+    }
+  }
+
+ private:  // RECEIVE PRIVATE
+  template <typename Type>
+  void receive(Type* values, const int capacity, const int fromProcess
+      , const int tag, const std::string& type) {
+    // Verify if array has at least s1 value
+    if (capacity <= 0) {
+      throw Error("invalid capacity of elements to receive");
+    }
+
+    // int MPI_Recv(void* buff, int capacity, MPI_Datatype datatype
+        // , int source, int tag, MPI_Comm comm, MPI_Status status)
+    if (MPI_Recv(&values, capacity, Mpi::map(Type())
         , /*source*/ fromProcess, /*tag*/ tag, MPI_COMM_WORLD
         , MPI_STATUS_IGNORE) != MPI_SUCCESS) {
-      throw Error("could not receive value");
+      throw Error("could not receive " + type);
     }
   }
 };

@@ -28,9 +28,14 @@ int main(int argc, char* argv[]) {
         std::cin >> overall_start >> overall_finish;  // Else ask for the data
         // Send messages to every other process
         for (int destination = 1; destination < mpi.size(); ++destination) {
-          // MPI can only send continuous data, i.e. arrays. If it sends
-          // pointers it won't be valid at destination. ANything with
-          // virtual or polymorphic behavior will not work in dest
+          /*
+          * MPI can only send continuous data, i.e. arrays. If it sends
+          * pointers it won't be valid at destination. Anything with
+          * virtual or polymorphic behavior will not work in dest
+          * given that these objects will have pointers to regions in memory
+          * related to the parent class, which will not be valid in the other
+          * machine
+          */
           // // int MPI_Send(const void* buff, int count, MPI_Datatype datatype
           // // , int dest, int tag, MPI_Comm comm)
           // if (MPI_Send(&overall_start, /*count*/ 1, MPI_INT, destination
@@ -41,8 +46,16 @@ int main(int argc, char* argv[]) {
           //     , /*tag*/ 0, MPI_COMM_WORLD) != MPI_SUCCESS) {
           //   throw Mpi::Error("could not send end", mpi);
           // }
-          mpi.send(overall_start, destination);
-          mpi.send(overall_finish, destination);
+          // SENDING INDIVIDUAL VALUES
+          // mpi.send(overall_start, destination);
+          // mpi.send(overall_finish, destination);
+
+          // SENDING ARRAY
+          // const int range[2] = {overall_start, overall_finish};
+          // mpi.send(range, 2, destination);
+
+          const int range[2] = {overall_start, overall_finish};
+          mpi.send(range, 2, destination);
         }
       } else {
         // If is not process 0, it only has to receive the info
@@ -58,8 +71,15 @@ int main(int argc, char* argv[]) {
         //     != MPI_SUCCESS) {
         //   throw Mpi::Error("could not receive finish", mpi);
         // }
-        mpi.receive(overall_start, 0);
-        mpi.receive(overall_finish, 0);
+        // RECEIVE INDIVIDUAL VALUES
+        // mpi.receive(overall_start, 0);
+        // mpi.receive(overall_finish, 0);
+
+        // RECEIVE ARRAY
+        int range[2] = {-1, -1};
+        mpi.receive(range, 2, 0);
+        overall_start = range[0];
+        overall_finish = range[1];
       }
     }
     const int process_start = calculate_start(mpi.rank(), overall_finish
