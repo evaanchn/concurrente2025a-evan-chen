@@ -31,31 +31,35 @@ int main(int argc, char* argv[]) {
           // MPI can only send continuous data, i.e. arrays. If it sends
           // pointers it won't be valid at destination. ANything with
           // virtual or polymorphic behavior will not work in dest
-          // int MPI_Send(const void* buff, int count, MPI_Datatype datatype
-          // , int dest, int tag, MPI_Comm comm)
-          if (MPI_Send(&overall_start, /*count*/ 1, MPI_INT, destination
-              , /*tag*/ 0, MPI_COMM_WORLD) != MPI_SUCCESS) {
-            throw Mpi::Error("could not send start", mpi);
-          }
-          if (MPI_Send(&overall_finish, /*count*/ 1, MPI_INT, destination
-              , /*tag*/ 0, MPI_COMM_WORLD) != MPI_SUCCESS) {
-            throw Mpi::Error("could not send end", mpi);
-          }
+          // // int MPI_Send(const void* buff, int count, MPI_Datatype datatype
+          // // , int dest, int tag, MPI_Comm comm)
+          // if (MPI_Send(&overall_start, /*count*/ 1, MPI_INT, destination
+          //     , /*tag*/ 0, MPI_COMM_WORLD) != MPI_SUCCESS) {
+          //   throw Mpi::Error("could not send start", mpi);
+          // }
+          // if (MPI_Send(&overall_finish, /*count*/ 1, MPI_INT, destination
+          //     , /*tag*/ 0, MPI_COMM_WORLD) != MPI_SUCCESS) {
+          //   throw Mpi::Error("could not send end", mpi);
+          // }
+          mpi.send(overall_start, destination);
+          mpi.send(overall_finish, destination);
         }
       } else {
         // If is not process 0, it only has to receive the info
         // int MPI_Recv(void* buff, int count, MPI_Datatype datatype
         // , int source, int tag, MPI_Comm comm, MPI_Status status)
-        if (MPI_Recv(&overall_start, /*count*/ 1, MPI_INT
-            , /*source*/ 0, /*tag*/ 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE)
-            != MPI_SUCCESS) {
-          throw Mpi::Error("could not receive start", mpi);
-        }
-        if (MPI_Recv(&overall_finish, /*count*/ 1, MPI_INT
-            , /*source*/ 0, /*tag*/ 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE)
-            != MPI_SUCCESS) {
-          throw Mpi::Error("could not receive finish", mpi);
-        }
+        // if (MPI_Recv(&overall_start, /*count*/ 1, MPI_INT
+        //     , /*source*/ 0, /*tag*/ 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE)
+        //     != MPI_SUCCESS) {
+        //   throw Mpi::Error("could not receive start", mpi);
+        // }
+        // if (MPI_Recv(&overall_finish, /*count*/ 1, MPI_INT
+        //     , /*source*/ 0, /*tag*/ 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE)
+        //     != MPI_SUCCESS) {
+        //   throw Mpi::Error("could not receive finish", mpi);
+        // }
+        mpi.receive(overall_start, 0);
+        mpi.receive(overall_finish, 0);
       }
     }
     const int process_start = calculate_start(mpi.rank(), overall_finish

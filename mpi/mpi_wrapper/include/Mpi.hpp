@@ -93,4 +93,44 @@ class Mpi {
   inline int size() const {
     return this->getProcessCount();
   }
+
+ public:  // Mapping types. Invoke with Mpi::func()
+  static inline MPI_Datatype map(bool) { return MPI_C_BOOL; }
+  static inline MPI_Datatype map(char) { return MPI_CHAR; }
+  static inline MPI_Datatype map(unsigned char) { return MPI_UNSIGNED_CHAR; }
+  static inline MPI_Datatype map(short) { return MPI_SHORT; }
+  static inline MPI_Datatype map(unsigned short) { return MPI_UNSIGNED_SHORT; }
+  static inline MPI_Datatype map(int) { return MPI_INT; }
+  static inline MPI_Datatype map(unsigned) { return MPI_UNSIGNED; }
+  static inline MPI_Datatype map(long) { return MPI_LONG; }
+  static inline MPI_Datatype map(unsigned long) { return MPI_UNSIGNED_LONG; }
+  static inline MPI_Datatype map(long long) { return MPI_LONG_LONG; }
+  static inline MPI_Datatype map(unsigned long long) {
+    return MPI_UNSIGNED_LONG_LONG;
+  }
+  static inline MPI_Datatype map(float) { return MPI_FLOAT; }
+  static inline MPI_Datatype map(double) { return MPI_DOUBLE; }
+  static inline MPI_Datatype map(long double) { return MPI_LONG_DOUBLE; }
+
+ public:  // Send
+  template <typename Type>
+  void send(const Type& value, const int toProcess, const int tag = 0) {
+    // int MPI_Send(const void* buff, int count, MPI_Datatype datatype
+        // , int dest, int tag, MPI_Comm comm)
+    if (MPI_Send(&value, /*count*/ 1, Mpi::map(value), toProcess
+          , tag, MPI_COMM_WORLD) != MPI_SUCCESS) {
+      throw Error("could not send value");
+    }
+  }
+
+ public:  // Receive
+  template <typename Type>
+  void receive(Type& value, const int fromProcess = MPI_ANY_SOURCE
+      , const int tag = MPI_ANY_TAG) {
+    if (MPI_Recv(&value, /*count*/ 1, Mpi::map(value)
+        , /*source*/ fromProcess, /*tag*/ tag, MPI_COMM_WORLD
+        , MPI_STATUS_IGNORE) != MPI_SUCCESS) {
+      throw Error("could not receive value");
+    }
+  }
 };
