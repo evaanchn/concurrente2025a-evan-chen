@@ -46,14 +46,11 @@ int set_plate_matrix(plate_t* plate, char* source_directory);
 /**
  * @brief Simulates heat transfer of a plate until equilibrium
  * 
- * Represents job of a thread, where it coordinates with the others
- * to equilibrate a plate
+ * Distributes threads to equilibrate plate with omp.
  * 
- * @param data Private data with information necessary to equilibrate
+ * @param plate Plate to equilibrate
+ * @param thread_count amount of threads used for the simulation
  */
-void* equilibrate_plate_concurrent(void* data);
-
-
 void equilibrate_plate(plate_t* plate, uint64_t thread_count);
 
 /**

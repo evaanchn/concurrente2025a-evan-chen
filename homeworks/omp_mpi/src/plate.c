@@ -4,6 +4,12 @@
 #include "threads.h"
 #include <omp.h>
 
+/// @brief Computes the mult constant for the plate with the thermal diffusivity
+/// inteval duration, and cells' dimension
+/// @param plate Plate to use
+/// @return Mult constant
+double calculate_mult_constant(plate_t* plate);
+
 int set_plate_matrix(plate_t* plate, char* source_directory) {
   // Concatenate plate file name with same directory specified for job
   char* plate_file_path = build_file_path(source_directory, plate->file_name);
@@ -51,25 +57,27 @@ int set_plate_matrix(plate_t* plate, char* source_directory) {
 
 
 void equilibrate_plate(plate_t* plate, uint64_t thread_count) {
-  plate_matrix_t* plate_matrix = plate->plate_matrix;
   bool equilibrated_plate = true;
   // Precompute constant for temperature update calculations
-  double diff_times_interval =
-      plate->thermal_diffusivity * plate->interval_duration;
-  double cell_area = plate->cells_dimension * plate->cells_dimension;
-  double mult_constant = diff_times_interval / cell_area;
+  double mult_constant = calculate_mult_constant(plate);
 
+  // Create thread_count amount of threads
   #pragma omp parallel num_threads(thread_count) default(none) \
-        shared(plate, plate_matrix, equilibrated_plate, mult_constant)
-  {
+        shared(plate, equilibrated_plate, mult_constant)
+  {  // NOLINT (whitespace/braces)
+    plate_matrix_t* plate_matrix = plate->plate_matrix;
+    // Each thread operates until finished with the equlibrium
     while (true) {
+      // Only one thread must do this
       #pragma omp single
       {
-        ++plate->k_states;
-        set_auxiliary(plate_matrix);
-        equilibrated_plate = true;
+        ++plate->k_states;  // Update iterations
+        set_auxiliary(plate_matrix);  // Prepare matrices
+        equilibrated_plate = true;  // Reset shared equilibrated flag
       }
 
+      // Distribute the threads to simulate state with static map by blocks
+      // which is the default map
       #pragma omp for reduction(&:equilibrated_plate)
       for (size_t row = 1; row < plate_matrix->rows - 1; ++row) {
         for (size_t col = 1; col < plate_matrix->cols - 1; ++col) {
@@ -89,13 +97,25 @@ void equilibrate_plate(plate_t* plate, uint64_t thread_count) {
           }
         }
       }
-      
-      if (equilibrated_plate) break;
 
-      #pragma omp barrier
+      if (equilibrated_plate) break;  // Break from work once finished
+      #pragma omp barrier  // Make sure threads sync before next iteration
     }
   }
 }
+
+
+
+double calculate_mult_constant(plate_t* plate) {
+  // First calculate diffusivity and interval duration
+  double diff_times_interval =
+      plate->thermal_diffusivity * plate->interval_duration;
+  // Get area
+  double cell_area = plate->cells_dimension * plate->cells_dimension;
+  return diff_times_interval / cell_area;  // Return division
+}
+
+
 
 int update_plate_file(plate_t* plate, char* source_directory) {
   int error = EXIT_SUCCESS;
