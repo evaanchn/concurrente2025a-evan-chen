@@ -188,7 +188,8 @@ int simulate(char* job_file_path, uint64_t thread_count) {
   
     // Report final results of the simulation
     report_results(job);
-  } else {  // Process is not first
+  } else {
+    // If process is not master, then run worker procedure
     job_worker_process(job, thread_count);
   }
 
@@ -201,19 +202,23 @@ int simulate(char* job_file_path, uint64_t thread_count) {
 
 int job_master_process(job_t* job, mpi_t* mpi) {
   int error = EXIT_SUCCESS;
+  // Keep record of current index
   int current_plate_idx = 0;
-  int active_workers = mpi->process_count - 1;
-  // Initial distribution of work
+  // Excluding first, other processes are workers
+  int available_workers = mpi->process_count - 1;
+  // Initial distribution of work, one plate for each available worker
   for (int process_number = FIRST_PROCESS + 1;
       process_number < mpi->process_count; ++process_number) {
+    // Send the index of the plate to work in
     error = mpiwrapper_send(&current_plate_idx, 1, MPI_INT, process_number);
     if (error != EXIT_SUCCESS) return error;
-    ++current_plate_idx;
-    --active_workers;
+    ++current_plate_idx;  // Move on to next plate
+    --available_workers;  // One less available worker
   }
   while (true) {
     MPI_Status status;
     int received_plate_idx = -1;
+    // Wait for any process to finish their plate and send the index
     if (MPI_Recv(&received_plate_idx, 1, MPI_INT, MPI_ANY_SOURCE, 0
         , MPI_COMM_WORLD, &status) != MPI_SUCCESS) {
       perror("Error: could not get plate index from other processes");
@@ -222,25 +227,37 @@ int job_master_process(job_t* job, mpi_t* mpi) {
     uint64_t k_states = 0;
     // Obtain k_states simulated from source
     error = mpiwrapper_recv(&k_states, 1, MPI_INT, status.MPI_SOURCE);
-    if (error != EXIT_SUCCESS) return error;  // TODO CHECK LATER
+    if (error != EXIT_SUCCESS) return error;
 
     // Update in own record
     if (received_plate_idx < job->plates_count)
       job->plates[received_plate_idx]->k_states = k_states;
-    ++active_workers;
+    ++available_workers;  // One worker became available
 
+    // If plates have not been fully processed
     if (current_plate_idx < job->plates_count) {
       // Send the next plate index back to sender
-      error = mpiwrapper_send(&current_plate_idx, 1, MPI_INT, status.MPI_SOURCE);
-      ++current_plate_idx;
-      --active_workers;
+      error = mpiwrapper_send(&current_plate_idx, 1, MPI_INT
+          , status.MPI_SOURCE);
+      ++current_plate_idx;  // Move on to next plate
+      --available_workers;  // One worker got sent to do work
     } else {
-      if (active_workers == mpi->process_count - 1) break;
+      // Check if all workers finished and are on standby again
+      if (available_workers == mpi->process_count - 1) break;
     }
   }
 
+  // Stop workers
+  error = job_master_stop_workers(job);
+  return error;
+}
+
+int job_master_stop_workers(job_t* job) {
+  int error = EXIT_SUCCESS;
+  // Send stop signals to the other processes
   for (int process_number = FIRST_PROCESS + 1;
       process_number < mpi->process_count; ++process_number) {
+    // Sending count indicates it has to end
     error = mpiwrapper_send(&job->plates_count, 1, MPI_INT, process_number);
     if (error != EXIT_SUCCESS) return error;
   }
@@ -249,16 +266,22 @@ int job_master_process(job_t* job, mpi_t* mpi) {
 
 int job_worker_process(job_t* job, uint64_t thread_count) {
   int error = EXIT_SUCCESS;
+  // Keep waiting for plate to be assigned
   while (true) {
+    // Obtain index to work on
     int working_plate_idx = 0;
     error = mpiwrapper_recv(&working_plate_idx, 1, MPI_INT, FIRST_PROCESS);
+    // If receive failed or the index sent is one out of range, return error
     if (error != EXIT_SUCCESS || working_plate_idx >= job->plates_count) break;
 
+    // Process the plate
     process_plate(job, working_plate_idx, thread_count);
 
+    // First send index so the master process knows which one it is
     error = mpiwrapper_send(&working_plate_idx, 1, MPI_INT, FIRST_PROCESS);
     if (error != EXIT_SUCCESS) break;
 
+    // Send k states simulated for the assigned plate.
     uint64_t k_states = job->plates[working_plate_idx]->k_states;
     error = mpiwrapper_send(&k_states, 1, MPI_INT, FIRST_PROCESS);
     if (error != EXIT_SUCCESS) break;
@@ -267,6 +290,8 @@ int job_worker_process(job_t* job, uint64_t thread_count) {
 }
 
 int process_plates(job_t* job, uint64_t thread_count) {
+  // Process every single plate registered. Do this when only one process is
+  // running
   for (uint64_t plate_number = 0; plate_number < job->plates_count;
        ++plate_number) {
     process_plate(job, plate_number, thread_count);

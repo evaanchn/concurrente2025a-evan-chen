@@ -86,8 +86,27 @@ void destroy_job(job_t* job);
  */
 int simulate(char* job_file_path, uint64_t thread_count);
 
+/**
+ * @brief First process' is job master, delegates work to workers in this 
+ * procedure, until all plates are simulated
+ * 
+ * @param job Job with info for master to distribute work
+ * @param mpi Mpi struct with process info
+ * @return Success or failure of procedure
+ */
 int job_master_process(job_t* job, mpi_t* mpi);
 
+/// @brief Iterates through worker processes' IDs and signals each to stop.
+/// @see job_master_process
+int job_master_stop_workers(job_t* job, mpi_t* mpi);
+
+/**
+ * @brief Receives plate indexes to process and report back to master.
+ * 
+ * @param job Job with info for worker to simulate plate
+ * @param thread_count Amount of threads used to simulate the plate
+ * @return Success or failure of procedure
+ */
 int job_worker_process(job_t* job, uint64_t thread_count);
 
 /**
@@ -99,6 +118,14 @@ int job_worker_process(job_t* job, uint64_t thread_count);
  */
 int process_plates(job_t* job, uint64_t thread_count);
 
+/**
+ * @brief Simulates heat transfer of one plate and reports duration
+ * 
+ * @param job current working job
+ * @param plate_number Number of plate to process
+ * @param thread_count Amount of threads available for simulation
+ * @return Success or failure of processing
+ */
 int process_plate(job_t* job, uint64_t plate_number, uint64_t thread_count);
 
 /// @brief Carries out recording of updated plate and freeing of memory.

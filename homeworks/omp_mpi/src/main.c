@@ -31,12 +31,17 @@ int main(int argc, char* argv[]) {
     perror("Error: could not init MPI");
     return ERR_INIT_MPI;
   }
+  double start_time = MPI_Wtime();  // Record MPI start time
+
   // Assume default amount of threads first
   uint64_t thread_count = sysconf(_SC_NPROCESSORS_ONLN);
 
   int error = analyze_arguments(argc, argv, &thread_count);
 
   if (error == EXIT_SUCCESS) error = simulate(argv[1], thread_count);
+
+  double end_time = MPI_Wtime();  // Record MPI end time
+  printf("Elapsed time MPI: %lf seconds\n", end_time - start_time);
 
   return error;
 }

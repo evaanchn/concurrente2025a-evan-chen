@@ -6,19 +6,44 @@
 
 #include "errors.h"
 
+/**
+ * @struct mpi_t
+ * @brief Contains current process's ID (rank) and total amount of processes
+ */
 typedef struct {
-  int process_number;  // rank
-  int process_count;  // size
+  int process_number;  // Equivalent of rank in mpi
+  int process_count;  // Equivalent of size in mpi
 } mpi_t;
 
-// Initializes the MPIWrapper
+/**
+ * @brief Stores process number and count into wrapper
+ * 
+ * @param wrapper Wrapper to initialize
+ * @return Success or failure of initialization (ERR_SET_PROCESS_NUMBER,
+ * ERR_SET_PROCESS_COUNT)
+ */
 int mpiwrapper_init(mpi_t* wrapper);
 
-// Wrapper for send
+/**
+ * @brief Sends data to specified process
+ * @param data Address of data to send
+ * @param count Amount of data to send
+ * @param datatype Data's type, of MPI_Datatype
+ * @param dest Destination process's number
+ * @return EXIT_SUCCESS if successful, if not, MPI error for sending
+ */
 int mpiwrapper_send(void* data, int count, MPI_Datatype datatype, int dest);
 
-// Wrapper for receive
-int mpiwrapper_recv(void* data, int count, MPI_Datatype datatype, int source);
+/**
+ * @brief Receives data from specified process
+ * @param data Address of variable where data will be received
+ * @param capacity Capacity of data buffer
+ * @param datatype Data's type, of MPI_Datatype
+ * @param dest Sender's process's number
+ * @return EXIT_SUCCESS if successful, if not, MPI error for sending
+ */
+int mpiwrapper_recv(void* data, int capacity, MPI_Datatype datatype
+    , int source);
 
-// Finalizes MPI (not strictly part of wrapper, but often tied to it)
+/// @brief Finalizes MPI
 void mpiwrapper_finalize();

@@ -2,7 +2,6 @@
 
 #include "mpi_wrapper.h"
 
-// Initializes the MPI Wrapper
 int mpiwrapper_init(mpi_t* wrapper) {
   // Initialize wrapper attributes
   wrapper->process_number = -1;
@@ -20,28 +19,29 @@ int mpiwrapper_init(mpi_t* wrapper) {
   return EXIT_SUCCESS;
 }
 
-// Wrapper for send
 int mpiwrapper_send(void* data, int count, MPI_Datatype datatype, int dest) {
+  // Defaults with MPI_COMM_WORLD for comm type, tag 0
   if (MPI_Send(data, count, datatype, dest, /*tag*/ 0, MPI_COMM_WORLD)
       != MPI_SUCCESS) {
+    // Report error if unsuccessful
     perror("Error: could not get send data");
     return ERR_MPI_SEND;
   }
   return EXIT_SUCCESS;
 }
 
-// Wrapper for receive
 int mpiwrapper_recv(void* data, const int capacity, MPI_Datatype datatype
     , int source) {
+  // Default tag 0, global communication between processes, ignore status
   if (MPI_Recv(data, capacity, datatype, source, /*tag*/ 0, MPI_COMM_WORLD
       , MPI_STATUS_IGNORE) != MPI_SUCCESS) {
+    // Report error if any
     perror("Error: could not get sent data");
     return ERR_MPI_RECV;
   }
   return EXIT_SUCCESS;
 }
 
-// Finalizes MPI (not strictly part of wrapper, but often tied to it)
 void mpiwrapper_finalize() {
-  MPI_Finalize();
+  MPI_Finalize();  // Calls for MPI to finalize
 }
