@@ -16,6 +16,8 @@
 #include "plate.h"
 #include "threads.h"
 
+#include "mpi_wrapper.h"
+
 /** @brief Initial capacity for plates allocation. */
 #define STARTING_CAPACITY 50
 
@@ -24,6 +26,9 @@
 
 /** @brief Folder name for report files. */
 #define REPORTS_DIRECTORY "reports"
+
+/** @brief First process ID */
+#define FIRST_PROCESS 0
 
 /**
  * @struct job_t
@@ -34,31 +39,10 @@ typedef struct {
     char* source_directory; /**< Directory containing job files. */
     size_t plates_count;    /**< Number of plates. */
     size_t plates_capacity; /**< Capacity of plates array. */
+    uint64_t plates_start;  /**< Assigned plates start */
+    uint64_t plates_finish; /**< Assigned plates finish */
     plate_t** plates;       /**< Array of plate pointers. */
 } job_t;
-
-/**
- * @brief Carries out simulation of each plate in an indicated job.
- * 
- * @param job_file_path path of job to simulate
- * @param thread_count amount of threads used to simulate
- * @return Success or failure of procedure
- */
-int simulate(char* job_file_path, uint64_t thread_count);
-
-/**
- * @brief Loops through all of the plates recorded to simulate.
- * 
- * @param job current working job
- * @param thread_count Amount of threads available for use
- * @return Success or failure of processing
- */
-int process_plates(job_t* job, uint64_t thread_count);
-
-/// @brief Carries out recording of updated plate and freeing of memory.
-/// @see equilibrate_plates
-/// @return if clean up if successful
-int clean_plate(job_t* job, size_t plate_number);
 
 /**
  * @brief Initializes a job from a given job file name.
@@ -94,6 +78,58 @@ int expand_job(job_t* job);
  */
 void destroy_job(job_t* job);
 
+
+/**
+ * @brief Carries out simulation of each plate in an indicated job.
+ * 
+ * @param job_file_path path of job to simulate
+ * @param thread_count amount of threads used to simulate
+ * @return Success or failure of procedure
+ */
+int simulate(char* job_file_path, uint64_t thread_count);
+
+/**
+ * @brief Loops through all of the plates recorded to simulate.
+ * 
+ * @param job current working job
+ * @param thread_count Amount of threads available for use
+ * @return Success or failure of processing
+ */
+int process_plates(job_t* job, mpi_t* mpi, uint64_t thread_count);
+
+/// @brief Carries out recording of updated plate and freeing of memory.
+/// @see equilibrate_plates
+/// @return if clean up if successful
+int clean_plate(job_t* job, size_t plate_number);
+
+/**
+ * @brief Generates a report file from the job's simulation results.
+ * @param job Pointer to the job structure.
+ * @param mpi The mpi struct with the process's data.
+ * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
+ */
+int report_results(job_t* job, mpi_t* mpi);
+
+/// @brief Procedure a non-first process runs to send simulated plates' itrs.
+/// @see report_results
+int send_results(job_t* job, mpi_t* mpi);
+
+/**
+ * @brief Calls upon common functions to build the report file's paths.
+ * @param job Pointer to the job structure.
+ * @return Report file path built.
+ */
+char* build_report_file_path(job_t* job);
+
+/// @brief Writes the results of a plate's simulation into a file
+/// @param job Pointer to job struct with the plates
+/// @param results_file Results file to report to
+/// @param plate_number Number of plate to extract data from
+/// @param k_states Amount of states simulated for the plate (could be fro
+/// another process)
+void write_result(job_t* job, FILE* results_file, int plate_number
+    , uint64_t k_states);
+
 /**
  * @brief Formats a time value into a human-readable string.
  * @param seconds Time in seconds.
@@ -103,18 +139,5 @@ void destroy_job(job_t* job);
  */
 char* format_time(const time_t seconds, char* text, const size_t capacity);
 
-/**
- * @brief Generates a report file from the job's simulation results.
- * @param job Pointer to the job structure.
- * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
- */
-int report_results(job_t* job);
-
-/**
- * @brief Calls upon common functions to build the report file's paths.
- * @param job Pointer to the job structure.
- * @return Report file path built.
- */
-char* build_report_file_path(job_t* job);
 
 #endif  // JOB_H

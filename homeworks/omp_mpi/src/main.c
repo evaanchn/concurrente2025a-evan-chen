@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include "job.h"
+#include <mpi.h>
 
 /**
  * @brief Checks whether arguments were valid.
@@ -25,6 +26,11 @@ int analyze_arguments(int argc, char* argv[], uint64_t* thread_count);
  * @return Status code to the operating system, 0 means success.
  */
 int main(int argc, char* argv[]) {
+  // Initialize MPI
+  if (MPI_Init(&argc, &argv) != MPI_SUCCESS) {
+    perror("Error: could not init MPI");
+    return ERR_INIT_MPI;
+  }
   // Assume default amount of threads first
   uint64_t thread_count = sysconf(_SC_NPROCESSORS_ONLN);
 
