@@ -248,11 +248,11 @@ int job_master_process(job_t* job, mpi_t* mpi) {
   }
 
   // Stop workers
-  error = job_master_stop_workers(job);
+  error = job_master_stop_workers(job, mpi);
   return error;
 }
 
-int job_master_stop_workers(job_t* job) {
+int job_master_stop_workers(job_t* job, mpi_t* mpi) {
   int error = EXIT_SUCCESS;
   // Send stop signals to the other processes
   for (int process_number = FIRST_PROCESS + 1;
