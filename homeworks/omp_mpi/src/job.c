@@ -158,6 +158,7 @@ void destroy_job(job_t* job) {
 int simulate(char* job_file_path, uint64_t thread_count) {
   mpi_t mpi;
   int error = mpiwrapper_init(&mpi);
+  if (error != EXIT_SUCCESS) return error;
 
   // Create job struct
   job_t* job = init_job(job_file_path);
@@ -182,13 +183,13 @@ int simulate(char* job_file_path, uint64_t thread_count) {
   double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
 
   // Report elapsed time
-  printf("Process %d completed share in: %.9lfs\n", mpi.process_number
+  printf("[PROCESS %d] completed share in: %.9lfs\n", mpi.process_number
       , elapsed_time);
 
   // Report final results of the simulation
   report_results(job, &mpi);
+  // Deallocation and mpi finalization
   destroy_job(job);
-
   mpiwrapper_finalize();
   return EXIT_SUCCESS;
 }
@@ -200,7 +201,6 @@ int process_plates(job_t* job, mpi_t* mpi, uint64_t thread_count) {
       , mpi->process_count);
   job->plates_finish = calculate_finish(mpi->process_number, job->plates_count
       , mpi->process_count);
-
   // For each plate stored
   for (size_t plate_number = job->plates_start; plate_number
       < job->plates_finish; ++plate_number) {
@@ -227,7 +227,8 @@ int process_plates(job_t* job, mpi_t* mpi, uint64_t thread_count) {
     double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
 
     // Report elapsed time
-    printf("Equilibrated plate %zu in: %.9lfs\n", plate_number, elapsed_time);
+    printf("[PROCESS %d] Equilibrated plate %zu in: %.9lfs\n"
+        , mpi->process_number, plate_number, elapsed_time);
 
     clean_plate(job, plate_number);
   }
@@ -262,7 +263,7 @@ int clean_plate(job_t* job, size_t plate_number) {
 int report_results(job_t* job, mpi_t* mpi) {
   // If process is not the first, send results only
   if (mpi->process_number != FIRST_PROCESS) {
-    return send_results(job, mpi);
+    return send_results(job);
   }
 
   // If not, it's the first one and it must report into report file
@@ -313,7 +314,7 @@ int report_results(job_t* job, mpi_t* mpi) {
   return error;
 }
 
-int send_results(job_t* job, mpi_t* mpi) {
+int send_results(job_t* job) {
   int error = EXIT_SUCCESS;
   // From worked plates in job, from start to finish
   // , send results (iterations) of simulation to 1st process 

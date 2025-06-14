@@ -41,6 +41,7 @@ typedef struct {
     size_t plates_capacity; /**< Capacity of plates array. */
     uint64_t plates_start;  /**< Assigned plates start */
     uint64_t plates_finish; /**< Assigned plates finish */
+    int current_plate;
     plate_t** plates;       /**< Array of plate pointers. */
 } job_t;
 
@@ -112,7 +113,7 @@ int report_results(job_t* job, mpi_t* mpi);
 
 /// @brief Procedure a non-first process runs to send simulated plates' itrs.
 /// @see report_results
-int send_results(job_t* job, mpi_t* mpi);
+int send_results(job_t* job);
 
 /**
  * @brief Calls upon common functions to build the report file's paths.
