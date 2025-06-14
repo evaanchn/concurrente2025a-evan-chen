@@ -1,0 +1,22 @@
+[prun] Master compute host = compute-1
+[prun] Resource manager = slurm
+[prun] Launch cmd = mpiexec.hydra -bootstrap slurm bin/omp_mpi jobs/job020/job020.txt (family=mpich)
+Equilibrated plate 8 in: 1.813016524s
+Process 4 completed share in: 63.755879672s
+Equilibrated plate 4 in: 69.264878127s
+Equilibrated plate 10 in: 0.080485851s
+Equilibrated plate 0 in: 136.536355094s
+Equilibrated plate 5 in: 50.047063155s
+Process 6 completed share in: 180.545182495s
+Process 2 completed share in: 188.361077202s
+Equilibrated plate 2 in: 185.857419829s
+Equilibrated plate 9 in: 145.291409064s
+Process 5 completed share in: 207.228274124s
+Equilibrated plate 6 in: 143.711321914s
+Equilibrated plate 7 in: 111.659231629s
+Process 3 completed share in: 433.278038816s
+Equilibrated plate 3 in: 344.890650619s
+Equilibrated plate 1 in: 464.310981513s
+Process 0 completed share in: 611.888942332s
+Process 1 completed share in: 631.129797613s
+Results stored in: reports/job020.tsv
