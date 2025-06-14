@@ -3,18 +3,6 @@
 #include "job.h"
 #include <omp.h>
 
-/// @brief Implements static map by blocks formula, adapted for processes
-/// @param rank Process number
-/// @param work_amount Amount of work to distribute
-/// @param workers Process count
-/// @return Index of start
-uint64_t calculate_start(int rank, int work_amount, int workers);
-
-/// @brief Calculates finish index with formula for static map by blocks
-/// @see calculate_start
-/// @return Index of finish (exclusive)
-uint64_t calculate_finish(int rank, int work_amount, int workers);
-
 // ***[JOB RELATED]***
 
 job_t* init_job(char* job_file_name) {
@@ -168,13 +156,141 @@ int simulate(char* job_file_path, uint64_t thread_count) {
   error = set_job(job);
   if (error != EXIT_SUCCESS) return error;
 
+  // If process is first
+  if (mpi.process_number == FIRST_PROCESS) {
+    // Record start time
+    struct timespec start_time, finish_time;
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
+  
+    // If there is more than one process involved
+    if (mpi.process_count > 1) {
+      error = job_master_process(job, &mpi);
+      //error = process_plates(job, thread_count);
+    } else {
+      // Process plates by itself
+      error = process_plates(job, thread_count);
+    }
+  
+    if (error != EXIT_SUCCESS) {
+        destroy_job(job);
+        mpiwrapper_finalize();
+        return error;
+    }
+
+    // Record end time
+    clock_gettime(CLOCK_MONOTONIC, &finish_time);
+  
+    // Set elapsed time
+    double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
+  
+    // Report elapsed time
+    printf("Completed job in: %.9lfs\n", elapsed_time);
+  
+    // Report final results of the simulation
+    report_results(job);
+  } else {  // Process is not first
+    job_worker_process(job, thread_count);
+  }
+
+  printf("[PROCESS %d] done\n", mpi.process_number);
+  // Deallocation and mpi finalization
+  destroy_job(job);
+  mpiwrapper_finalize();
+  return EXIT_SUCCESS;
+}
+
+int job_master_process(job_t* job, mpi_t* mpi) {
+  int error = EXIT_SUCCESS;
+  int current_plate_idx = 0;
+  int active_workers = mpi->process_count - 1;
+  // Initial distribution of work
+  for (int process_number = FIRST_PROCESS + 1;
+      process_number < mpi->process_count; ++process_number) {
+    error = mpiwrapper_send(&current_plate_idx, 1, MPI_INT, process_number);
+    if (error != EXIT_SUCCESS) return error;
+    ++current_plate_idx;
+    --active_workers;
+  }
+  while (true) {
+    MPI_Status status;
+    int received_plate_idx = -1;
+    if (MPI_Recv(&received_plate_idx, 1, MPI_INT, MPI_ANY_SOURCE, 0
+        , MPI_COMM_WORLD, &status) != MPI_SUCCESS) {
+      perror("Error: could not get plate index from other processes");
+      return ERR_MPI_RECV;
+    }
+    uint64_t k_states = 0;
+    // Obtain k_states simulated from source
+    error = mpiwrapper_recv(&k_states, 1, MPI_INT, status.MPI_SOURCE);
+    if (error != EXIT_SUCCESS) return error;  // TODO CHECK LATER
+
+    // Update in own record
+    if (received_plate_idx < job->plates_count)
+      job->plates[received_plate_idx]->k_states = k_states;
+    ++active_workers;
+
+    if (current_plate_idx < job->plates_count) {
+      // Send the next plate index back to sender
+      error = mpiwrapper_send(&current_plate_idx, 1, MPI_INT, status.MPI_SOURCE);
+      ++current_plate_idx;
+      --active_workers;
+    } else {
+      if (active_workers == mpi->process_count - 1) break;
+    }
+  }
+
+  for (int process_number = FIRST_PROCESS + 1;
+      process_number < mpi->process_count; ++process_number) {
+    error = mpiwrapper_send(&job->plates_count, 1, MPI_INT, process_number);
+    if (error != EXIT_SUCCESS) return error;
+  }
+  return error;
+}
+
+int job_worker_process(job_t* job, uint64_t thread_count) {
+  int error = EXIT_SUCCESS;
+  while (true) {
+    int working_plate_idx = 0;
+    error = mpiwrapper_recv(&working_plate_idx, 1, MPI_INT, FIRST_PROCESS);
+    if (error != EXIT_SUCCESS || working_plate_idx >= job->plates_count) break;
+
+    process_plate(job, working_plate_idx, thread_count);
+
+    error = mpiwrapper_send(&working_plate_idx, 1, MPI_INT, FIRST_PROCESS);
+    if (error != EXIT_SUCCESS) break;
+
+    uint64_t k_states = job->plates[working_plate_idx]->k_states;
+    error = mpiwrapper_send(&k_states, 1, MPI_INT, FIRST_PROCESS);
+    if (error != EXIT_SUCCESS) break;
+  }
+  return error;
+}
+
+int process_plates(job_t* job, uint64_t thread_count) {
+  for (uint64_t plate_number = 0; plate_number < job->plates_count;
+       ++plate_number) {
+    process_plate(job, plate_number, thread_count);
+  }
+  return EXIT_SUCCESS;
+}
+
+int process_plate(job_t* job, uint64_t plate_number, uint64_t thread_count) {
+  int error = EXIT_SUCCESS;
+  // Get current plate
+  plate_t* curr_plate = job->plates[plate_number];
+
+  // Create plate's plate matrix: read plate file and store temperatures
+  error = set_plate_matrix(curr_plate, job->source_directory);
+  if (error != EXIT_SUCCESS) {
+    destroy_plate_matrix(curr_plate->plate_matrix);
+    return error;
+  }
+
   // Record start time
   struct timespec start_time, finish_time;
   clock_gettime(CLOCK_MONOTONIC, &start_time);
 
-  // Process the plates
-  error = process_plates(job, &mpi, thread_count);
-  if (error != EXIT_SUCCESS) return error;
+  equilibrate_plate(curr_plate, thread_count);
 
   // Record end time
   clock_gettime(CLOCK_MONOTONIC, &finish_time);
@@ -183,67 +299,12 @@ int simulate(char* job_file_path, uint64_t thread_count) {
   double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
 
   // Report elapsed time
-  printf("[PROCESS %d] completed share in: %.9lfs\n", mpi.process_number
-      , elapsed_time);
+  printf("Equilibrated plate %zu in: %.9lfs\n", plate_number, elapsed_time);
 
-  // Report final results of the simulation
-  report_results(job, &mpi);
-  // Deallocation and mpi finalization
-  destroy_job(job);
-  mpiwrapper_finalize();
-  return EXIT_SUCCESS;
+  clean_plate(job, plate_number);
+  return error;
 }
 
-
-
-int process_plates(job_t* job, mpi_t* mpi, uint64_t thread_count) {
-  job->plates_start = calculate_start(mpi->process_number, job->plates_count
-      , mpi->process_count);
-  job->plates_finish = calculate_finish(mpi->process_number, job->plates_count
-      , mpi->process_count);
-  // For each plate stored
-  for (size_t plate_number = job->plates_start; plate_number
-      < job->plates_finish; ++plate_number) {
-    // Get current plate
-    plate_t* curr_plate = job->plates[plate_number];
-
-    // Create plate's plate matrix: read plate file and store temperatures
-    int error = set_plate_matrix(curr_plate, job->source_directory);
-    if (error != EXIT_SUCCESS) {
-      destroy_job(job);
-      return error;
-    }
-
-    // Record start time
-    struct timespec start_time, finish_time;
-    clock_gettime(CLOCK_MONOTONIC, &start_time);
-
-    equilibrate_plate(curr_plate, thread_count);
-
-    // Record end time
-    clock_gettime(CLOCK_MONOTONIC, &finish_time);
-
-    // Set elapsed time
-    double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
-
-    // Report elapsed time
-    printf("[PROCESS %d] Equilibrated plate %zu in: %.9lfs\n"
-        , mpi->process_number, plate_number, elapsed_time);
-
-    clean_plate(job, plate_number);
-  }
-  return EXIT_SUCCESS;
-}
-
-uint64_t calculate_start(int rank, int work_amount, int workers) {
-  // Add the residue if thread number exceeds it
-  size_t added = rank < work_amount % workers ? rank : work_amount % workers;
-  return rank * (work_amount / workers) + added;
-}
-
-uint64_t calculate_finish(int rank, int work_amount, int workers) {
-  return calculate_start(rank + 1, work_amount, workers);
-}
 
 int clean_plate(job_t* job, size_t plate_number) {
   plate_t* curr_plate = job->plates[plate_number];
@@ -260,13 +321,7 @@ int clean_plate(job_t* job, size_t plate_number) {
 }
 
 
-int report_results(job_t* job, mpi_t* mpi) {
-  // If process is not the first, send results only
-  if (mpi->process_number != FIRST_PROCESS) {
-    return send_results(job);
-  }
-
-  // If not, it's the first one and it must report into report file
+int report_results(job_t* job) {
   int error = EXIT_SUCCESS;
   char* results_file_path = build_report_file_path(job);
 
@@ -279,30 +334,11 @@ int report_results(job_t* job, mpi_t* mpi) {
   FILE* results_file = fopen(results_file_path, "w");
 
   if (results_file) {
-    // For every process simulating
-    for (int process_number = FIRST_PROCESS; process_number
-        < mpi->process_count; ++process_number) {
-      // Calculate their start and finish
-      uint64_t process_start = calculate_start(process_number, job->plates_count
-      , mpi->process_count);
-      uint64_t process_finish = calculate_finish(process_number
-          , job->plates_count, mpi->process_count);
-      // Iterate through interval
-      for (uint64_t plate_number = process_start; plate_number < process_finish;
-          ++plate_number) {
-        // If current process is the first one
-        if (process_number == FIRST_PROCESS) {
-          // It has the data of the simulation, so it can just write it
-          write_result(job, results_file, plate_number
-              , job->plates[plate_number]->k_states);
-        } else {
-          // Otherwise, it waits for the current process to send the states
-          uint64_t k_states = 0;
-          mpiwrapper_recv(&k_states, 1, MPI_INT, process_number, 0);
-          write_result(job, results_file, plate_number, k_states);
-        }
-      }
+    for (size_t plate_number = 0; plate_number < job->plates_count;
+       ++plate_number) {
+      write_result(job, results_file, plate_number);
     }
+    
     printf("Results stored in: %s\n", results_file_path);
     fclose(results_file);
   } else {
@@ -311,23 +347,6 @@ int report_results(job_t* job, mpi_t* mpi) {
   }
 
   free(results_file_path);
-  return error;
-}
-
-int send_results(job_t* job) {
-  int error = EXIT_SUCCESS;
-  // From worked plates in job, from start to finish
-  // , send results (iterations) of simulation to 1st process 
-  for (size_t plate_number = job->plates_start; plate_number
-        < job->plates_finish; ++plate_number) {
-    // Obtain information to send
-    uint64_t k_states = job->plates[plate_number]->k_states;
-    error = mpiwrapper_send(&k_states, /*count*/ 1, MPI_INT
-        , /*dest*/ FIRST_PROCESS, /*tag*/ 0);  // Send states of plate
-    if (error != MPI_SUCCESS) {
-      return error;
-    }
-  }
   return error;
 }
 
@@ -353,8 +372,7 @@ char* build_report_file_path(job_t* job) {
   return results_file_path;
 }
 
-void write_result(job_t* job, FILE* results_file, int plate_number
-    , uint64_t k_states) {
+void write_result(job_t* job, FILE* results_file, int plate_number) {
   plate_t* plate = job->plates[plate_number];  // Obtain plate
   // Calculate the time
   time_t simulated_seconds = plate->k_states * plate->interval_duration;
@@ -368,7 +386,7 @@ void write_result(job_t* job, FILE* results_file, int plate_number
       plate->thermal_diffusivity,
       plate->cells_dimension,
       plate->epsilon,
-      k_states,
+      plate->k_states,
       formatted_time);
 }
 

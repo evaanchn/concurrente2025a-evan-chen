@@ -39,9 +39,6 @@ typedef struct {
     char* source_directory; /**< Directory containing job files. */
     size_t plates_count;    /**< Number of plates. */
     size_t plates_capacity; /**< Capacity of plates array. */
-    uint64_t plates_start;  /**< Assigned plates start */
-    uint64_t plates_finish; /**< Assigned plates finish */
-    int current_plate;
     plate_t** plates;       /**< Array of plate pointers. */
 } job_t;
 
@@ -89,6 +86,10 @@ void destroy_job(job_t* job);
  */
 int simulate(char* job_file_path, uint64_t thread_count);
 
+int job_master_process(job_t* job, mpi_t* mpi);
+
+int job_worker_process(job_t* job, uint64_t thread_count);
+
 /**
  * @brief Loops through all of the plates recorded to simulate.
  * 
@@ -96,7 +97,9 @@ int simulate(char* job_file_path, uint64_t thread_count);
  * @param thread_count Amount of threads available for use
  * @return Success or failure of processing
  */
-int process_plates(job_t* job, mpi_t* mpi, uint64_t thread_count);
+int process_plates(job_t* job, uint64_t thread_count);
+
+int process_plate(job_t* job, uint64_t plate_number, uint64_t thread_count);
 
 /// @brief Carries out recording of updated plate and freeing of memory.
 /// @see equilibrate_plates
@@ -106,14 +109,9 @@ int clean_plate(job_t* job, size_t plate_number);
 /**
  * @brief Generates a report file from the job's simulation results.
  * @param job Pointer to the job structure.
- * @param mpi The mpi struct with the process's data.
  * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure.
  */
-int report_results(job_t* job, mpi_t* mpi);
-
-/// @brief Procedure a non-first process runs to send simulated plates' itrs.
-/// @see report_results
-int send_results(job_t* job);
+int report_results(job_t* job);
 
 /**
  * @brief Calls upon common functions to build the report file's paths.
@@ -126,10 +124,7 @@ char* build_report_file_path(job_t* job);
 /// @param job Pointer to job struct with the plates
 /// @param results_file Results file to report to
 /// @param plate_number Number of plate to extract data from
-/// @param k_states Amount of states simulated for the plate (could be fro
-/// another process)
-void write_result(job_t* job, FILE* results_file, int plate_number
-    , uint64_t k_states);
+void write_result(job_t* job, FILE* results_file, int plate_number);
 
 /**
  * @brief Formats a time value into a human-readable string.

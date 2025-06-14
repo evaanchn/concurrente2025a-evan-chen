@@ -21,9 +21,8 @@ int mpiwrapper_init(mpi_t* wrapper) {
 }
 
 // Wrapper for send
-int mpiwrapper_send(void* data, int count
-    , MPI_Datatype datatype, int dest, int tag) {
-  if (MPI_Send(data, count, datatype, dest, tag, MPI_COMM_WORLD)
+int mpiwrapper_send(void* data, int count, MPI_Datatype datatype, int dest) {
+  if (MPI_Send(data, count, datatype, dest, /*tag*/ 0, MPI_COMM_WORLD)
       != MPI_SUCCESS) {
     perror("Error: could not get send data");
     return ERR_MPI_SEND;
@@ -32,11 +31,11 @@ int mpiwrapper_send(void* data, int count
 }
 
 // Wrapper for receive
-int mpiwrapper_recv(void* data, const int capacity
-    , MPI_Datatype datatype, int source, const int tag) {
-  if (MPI_Recv(data, capacity, datatype, source, tag, MPI_COMM_WORLD
+int mpiwrapper_recv(void* data, const int capacity, MPI_Datatype datatype
+    , int source) {
+  if (MPI_Recv(data, capacity, datatype, source, /*tag*/ 0, MPI_COMM_WORLD
       , MPI_STATUS_IGNORE) != MPI_SUCCESS) {
-    perror("Error: could not get send data");
+    perror("Error: could not get sent data");
     return ERR_MPI_RECV;
   }
   return EXIT_SUCCESS;

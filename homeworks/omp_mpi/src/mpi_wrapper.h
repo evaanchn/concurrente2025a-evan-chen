@@ -15,12 +15,10 @@ typedef struct {
 int mpiwrapper_init(mpi_t* wrapper);
 
 // Wrapper for send
-int mpiwrapper_send(void* data, int count
-    , MPI_Datatype datatype, int dest, int tag);
+int mpiwrapper_send(void* data, int count, MPI_Datatype datatype, int dest);
 
 // Wrapper for receive
-int mpiwrapper_recv(void* data, int count
-    , MPI_Datatype datatype, int source, int tag);
+int mpiwrapper_recv(void* data, int count, MPI_Datatype datatype, int source);
 
 // Finalizes MPI (not strictly part of wrapper, but often tied to it)
 void mpiwrapper_finalize();
