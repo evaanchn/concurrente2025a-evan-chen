@@ -43,6 +43,8 @@ int main(int argc, char* argv[]) {
   double end_time = MPI_Wtime();  // Record MPI end time
   printf("Elapsed time MPI: %lf seconds\n", end_time - start_time);
 
+  mpiwrapper_finalize();
+
   return error;
 }
 

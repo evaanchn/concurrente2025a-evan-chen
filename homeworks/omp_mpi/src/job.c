@@ -161,16 +161,15 @@ int simulate(char* job_file_path, uint64_t thread_count) {
     // Record start time
     struct timespec start_time, finish_time;
     clock_gettime(CLOCK_MONOTONIC, &start_time);
-  
+
     // If there is more than one process involved
     if (mpi.process_count > 1) {
       error = job_master_process(job, &mpi);
-      //error = process_plates(job, thread_count);
     } else {
       // Process plates by itself
       error = process_plates(job, thread_count);
     }
-  
+
     if (error != EXIT_SUCCESS) {
         destroy_job(job);
         mpiwrapper_finalize();
@@ -179,13 +178,13 @@ int simulate(char* job_file_path, uint64_t thread_count) {
 
     // Record end time
     clock_gettime(CLOCK_MONOTONIC, &finish_time);
-  
+
     // Set elapsed time
     double elapsed_time = get_elapsed_seconds(&start_time, &finish_time);
-  
+
     // Report elapsed time
     printf("Completed job in: %.9lfs\n", elapsed_time);
-  
+
     // Report final results of the simulation
     report_results(job);
   } else {
@@ -196,7 +195,6 @@ int simulate(char* job_file_path, uint64_t thread_count) {
   printf("[PROCESS %d] done\n", mpi.process_number);
   // Deallocation and mpi finalization
   destroy_job(job);
-  mpiwrapper_finalize();
   return EXIT_SUCCESS;
 }
 
@@ -204,11 +202,16 @@ int job_master_process(job_t* job, mpi_t* mpi) {
   int error = EXIT_SUCCESS;
   // Keep record of current index
   int current_plate_idx = 0;
-  // Excluding first, other processes are workers
-  int available_workers = mpi->process_count - 1;
+  // Determine if there are more worker processes than plates to simulate
+  // If so, then there will be one plate assigned to one process
+  // The rest would leave. If not, the worker processes are the ones available
+  int working_processes = (size_t) mpi->process_count - 1 < job->plates_count ?
+      mpi->process_count - 1 : (int) job->plates_count;
+  // Intialize workers controller with available worker processes
+  int available_workers = working_processes;
   // Initial distribution of work, one plate for each available worker
   for (int process_number = FIRST_PROCESS + 1;
-      process_number < mpi->process_count; ++process_number) {
+      process_number < working_processes; ++process_number) {
     // Send the index of the plate to work in
     error = mpiwrapper_send(&current_plate_idx, 1, MPI_INT, process_number);
     if (error != EXIT_SUCCESS) return error;
@@ -222,12 +225,13 @@ int job_master_process(job_t* job, mpi_t* mpi) {
     if (MPI_Recv(&received_plate_idx, 1, MPI_INT, MPI_ANY_SOURCE, 0
         , MPI_COMM_WORLD, &status) != MPI_SUCCESS) {
       perror("Error: could not get plate index from other processes");
-      return ERR_MPI_RECV;
+      error = ERR_MPI_RECV;
+      break;
     }
     uint64_t k_states = 0;
     // Obtain k_states simulated from source
     error = mpiwrapper_recv(&k_states, 1, MPI_INT, status.MPI_SOURCE);
-    if (error != EXIT_SUCCESS) return error;
+    if (error != EXIT_SUCCESS) break;  // Break to stop the processes
 
     // Update in own record
     if (received_plate_idx < job->plates_count)
@@ -243,7 +247,7 @@ int job_master_process(job_t* job, mpi_t* mpi) {
       --available_workers;  // One worker got sent to do work
     } else {
       // Check if all workers finished and are on standby again
-      if (available_workers == mpi->process_count - 1) break;
+      if (available_workers == working_processes) break;
     }
   }
 
@@ -363,7 +367,7 @@ int report_results(job_t* job) {
        ++plate_number) {
       write_result(job, results_file, plate_number);
     }
-    
+
     printf("Results stored in: %s\n", results_file_path);
     fclose(results_file);
   } else {
