@@ -39,7 +39,7 @@ int mpiwrapper_send(void* data, int count, MPI_Datatype datatype, int dest);
  * @param data Address of variable where data will be received
  * @param capacity Capacity of data buffer
  * @param datatype Data's type, of MPI_Datatype
- * @param dest Sender's process's number
+ * @param source Sender's process's number
  * @return EXIT_SUCCESS if successful, if not, MPI error for sending
  */
 int mpiwrapper_recv(void* data, int capacity, MPI_Datatype datatype
