@@ -1,4 +1,4 @@
-= Heat Transfer Simulation (Concurrent)
+= Heat Transfer Simulation (Distributed and Concurrent)
 :experimental:
 :nofooter:
 :source-highlighter: highlightjs
@@ -31,7 +31,7 @@ The new temperature at time step k+1 is calculated using the current temperature
 
 The update formula follows a discrete approximation of the heat equation, with the use of an equilibrium point constant (epsilon), ensuring a realistic simulation of thermal equilibrium.
 
-In short, this program simulates the heat transfer process of rectangular plates and reports how much time was needed to reach thermal equilibrium, updated *with the newly added possibility of concurrent processing of plates*.
+In short, this program simulates the heat transfer process of rectangular plates and reports how much time was needed to reach thermal equilibrium, updated *with the newly added possibility of distributed and concurrent processing of plates*.
 
 An example of the simulation of a plate is shown below:
 
@@ -75,6 +75,13 @@ For more detailed information, visit link:[https://jeisson.ecci.ucr.ac.cr/concur
 == User manual
 
 [[build]]
+=== Dependencies
+To make use of the provided distribution boon, install **mpich** in your device, preferrably with Linux. Execute the following commands to install:
+
+*Fedora*: `sudo dnf install mpich mpich-devel` and `module load mpi/mpich-$arch`, where $arch should be replaced with the architecture in your device, for instance `x86_64`. You can check out the architecture with `uname -m`.
+
+*Ubuntu/Debian*: `sudo apt install mpich libmpich-dev`
+
 === Build
 
 Compile the program with the following command
@@ -83,21 +90,23 @@ Compile the program with the following command
 
 [[usage]]
 === Usage
-To execute the program, first make sure you have a correctly formatted job file (like the exmaple shown above) with the mentioned plate files, preferrably in the jobs/ folder. If not, remember to specify the folder path when running the execution command, which has the format:
+To execute the program, first make sure you have a correctly formatted job file (like the example shown above) with the mentioned plate files, preferrably in the jobs/ folder. If not, remember to specify the folder path when running the execution command, which has the format:
 
-`bin/pthread {folder_with_job}/{job_file_name}`
+`mpiexec -np {amount_of_processes} bin/omp_mpi {folder_with_job}/{job_file_name}`
 
-An example execution command could be: `bin/pthread jobs/job001b/job001.txt`
+An example execution command could be: `mpiexec -np 3 bin/omp_mpi jobs/job002b/job002.txt`
 
-*IMPORTANT*: Note that this program has been adapted to allow concurrency in the simulation, thus, a second argument can be added to the execution command to specify the amount of threads to use. The program will run with a default amount if not specified.
+Note that this program has been adapted to allow concurrency in the simulation, thus, a second argument can be added to the execution command to specify the amount of threads to use. The program will run with a default amount if not specified.
 
-`bin/pthread {folder_with_job}/{job_file_name} {thread_count}`
+`mpiexec -np {amount_of_processes} bin/omp_mpi {folder_with_job}/{job_file_name} {thread_count}`
 
-Add a valid amount to the command like so: `bin/pthread jobs/job001b/job001.txt 10` This way, the simulation will execute with 10 threads.
+Add a valid amount to the command like so: `bin/omp_mpi jobs/job001b/job001.txt 10` This way, the simulation will execute with 10 threads. Alternatively, `mpiexec -np 3 bin/omp_mpi jobs/job001b/job001.txt 2` will run the program with 3 processes: 2 working on plates simulation and 1 directing them, and each of the worker processes will have 2 threads available for plates' processing.
 
 Furthermore, note that once the simulation ends, updated plate files with the number of states simulated in their names, written in binary, will be stored in the same directory as the job file. The .tsv report of the job will be stored in the results/ folder, with the same name as the job.
 
 For example, jobs/job002b/job002.txt, with a request to simulate plate001.bin (and others), would result in the creation of a plate001-12.bin (12 states until equilibrium) file in jobs/job002b/, and job002.tsv report in reports/.
+
+Finally, using the `make run` command will execute the program with 3 processes, default amount of threads for each, and job002 will be processed.
 
 === Output examples
 If the program executed without errors, a message indicating where the report file was stored will be shown in terminal.
@@ -111,6 +120,9 @@ If the program executed without errors, a message indicating where the report fi
 `Completed job in: {seconds}s`
 
 `Results stored in: reports/job###.tsv`
+
+`[PROCESS 0] done`
+
 ====
 
 However, if certain criteria are met, error messages could show as well. The following table illustrates the possible outcomes.
@@ -118,7 +130,7 @@ However, if certain criteria are met, error messages could show as well. The fol
 [%autowidth]
 |===
 s|_Error code_ s|_Error_ s|_Output Message_
-|2 | *No job file specified* m|`usage: bin/pthread job_file_path thread_count (count optional)`
+|2 | *No job file specified* m|`usage: bin/omp_mpi job_file_path thread_count (count optional)`
 |3 | *Invalid thread count (negative, 0 or greater than max threads)* m|`Error: Invalid thread count (0 < thread_count <= 32000)`
 |11 | Allocation for job struct failed m|`Error: Memory for job could not be allocated`
 |11 | Allocation for plates array failed m|`Error: Memory for plates could not be allocated`
@@ -134,10 +146,11 @@ s|_Error code_ s|_Error_ s|_Output Message_
 |23 | *Rows and cols values in plate file incorrect or failed to store* m|`Error: Rows and cols could not be read`
 |24 | Plate output file's path could not be built m|`Error: Could not build output file name`
 |25 | Plate output file could not be opened m|`Error: Could not open output file`
-|31 | Shared data could not be initialzed m|`Error: Could not initialize shared data for plate ##`
-|32 | Thread team could not be created m|`Error: Could not create thread team for plate ##`
-|33 | Thread could not be created m|`Error: could not create thread ##`
-|## | Threads failed to join (## is amount that failed to join) m|`Error: could not join thread ##`
+|31 | MPI could not be initialzed m|`Error: could not initialize MPI`
+|32 | Could not set process number for MPI wrapper m|`Error: could not get MPI rank`
+|33 | Could not set process count for MPI wrapper m|`Error: could not get MPI size`
+|34 | Could not send message to another process m|`Error: could not send data`
+|35 | Could not receive message from another process m|`Error: could not receive data`
 
 |===
 
