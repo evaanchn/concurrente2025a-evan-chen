@@ -7,75 +7,38 @@
 :toc:
 :xrefstyle: short
 
-[[analysis]]
-== Initial Analysis (Brainstorm)
-To add concurrency to the simulation, static mapping by blocks was considered as a good choice, preferrably with thread reuse. Thus, the distribution of rows had to follow the formula, and the threads had to coordinate with each other via barriers. The following figure is an informal sketch of the creation of the thread team and the coordination between the worker threads.
-
-[#concurrency_design]
-.Informal sketch of concurrency with static map 
-image::heat_simul_static_design.svg[align="center"]
-
 
 [[object_design]]
 == Object-oriented design
-The class diagram for the program can be found below, where the private_data and shared_data structs are used by threads in the invocation of the equilibrate_plate() function to properly equilibrate the plate.
+The class diagram for the program can be found below, with updated classes. Notice that the threads related structs were removed, given that declarative concurrency made them irrelevant to this version of the heat simulation. On the other hand, a new struct was added for distribution between processes: mpi_t. This register stores the process's rank or number, and the total amount of processes involved in the execution. It also contains wrapper functions to send and receive messages between processes. To adjust for distribution, separate procedures for master and worker processes were added to job.
 
 [#class_diagram]
 .UML class diagram for the program
-image::heat_simul_static_uml.svg[align="center"]
-
-NOTE: 
+image::omp_mpi_class_diagram.svg[align="center"]
 
 [[concurrent_design]]
 == Concurrent Design
-=== Memory distribution
-<<distribution_example>> is an example of how rows would be distributed for a matrix with 6 rows. Excluding the first and last row, we have 4 rows to evaluate. If two threads were solicited, then each would take half of the plate: upper two rows (1-2) and bottom two (3-4). Note that thread_id was not included in this visualization.
+The concurrent design for simulating heat transfer of plates remained the same, but implemented with Open MP, which will expand the static map by block approach implemented in the previous version: the combination of boolean flags that will indicate if the plate is equilibrated, the incrementation of iterations recorded and switching of matrices, and the barrier assuring threads start new states at the same time, are all summarized into omp declarations.
 
-[#distribution_example]
-.Example of distributions
-image::heat_simul_static_uml.svg[align="center"]
+[#concurrent_static_design]
+.Static map by blocks implemented
+image::heat_simul_static_design.svg[align="center"]
 
-The distribution of rows, as mentioned before, is done using the formula for static mapping by blocks:
+[[distributed_design]]
+== Distribution design
 
-[latexmath]
-++++
-\begin{align*}
-\text{start}(i, D, w) &= i \left\lfloor \frac{D}{w} \right\rfloor + \min \left(i, \, \text{mod}(D, w) \right) \\
-\text{finish}(i, D, w) &= \text{start}(i+1, D, w)
-\end{align*}
-++++
+To implement a dynamic distribution of work between workers, the following design was thought up.
 
-Where the get_finish_row() formula applies the start(i, D, w) calculation, but it's invoked with the i+1, in a way that the finishing row set for the thread i is the start of the next one (threads finish before stepping into another thead's region).
+[#dist_design]
+.Static map by blocks implemented
+image::distribution_visualization.svg[align="center"]
 
+NOTE: A simulation of job020, with 11 plates, in the Poas cluster, with 6 nodes available to act as workers and 1 as master, is used as an example to illustrate the distribution design implemented. Outlined arrows indicate communications between processes, where the end of the arrow points at the receiving process.
 
-[[threads_pseudo]]
-== Pseudocode
-=== Changes to simulation
-First of all, the simulation-related procedure with the most changes was equilibrate_plate(), which now received an extra parameter thread_count. It is in charge of setting private and shared data, before actually simulating the plate. The pseudocode can be found below
+First of all, it was decided that the first process (with rank 0), would be the master, in charge of delegating plates to other processes for heat transfer simulation. Given that each process has their copy of the plates array (distribution begins until the simulation part), master and workers communicate by sending plates indexes and results: master first assigns one plate to each worker, then waits for results, capturing index and state to update in its own record. If it is still necessary to simulate plates, it assigns another plate index to the process it last received a result from, since it knows it will be free.
 
-[source,delphi]
-----
-include::pseudocode/simulate.pseudo[]
-----
+Once all plates have been updated and the last process has finished doing the last plate, the master process signals the other processes to end with the plates count. The master process finishes by reporting the results in a file.
 
-=== Thread related
-The following pseudocode is related to the described threads manipulation procedures.
+In <<dist_design>> the current index is 6, so the first process to finish and send a result back, will be assigned the plate at index 6. This shall continue until plate at index 10 is finished by some process, at which point the stop signals will be sent to all processes.
 
-[source,delphi]
-----
-include::pseudocode/threads.pseudo[]
-----
-
-=== Equilibrate plate and equilibrate rows
-Finally, we can look at the procedure called by each thread: equilibrate_plate(), which is in charge of simulating the heat transfer of a designated section in the plate, and determines if said area was equilibrated. It calls equilibrate_rows() to simulate the rows, and then manages the rest of the concurrency control.
-
-Refer to the initial analysis section for a more visual representation of the equilibrate_plate() function.
-
-[source,delphi]
-----
-include::pseudocode/equilibrate_rows.pseudo[]
-----
-
-[[Results]]
-== Results
-This implementation proved to be the most efficient for the simulation, tielding the best execution times. This is likely because of the nature of the problem, For more information, refer to the report regarding optimizations.
+Note that if there are more processes than plates to simulate, only plates amount of working processes will be needed. The rest will halt once the m
