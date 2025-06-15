@@ -28,10 +28,10 @@ int analyze_arguments(int argc, char* argv[], uint64_t* thread_count);
 int main(int argc, char* argv[]) {
   // Initialize MPI
   if (MPI_Init(&argc, &argv) != MPI_SUCCESS) {
-    perror("Error: could not init MPI");
+    perror("Error: could not initialize MPI");
     return ERR_INIT_MPI;
   }
-  double start_time = MPI_Wtime();  // Record MPI start time
+  // double start_time = MPI_Wtime();  // Record MPI start time
 
   // Assume default amount of threads first
   uint64_t thread_count = sysconf(_SC_NPROCESSORS_ONLN);
@@ -40,8 +40,8 @@ int main(int argc, char* argv[]) {
 
   if (error == EXIT_SUCCESS) error = simulate(argv[1], thread_count);
 
-  double end_time = MPI_Wtime();  // Record MPI end time
-  printf("Elapsed time MPI: %lf seconds\n", end_time - start_time);
+  // double end_time = MPI_Wtime();  // Record MPI end time
+  // printf("Elapsed time MPI: %lf seconds\n", end_time - start_time);
 
   mpiwrapper_finalize();
 
@@ -62,7 +62,7 @@ int analyze_arguments(int argc, char* argv[], uint64_t* thread_count) {
   } else if (argc < 2) {
     // Inform usage to user
     fprintf(stderr,
-        "usage: bin/pthread job_file_path thread_count (count optional)\n");
+        "usage: bin/omp_mpi job_file_path thread_count (count optional)\n");
     error = ERR_NO_JOB_FILE;
   }
   return error;
