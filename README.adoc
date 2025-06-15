@@ -49,13 +49,24 @@ s|# s|Id s|Tipo s|Descripcion
 |4 m|link:omp/omp_stats[omp_stats] | Ejemplo de clase |En un programa para obtener estadisticos, se usa omp para paralelizar distintos procesos.
 |5 m|link:omp/omp_mergesort[omp_mergesort] | Ejemplo de clase |Se paraleliza el mergesort con OpenMP.
 |===
+
+== MPI
+[%autowidth]
+|=== 
+s|# s|Id s|Tipo s|Descripcion
+|1 m|link:mpi/mpi_hello[mpi_hello] | Ejemplo de clase |Saludar desde multiples procesos con MPI.
+|2 m|link:mpi/mpi_wrapper[mpi_wrapper] | Ejemplo de clase |Se crea un wrapper para MPI, con funciones para obtener el numero de proceso, cantidad de procesos, mandar mensajes y recibir mensajes.
+|3 m|link:mpi/mpi_hybrid_distr_arg[mpi_hybrid_distr_arg] | Ejemplo de clase |Se distribuye un rango especificado por el usuario entre procesos y cada proceso dstribuye su parte asignada por bloques a hilos con OMP
+|===
+
 == Tareas
 [%autowidth]
 |=== 
 s|# s|Id s|Titulo s|Descripcion
 |1 |link:homeworks/serial[serial] |Simulacion de calor (serial) |Se simula el proceso de equilibrio de laminas, reportando los parametros utilizados, la cantidad de estados transcurridas y la duracion de simulacion.
-|2 |link:homeworks/pthreads[pthreads] |Simulacion de calor (concurrente) |Se habilita la opcion de utilizar hilos de ejecucion durante la misma simulacion de calor resuelta en la primera tarea.
-|3 |link:homeworks/optimized[pthreads] |Simulacion de calor (optimizado) |Se optimizan la version serial y concurrente de la simulacion de calor.
+|2 |link:homeworks/pthreads[pthread] |Simulacion de calor (concurrente) |Se habilita la opcion de utilizar hilos de ejecucion durante la misma simulacion de calor resuelta en la primera tarea.
+|3 |link:homeworks/optimized[optimized] |Simulacion de calor (optimizado) |Se optimizan la version serial y concurrente de la simulacion de calor.
+|4 |link:homeworks/omp_mpi[omp_mpi] |Simulacion de calor (distribuido) |Se agrega distribucion a la simulacion de calor.
 |===
 
 == Glosario
@@ -102,11 +113,11 @@ s|# s|Id s|Titulo s|Descripcion
 
     21. *Cluster de computadores*: Consiste en una red de computadoras identicos en configuracion en hardware y software, tal que se pueden ejecutar programas de forma distribuida en paralelo y sin modificaciones.
 
+    22. *Comunicación punto a punto entre procesos*: Comunicacion entre dos procesos especificos, uno que envia y otro que recibe, sea de uno especifico que envia o alguno aleatorio. Puede ser bloqueante o no bloqueante.
+
+    23. *Comunicación colectiva entre procesos*: Comunicacion colectiva donde todos los procesos deben de estar involucrados. Es como anunciar algo a un grupo, y todos reciben el mismo anuncio.
+
     Candado de lectura y escritura.
-
-    Comunicación punto a punto entre procesos.
-
-    Comunicación colectiva entre procesos.
 
     Reducción.
 
