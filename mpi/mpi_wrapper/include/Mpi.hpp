@@ -171,7 +171,7 @@ class Mpi {
   void receive(std::vector<Type>& values, const int capacity
       , const int fromProcess = MPI_ANY_SOURCE, const int tag = MPI_ANY_TAG) {
     // Match vector's capacity if necessary
-    if (values.size() < capacity) values.resize(capacity);
+    if (static_cast<int>(values.size()) < capacity) values.resize(capacity);
     return this->receive(values.data(), capacity, fromProcess, tag, "vector");
   }
 
