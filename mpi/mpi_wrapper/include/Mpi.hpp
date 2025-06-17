@@ -145,7 +145,7 @@ class Mpi {
   /// Send a text to another process
   void send(const std::string& text, const int toProcess, const int tag = 0) {
     // send text's array of chars
-    return this->send(text.data(), text.size(), toProcess, tag, "text");
+    return this->send(text.data(), text.size() + 1, toProcess, tag, "text");
   }
 
 
@@ -212,7 +212,7 @@ class Mpi {
 
     // int MPI_Recv(void* buff, int capacity, MPI_Datatype datatype
         // , int source, int tag, MPI_Comm comm, MPI_Status status)
-    if (MPI_Recv(&values, capacity, Mpi::map(Type())
+    if (MPI_Recv(values, capacity, Mpi::map(Type())
         , /*source*/ fromProcess, /*tag*/ tag, MPI_COMM_WORLD
         , MPI_STATUS_IGNORE) != MPI_SUCCESS) {
       throw Error("could not receive " + type);
