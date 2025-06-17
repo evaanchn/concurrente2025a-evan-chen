@@ -3,11 +3,30 @@
 
 #include "Mpi.hpp"
 
+#define FIRST_PROCESS 0
+
 int main(int argc, char* argv[]) {
+
   try {
     Mpi mpi(argc, argv);
+    // Only non-first process have to wait for simulated semaphore to greet
+    if (mpi.rank() != FIRST_PROCESS) {
+      bool canGreet = false;
+      int previousProcess = mpi.rank() - 1;  // Wait for previous process
+      mpi.receive(canGreet, previousProcess);  // Wait for bytes to come
+    }
+
+    // Greet
     std::cout << "Hello from main thread of process " << mpi.rank()
         << " of " << mpi.size() << " on " << mpi.getHostname() << std::endl;
+
+    bool nextCanGreet = true;  // Allow next process to greet
+    // Cyclic next process
+    int nextProcess = mpi.rank() + 1;
+    // Don't make last process send
+    if (nextProcess < mpi.getProcessCount()) {
+      mpi.send(nextCanGreet, nextProcess);  // Equivalent to signal(nextSem)
+    }
   } catch (const std::exception& error) {
     std::cerr << "error: " << error.what() << std::endl;
   }
