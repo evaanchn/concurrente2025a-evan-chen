@@ -57,6 +57,11 @@ s|# s|Id s|Tipo s|Descripcion
 |1 m|link:mpi/mpi_hello[mpi_hello] | Ejemplo de clase |Saludar desde multiples procesos con MPI.
 |2 m|link:mpi/mpi_wrapper[mpi_wrapper] | Ejemplo de clase |Se crea un wrapper para MPI, con funciones para obtener el numero de proceso, cantidad de procesos, mandar mensajes y recibir mensajes.
 |3 m|link:mpi/mpi_hybrid_distr_arg[mpi_hybrid_distr_arg] | Ejemplo de clase |Se distribuye un rango especificado por el usuario entre procesos y cada proceso dstribuye su parte asignada por bloques a hilos con OMP
+|4 m|link:mpi/send_recv_ord_sem[send_recv_ord_sem] | Ejemplo de clase |Se recrea el ejercicio de link:pthreads/hello_order_semaphor[hello_order_semaphor], con send y receive de MPI
+|5 m|link:mpi/send_recv_ord_itm[send_recv_ord_itm] | Ejemplo de clase |Se centralizan las impresiones de saludos, mandando cadenas de saludos al primer proceso.
+|6 m|link:mpi/send_recv_urd[send_recv_urd] | Ejemplo de clase |A diferencia del ejemplo anterior, las impresiones son en el orden de llegada de cada proceso
+|7 m|link:mpi/mpi_ping_pong[mpi_ping_pong] | Ejemplo de clase |Simula un juego de ping pong entre dos procesos
+|8 m|link:mpi/mpi_relay_race[mpi_relay_race] | Ejemplo de clase |Recrea el ejercicio de la carrera de relevo con hilos en link:pthreads/position_race[position_race], con procesos.
 |===
 
 == Tareas
