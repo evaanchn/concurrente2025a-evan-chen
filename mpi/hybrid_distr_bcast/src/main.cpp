@@ -26,61 +26,12 @@ int main(int argc, char* argv[]) {
       // Process 0 is the one that gets std::cin
       if (mpi.rank() == 0) {
         std::cin >> overall_start >> overall_finish;  // Else ask for the data
-        // Send messages to every other process
-        for (int destination = 1; destination < mpi.size(); ++destination) {
-          /*
-          * MPI can only send continuous data, i.e. arrays. If it sends
-          * pointers it won't be valid at destination. Anything with
-          * virtual or polymorphic behavior will not work in dest
-          * given that these objects will have pointers to regions in memory
-          * related to the parent class, which will not be valid in the other
-          * machine
-          */
-          // // int MPI_Send(const void* buff, int count, MPI_Datatype datatype
-          // // , int dest, int tag, MPI_Comm comm)
-          // if (MPI_Send(&overall_start, /*count*/ 1, MPI_INT, destination
-          //     , /*tag*/ 0, MPI_COMM_WORLD) != MPI_SUCCESS) {
-          //   throw Mpi::Error("could not send start", mpi);
-          // }
-          // if (MPI_Send(&overall_finish, /*count*/ 1, MPI_INT, destination
-          //     , /*tag*/ 0, MPI_COMM_WORLD) != MPI_SUCCESS) {
-          //   throw Mpi::Error("could not send end", mpi);
-          // }
-          // SENDING INDIVIDUAL VALUES
-          // mpi.send(overall_start, destination);
-          // mpi.send(overall_finish, destination);
-
-          // SENDING ARRAY
-          // const int range[2] = {overall_start, overall_finish};
-          // mpi.send(range, 2, destination);
-
-          const int range[2] = {overall_start, overall_finish};
-          mpi.send(range, 2, destination);
-        }
-      } else {
-        // If is not process 0, it only has to receive the info
-        // int MPI_Recv(void* buff, int count, MPI_Datatype datatype
-        // , int source, int tag, MPI_Comm comm, MPI_Status status)
-        // if (MPI_Recv(&overall_start, /*count*/ 1, MPI_INT
-        //     , /*source*/ 0, /*tag*/ 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE)
-        //     != MPI_SUCCESS) {
-        //   throw Mpi::Error("could not receive start", mpi);
-        // }
-        // if (MPI_Recv(&overall_finish, /*count*/ 1, MPI_INT
-        //     , /*source*/ 0, /*tag*/ 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE)
-        //     != MPI_SUCCESS) {
-        //   throw Mpi::Error("could not receive finish", mpi);
-        // }
-        // RECEIVE INDIVIDUAL VALUES
-        // mpi.receive(overall_start, 0);
-        // mpi.receive(overall_finish, 0);
-
-        // RECEIVE ARRAY
-        int range[2] = {-1, -1};
-        mpi.receive(range, 2, 0);
-        overall_start = range[0];
-        overall_finish = range[1];
       }
+
+      // Root is first process, which knows the overall start
+      // The rest will know that they receive from 0
+      mpi.broadcast(overall_start, 0);
+      mpi.broadcast(overall_finish, 0);
     }
     const int process_start = calculate_start(mpi.rank(), overall_finish
         , mpi.size(), overall_start);
@@ -108,10 +59,12 @@ int main(int argc, char* argv[]) {
       }
       const int thread_size = thread_finish - thread_start;
 
-      #pragma omp critical(print)
-      std::cout << '\t' << mpi.getHostname() << ':' << mpi.getProcessNumber()
-          << '.' << omp_get_thread_num() << ": range [" << thread_start
-          << ", " << thread_finish << "[ size " << thread_size << std::endl;
+      if (thread_start != -1 && thread_finish != -1) {
+        #pragma omp critical(print)
+        std::cout << '\t' << mpi.getHostname() << ':' << mpi.getProcessNumber()
+            << '.' << omp_get_thread_num() << ": range [" << thread_start
+            << ", " << thread_finish << "[ size " << thread_size << std::endl;
+      }
     }
   } catch (const std::exception& error) {
     std::cerr << "error: " << error.what() << std::endl;
