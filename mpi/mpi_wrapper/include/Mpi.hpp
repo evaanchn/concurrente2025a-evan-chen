@@ -229,4 +229,15 @@ class Mpi {
   inline static double wtime() {
     return MPI_Wtime();
   }
+
+ public:
+  template <typename Type>
+  void broadcast(Type& value, const int fromProcess) {
+    // int MPI_Bcast(void *buffer, int count, MPI_DataType datatype, int root,
+        // MPI_Comm comm);
+    if (MPI_Bcast(&value, /*count*/ 1, Mpi::map(value), /*root*/ fromProcess,
+          MPI_COMM_WORLD) != MPI_SUCCESS) {
+      throw Error("could not broadcast");
+    }
+  }
 };
