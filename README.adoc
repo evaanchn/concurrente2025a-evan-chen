@@ -62,8 +62,10 @@ s|# s|Id s|Tipo s|Descripcion
 |6 m|link:mpi/send_recv_ord_itm[send_recv_ord_itm] | Ejemplo de clase |Se centralizan las impresiones de saludos, mandando cadenas de saludos al primer proceso.
 |7 m|link:mpi/send_recv_urd[send_recv_urd] | Ejemplo de clase |A diferencia del ejemplo anterior, las impresiones son en el orden de llegada de cada proceso
 |8 m|link:mpi/mpi_ping_pong[mpi_ping_pong] | Ejemplo de clase |Simula un juego de ping pong entre dos procesos
-|9 m|link:mpi/mpi_relay_race[mpi_relay_race] | Ejemplo de clase |Recrea el ejercicio de la carrera de relevo con hilos en link:pthreads/position_race[position_race], con procesos.\
+|9 m|link:mpi/mpi_relay_race[mpi_relay_race] | Ejemplo de clase |Recrea el ejercicio de la carrera de relevo con hilos en link:pthreads/position_race[position_race], con procesos.
 |10 m|link:mpi/hybrid_distr_bcast[hybrid_distr_bcast] | Ejemplo de clase |Modifica el link:mpi/mpi_hybrid_distr_stdin[mpi_hybrid_distr_stdin] para que los procesos usen broadcast para capturar los limites del rango por entrada estandar con broadcast.
+|11 m|link:mpi/mpi_lucky_number_reduce[mpi_lucky_number_reduce] | Ejemplo de clase |Se emplea reduce de MPI para reportar el minimo, maximo y promedio de los numeros de suerte creado por procesos diversos.
+|12 m|link:mpi/mpi_lucky_number_who[mpi_lucky_number_who] | Ejemplo de clase |Modifica el programa link:mpi/mpi_lucky_number_reduce[mpi_lucky_number_reduce] tal que cada proceso reporta si su numero es el menor o mayor de los escogidos.
 |===
 
 == Tareas
