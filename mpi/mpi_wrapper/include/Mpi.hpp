@@ -240,4 +240,16 @@ class Mpi {
       throw Error("could not broadcast");
     }
   }
+
+ public:
+  template <typename Type>
+  void reduce(const Type& value, Type& result, const int operation,
+      const int toProcess) {
+    // int MPI_Reduce(const void *sendbuf, void *recvbuf, int count,
+    //   MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm);
+    if (MPI_Reduce(&value, &result, /*count*/ 1,
+      Mpi::map(value), operation, toProcess, MPI_COMM_WORLD) != MPI_SUCCESS) {
+      throw Error("could not reduce");
+    }
+  }
 };
