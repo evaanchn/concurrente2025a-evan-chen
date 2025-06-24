@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 
 void generate_lucky_statistics(Mpi& mpi) {
   // TODO(you): Generate my lucky number
-  const int my_lucky_number = -1;
+  const int my_lucky_number = UniformRandom<int>().between(0, 99);
 
   out1 << "my lucky number is " << my_lucky_number << std::endl;
 
@@ -30,10 +30,14 @@ void generate_lucky_statistics(Mpi& mpi) {
   int all_max = -1;
   int all_sum = -1;
 
-  // TODO(you): Update distributed statistics from processes' lucky numbers
+  mpi.reduce(my_lucky_number, all_min, MPI_MIN, /*root*/ 0);
+  mpi.reduce(my_lucky_number, all_max, MPI_MAX, /*root*/ 0);
+  mpi.reduce(my_lucky_number, all_sum, MPI_SUM, /*root*/ 0);
 
-  const double all_average = static_cast<double>(all_sum) / mpi.size();
-  out1 << "all minimum = " << all_min << std::endl;
-  out1 << "all average = " << all_average << std::endl;
-  out1 << "all maximum = " << all_max << std::endl;
+  if (mpi.rank() == 0) {
+    const double all_average = static_cast<double>(all_sum) / mpi.size();
+    out1 << "all minimum = " << all_min << std::endl;
+    out1 << "all average = " << all_average << std::endl;
+    out1 << "all maximum = " << all_max << std::endl;
+  }
 }

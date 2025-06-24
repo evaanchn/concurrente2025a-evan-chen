@@ -14,7 +14,7 @@ class UniformRandom {
  private:
   /// Try to get a seed from hardware, if available
   std::random_device::result_type seed;
-  /// Generates pseudo-randon numbers using the Mersenne-Twister algoritym
+  /// Generates pseudo-randon numbers using the Mersenne-Twister algorithm
   std::mt19937 randomEngine;
 
  public:
