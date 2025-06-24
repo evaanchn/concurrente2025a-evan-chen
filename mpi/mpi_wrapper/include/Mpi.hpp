@@ -242,6 +242,12 @@ class Mpi {
   }
 
  public:
+  /// @brief Reduces values from processes into a result, following operation.
+  /// @tparam Type Data type.
+  /// @param value Value from process sent to reduce.
+  /// @param result The concentrated data that will be reduced for toProcess.
+  /// @param operation How values will be reduced. E.g. min, max, sum.
+  /// @param toProcess Process that will receive reduced value
   template <typename Type>
   void reduce(const Type& value, Type& result, const int operation,
       const int toProcess) {
@@ -249,6 +255,19 @@ class Mpi {
     //   MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm);
     if (MPI_Reduce(&value, &result, /*count*/ 1,
       Mpi::map(value), operation, toProcess, MPI_COMM_WORLD) != MPI_SUCCESS) {
+      throw Error("could not reduce");
+    }
+  }
+
+  /// @brief Reduces values from processes into a result, following operation.
+  /// Different from reduce, since it broadcasts reduced result back to process
+  /// @see reduce
+  template <typename Type>
+  void allReduce(const Type& value, Type& result, const int operation) {
+    // int MPI_AllReduce(const void *sendbuf, void *recvbuf, int count,
+    //   MPI_Datatype datatype, MPI_Comm comm);
+    if (MPI_Allreduce(&value, &result, /*count*/ 1,
+      Mpi::map(value), operation, MPI_COMM_WORLD) != MPI_SUCCESS) {
       throw Error("could not reduce");
     }
   }
