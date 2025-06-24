@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 }
 
 void generate_lucky_statistics(Mpi& mpi) {
-  // TODO(you): Generate my lucky number
+  // Generate my lucky number
   const int my_lucky_number = UniformRandom<int>().between(0, 99);
 
   out1 << "my lucky number is " << my_lucky_number << std::endl;
