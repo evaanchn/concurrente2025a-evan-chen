@@ -35,7 +35,9 @@ s|# s|Id s|Tipo s|Descripcion
 |21 m|link:taskc/network_simul_packet_loss2[network_simul_packet_loss2] | Ejemplo en clase |Similar al link:taskc/network_simul_packet_loss[network_simul_packet_loss], pero se traslada al ensamblador tal que primero se ensambla y luego se reparte.
 |22 m|link:taskc/network_simul_producers[network_simul_producers] | Ejemplo en clase |Se modifica el codigo de link:taskc/network_simul_packet_loss2[network_simul_packet_loss2] tal que se pueden solicitar multiples productores.
 |23 m|link:taskc/network_simul_bound[network_simul_bound] | Ejemplo en clase |Se modifica el codigo de link:taskc/network_simul_producers[network_simul_producers], de forma que las colas pueden ser acotadas.
-|24 m|link:taskc/taskc_patterns/readme.adoc[taskc_patterns] | Ejemplo en clase |Se analizan varios patrones simples relacionados al control de concurrencia.
+|24 m|link:taskc/taskc_patterns[taskc_patterns] | Ejemplo en clase |Se analizan varios patrones simples relacionados al control de concurrencia.
+|25 m|link:taskc/dining_philosophers[dining_philosophers] | Ejemplo en clase |Representa un problema donde filosofos piensan y comen, con palillos compartidos. Se deben de coordinar tal que no ocurra una situacion donde hay deadlock y se impide la ingestion para los filosofos.
+|26 m|link:pthreads/mist_cond_var[mist_cond_var] | Ejemplo en clase |Se hace un rastreo de la ejecucion de un programa que simula una barrera con una variable de condicion.
 |===
 
 == Open MP
