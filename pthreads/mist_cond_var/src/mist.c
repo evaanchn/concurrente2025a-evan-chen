@@ -1,3 +1,6 @@
+// Copyright 2021 Jeisson Hidalgo <jeisson.hidalgo@ucr.ac.cr> CC-BY 4.0
+// Commented by Evan Chen
+
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,13 +16,16 @@ typedef struct {
 void mist_init(mist_t* mist, unsigned max) {
   mist->counter = 0;
   mist->max = max;
-  pthread_mutex_init(&mist->mutex, NULL);
+  // Main thread loses CPU in inits
+  pthread_mutex_init(&mist->mutex, NULL);  // Initialize mutex with 1
   pthread_cond_init(&mist->cond_var, NULL);
 }
 
 void mist_destroy(mist_t* mist) {
   mist->counter = 0;
+  // Destroy waiting queue for mutex
   pthread_mutex_destroy(&mist->mutex);
+  // Destroy waiting queue for condition variable
   pthread_cond_destroy(&mist->cond_var);
 }
 
@@ -28,6 +34,7 @@ void mistery(mist_t* mist) {
   ++mist->counter;
   if (mist->counter < mist->max) {
     // Preferred: while ( pthread_cond_wait(...) != 0 ) /* empty */;
+    // Condition variable will stop every thread
     pthread_cond_wait(&mist->cond_var, &mist->mutex);
   } else {
     mist->counter = 0;
@@ -51,6 +58,7 @@ int main() {
 
   pthread_t* workers = malloc(3 * sizeof(pthread_t));
   for (size_t index = 0; index < 3; ++index) {
+    // Places thread ID in corresponding space. Sets register file values
     pthread_create(&workers[index], NULL, run, (void*)index);
   }
 
