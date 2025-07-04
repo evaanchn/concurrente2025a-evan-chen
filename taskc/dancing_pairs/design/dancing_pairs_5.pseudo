@@ -1,7 +1,7 @@
 procedure main()
-  shared male_queue := semaphore(1)
-  shared female_queue := semaphore(1)
-  shared room_barrier := semaphore(2)
+  shared male_queue := semaphore(2)
+  shared female_queue := semaphore(2)
+  shared room_barrier := semaphore(4)
   shared multiplex := semaphore(2 * room_capacity)
   read shared const room_capacity as int
 
