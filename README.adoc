@@ -38,6 +38,9 @@ s|# s|Id s|Tipo s|Descripcion
 |24 m|link:taskc/taskc_patterns[taskc_patterns] | Ejemplo en clase |Se analizan varios patrones simples relacionados al control de concurrencia.
 |25 m|link:taskc/dining_philosophers[dining_philosophers] | Ejemplo en clase |Representa un problema donde filosofos piensan y comen, con palillos compartidos. Se deben de coordinar tal que no ocurra una situacion donde hay deadlock y se impide la ingestion para los filosofos.
 |26 m|link:pthreads/mist_cond_var[mist_cond_var] | Ejemplo en clase |Se hace un rastreo de la ejecucion de un programa que simula una barrera con una variable de condicion.
+|27 m|link:pthreads/readers_writers[readers_writers] | Ejemplo en clase |Consiste en un ejercicio donde se combinan mecanismos de control de concurrencia para limitar acceso a un medio cuando se escribe en el. pero no impedir la concurrencia cuando se lee. 
+|28 m|link:taskc/build_h2o[build_h2o] | Ejemplo en clase |Se usa mutex y barrera para lograr la formacion propia de h2o, controlando la llegada a fusion de moleculas de hidrogeno y oxigeno.
+|29 m|link:taskc/dancing_partners[dancing_partners] | Ejemplo en clase |Se varia el control de entrada a una pista de baile a traves de 5 versiones, mediante la combinacion de mecanismos de control de concurrencia y patrones. 
 |===
 
 == Open MP
@@ -128,9 +131,9 @@ s|# s|Id s|Titulo s|Descripcion
 
     23. *Comunicación colectiva entre procesos*: Comunicacion colectiva donde todos los procesos deben de estar involucrados. Es como anunciar algo a un grupo, y todos reciben el mismo anuncio.
 
-    Candado de lectura y escritura.
+    24. *Candado de lectura y escritura*: Es un candado para controlar lectura y escritura: se puede adquirir un candado de lectura si no hay escritores o escritores bloqueados. En otras palabras, permite escritura unica, al mismo tiempo que posibilita lectura simultanea si no hay escritura.
 
-    Reducción.
+    25. *Reducción*: Se refiere a la reduccion del proceso de "combinacion" de varios estados de una variable, que se puede llevar a cabo en paralelo, posible en la concurrencia declarativa. Se puede tratar sobre encontrar el maximo, minimo, sumatoria, productoria, etc. 
 
 === Extra
 
