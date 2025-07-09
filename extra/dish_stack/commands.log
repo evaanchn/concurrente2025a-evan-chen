@@ -1,999 +1,999 @@
-    1  2025-07-09 09:50:37 make clean
-    2  2025-07-09 09:50:37 make
-    3  2025-07-09 09:50:37 make clean
-    4  2025-07-09 09:50:37 make
-    5  2025-07-09 09:50:37 ll
-    6  2025-07-09 09:50:37 git pull git@github.com:5n4v3/stack_underflow.git
-    7  2025-07-09 09:50:37 git clone git@github.com:5n4v3/stack_underflow.git
-    8  2025-07-09 09:50:37 ssh-keygen -t ed25519 -C "evan.chen@ucr.ac.cr"
-    9  2025-07-09 09:50:37 eval "$(ssh-agent -s)"
-   10  2025-07-09 09:50:37 ssh-add ~/.ssh/id_ed25519
-   11  2025-07-09 09:50:37 cat ~/.ssh/id_ed25519.pub
-   12  2025-07-09 09:50:37 git clone git@github.com:5n4v3/stack_underflow.git
-   13  2025-07-09 09:50:37 ssh -T git@github.com
-   14  2025-07-09 09:50:37 cat ~/.ssh/id_ed25519.pub
-   15  2025-07-09 09:50:37 cd omp_mergesort/
-   16  2025-07-09 09:50:37 make test
-   17  2025-07-09 09:50:37 make clean debug
-   18  2025-07-09 09:50:37 make clean debug && time  bin/omp_mergesort 5000000 16 0
-   19  2025-07-09 09:50:37 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
-   20  2025-07-09 09:50:37 make clean test
-   21  2025-07-09 09:50:37 make clean debug && time  bin/omp_mergesort 5000000 16 0
-   22  2025-07-09 09:50:37 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
-   23  2025-07-09 09:50:37 make clean test
-   24  2025-07-09 09:50:37 make clean debug && time  bin/omp_mergesort 5000000 16 0
-   25  2025-07-09 09:50:37 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
-   26  2025-07-09 09:50:37 make clean test
-   27  2025-07-09 09:50:37 make clean debug && time  bin/omp_mergesort 5000000 16 0
-   28  2025-07-09 09:50:37 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
-   29  2025-07-09 09:50:37 make clean test
-   30  2025-07-09 09:50:37 make clean debug && time  bin/omp_mergesort 5000000 16 0
-   31  2025-07-09 09:50:37 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
-   32  2025-07-09 09:50:37 make clean test
-   33  2025-07-09 09:50:37 make clean debug && time  bin/omp_mergesort 5000000 16 0
-   34  2025-07-09 09:50:37 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
-   35  2025-07-09 09:50:37 make clean test
-   36  2025-07-09 09:50:37 make clean debug && time  bin/omp_mergesort 5000000 16 0
-   37  2025-07-09 09:50:37 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
-   38  2025-07-09 09:50:37 make clean test
-   39  2025-07-09 09:50:37 make clean debug && time  bin/omp_mergesort 5000000 16 0
-   40  2025-07-09 09:50:37 make clean release && perf stat  bin/omp_mergesort 50000000 32 0
-   41  2025-07-09 09:50:37 cd ..
-   42  2025-07-09 09:50:37 cd  omp_stats
-   43  2025-07-09 09:50:37 make test
-   44  2025-07-09 09:50:37 make bench
-   45  2025-07-09 09:50:37 git add .
-   46  2025-07-09 09:50:37 git status
-   47  2025-07-09 09:50:37 git commit -m "omp/omp
-   48  2025-07-09 09:50:37 git add omp/
-   49  2025-07-09 09:50:37 git status
-   50  2025-07-09 09:50:37 git commit -m "omp/omp_mergesort: Fixed results analysis"
-   51  2025-07-09 09:50:37 git add .
-   52  2025-07-09 09:50:37 git commit -m "README: Added condition variable and cluster definitions"
-   53  2025-07-09 09:50:37 git push
-   54  2025-07-09 09:50:37 git checkout main
-   55  2025-07-09 09:50:37 git pull
-   56  2025-07-09 09:50:37 git branch
-   57  2025-07-09 09:50:37 git checkout Task4_Decomposer
-   58  2025-07-09 09:50:37 git checkout -b Task4_Decomposer
-   59  2025-07-09 09:50:37 git checkout main
-   60  2025-07-09 09:50:37 git fetch --prune
-   61  2025-07-09 09:50:37 git pull 
-   62  2025-07-09 09:50:37 make clean
-   63  2025-07-09 09:50:37 git branch
-   64  2025-07-09 09:50:37 git checkout -b Task4.0_Decomposer
-   65  2025-07-09 09:50:37 make lint
-   66  2025-07-09 09:50:37 cd paralela25a-stockholm_syndrome/
-   67  2025-07-09 09:50:37 cd web_server_11/
-   68  2025-07-09 09:50:37 code .
-   69  2025-07-09 09:50:37 cd ..
-   70  2025-07-09 09:50:37 cd stack_underflow/
-   71  2025-07-09 09:50:37 cd projects/
-   72  2025-07-09 09:50:37 code .
-   73  2025-07-09 09:50:37 make clean release run
-   74  2025-07-09 09:50:37 make lint
-   75  2025-07-09 09:50:37 make doc
-   76  2025-07-09 09:50:37 git add .
-   77  2025-07-09 09:50:37 cd web_server_11/
-   78  2025-07-09 09:50:37 git pull
-   79  2025-07-09 09:50:37 git main
-   80  2025-07-09 09:50:37 git branch
-   81  2025-07-09 09:50:37 git checkout main
-   82  2025-07-09 09:50:37 git pull
-   83  2025-07-09 09:50:37 make clean release run
-   84  2025-07-09 09:50:37 cd ..
-   85  2025-07-09 09:50:37 cd paralela25a-stockholm_syndrome/
-   86  2025-07-09 09:50:37 cd web_server/
-   87  2025-07-09 09:50:37 make clean release run
-   88  2025-07-09 09:50:37 make run
-   89  2025-07-09 09:50:37 make clean && make asan run
-   90  2025-07-09 09:50:37 make lint
-   91  2025-07-09 09:50:37 sudo dnf install gtest gtest-devel
-   92  2025-07-09 09:50:37 make
-   93  2025-07-09 09:50:37 ./runtests
-   94  2025-07-09 09:50:37 ./runTests
-   95  2025-07-09 09:50:37 make
-   96  2025-07-09 09:50:37 ./runTests
-   97  2025-07-09 09:50:37 make
-   98  2025-07-09 09:50:37 make clean
-   99  2025-07-09 09:50:37 make
-  100  2025-07-09 09:50:37 ./runTests
-  101  2025-07-09 09:50:37 make
-  102  2025-07-09 09:50:37 make clean
-  103  2025-07-09 09:50:37 make
-  104  2025-07-09 09:50:37 cd tests/gtests/
-  105  2025-07-09 09:50:37 git clone https://github.com/google/googletest.git
-  106  2025-07-09 09:50:37 cd googletest
-  107  2025-07-09 09:50:37 cmake -S . -B build
-  108  2025-07-09 09:50:37 cmake --build build
-  109  2025-07-09 09:50:37 sudo cmake --install build
-  110  2025-07-09 09:50:37 cd ..
-  111  2025-07-09 09:50:37 cd..
-  112  2025-07-09 09:50:37 cd ..
-  113  2025-07-09 09:50:37 cd build
-  114  2025-07-09 09:50:37 cmake
-  115  2025-07-09 09:50:37 cmake ..
-  116  2025-07-09 09:50:37 make
-  117  2025-07-09 09:50:37 cd ..
-  118  2025-07-09 09:50:37 make
-  119  2025-07-09 09:50:37 cd build
-  120  2025-07-09 09:50:37 cmake ..
-  121  2025-07-09 09:50:37 make
-  122  2025-07-09 09:50:37 cd ..
-  123  2025-07-09 09:50:37 make test
-  124  2025-07-09 09:50:37 make clean
-  125  2025-07-09 09:50:37 make
-  126  2025-07-09 09:50:37 make test
-  127  2025-07-09 09:50:37 bin/SolarSystemTests 
-  128  2025-07-09 09:50:37 make clean
-  129  2025-07-09 09:50:37 make test
-  130  2025-07-09 09:50:37 ./bin/SolarSystemTests 
-  131  2025-07-09 09:50:37 ./bin/SolarSystemTests --gtest_list_tests
-  132  2025-07-09 09:50:37 make test
-  133  2025-07-09 09:50:37 ./bin/SolarSystemTests --gtest_list_tests
-  134  2025-07-09 09:50:37 make test
-  135  2025-07-09 09:50:37 cd stack_underflow/
-  136  2025-07-09 09:50:37 cd projects/
-  137  2025-07-09 09:50:37 cd project_02_conquest/
-  138  2025-07-09 09:50:37 code .
-  139  2025-07-09 09:50:37 cd ..
-  140  2025-07-09 09:50:37 cd paralela25a-stockholm_syndrome/
-  141  2025-07-09 09:50:37 code .
-  142  2025-07-09 09:50:37 sudo apt install libgtest-dev
-  143  2025-07-09 09:50:37 sudo dnf install libgtest-dev
-  144  2025-07-09 09:50:37 make test
-  145  2025-07-09 09:50:37 make clean
-  146  2025-07-09 09:50:37 make test
-  147  2025-07-09 09:50:37 cd /usr/src/gtest
-  148  2025-07-09 09:50:37 sudo cmake .
-  149  2025-07-09 09:50:37 sudo make
-  150  2025-07-09 09:50:37 sudo cp lib/*.a /usr/lib
-  151  2025-07-09 09:50:37 make clean test
-  152  2025-07-09 09:50:37 make test
-  153  2025-07-09 09:50:37 sudo rm /usr/lib/libgtest.a /usr/lib/libgtest_main.a
-  154  2025-07-09 09:50:37 sudo rm CMakeFiles/
-  155  2025-07-09 09:50:37 sudo rm -r  CMakeFiles/
-  156  2025-07-09 09:50:37 sudo rm -r tests/ CMakeFiles/
-  157  2025-07-09 09:50:37 sudo rm -r tests/CMakeFiles/
-  158  2025-07-09 09:50:37 sudo rm -r tests/
-  159  2025-07-09 09:50:37 sudo rm -r Testing/
-  160  2025-07-09 09:50:37 make
-  161  2025-07-09 09:50:37 make run
-  162  2025-07-09 09:50:37 make
-  163  2025-07-09 09:50:37 make run
-  164  2025-07-09 09:50:37 make
-  165  2025-07-09 09:50:37 make clean
-  166  2025-07-09 09:50:37 make
-  167  2025-07-09 09:50:37 make clean
-  168  2025-07-09 09:50:37 make
-  169  2025-07-09 09:50:37 make clean asan run
-  170  2025-07-09 09:50:37 make clean msan run 
-  171  2025-07-09 09:50:37 addr2line -e bin/project_02_conquest 0x472b49
-  172  2025-07-09 09:50:37 llvm-symbolizer --obj=bin/project_02_conquest 0x472b49
-  173  2025-07-09 09:50:37 make clean run
-  174  2025-07-09 09:50:37 make run
-  175  2025-07-09 09:50:37 make lint
-  176  2025-07-09 09:50:37 make run
-  177  2025-07-09 09:50:37 git checkout main
-  178  2025-07-09 09:50:37 git pull
-  179  2025-07-09 09:50:37 git checkout -b Task4.4-Floyd
-  180  2025-07-09 09:50:37 git checkout main
-  181  2025-07-09 09:50:37 git checkout -b TaskBack7-GalaxyClass
-  182  2025-07-09 09:50:37 cd src/backend/galaxy
-  183  2025-07-09 09:50:37 git mv SolarSystem.cpp solar_system/SolarSystem.cpp
-  184  2025-07-09 09:50:37 git mv SolarSystem.hpp solar_system/SolarSystem.hpp
-  185  2025-07-09 09:50:37 git mv SolarSystemExceptions.hpp solar_system/SolarSystemExceptions.hpp
-  186  2025-07-09 09:50:37 git mv SolarSystemVerifier.hpp solar_system/SolarSystemVerifier.hpp
-  187  2025-07-09 09:50:37 git mv SolarSystemVerifier.cpp solar_system/SolarSystemVerifier.cpp
-  188  2025-07-09 09:50:37 git mv Planet.hpp solar_system/planet/Planet.hpp
-  189  2025-07-09 09:50:37 git mv Planet.cpp solar_system/planet/Planet.cpp
-  190  2025-07-09 09:50:37 git mv Boss.cpp solar_system/planet/Boss.cpp
-  191  2025-07-09 09:50:37 git mv Boss.hpp solar_system/planet/Boss.hpp
-  192  2025-07-09 09:50:37 git add .
-  193  2025-07-09 09:50:37 git status
-  194  2025-07-09 09:50:37 git checkout main
-  195  2025-07-09 09:50:37 git checkout -b TaskBack4.4-Floyd
-  196  2025-07-09 09:50:37 make
-  197  2025-07-09 09:50:37 make run
-  198  2025-07-09 09:50:37 cd ..
-  199  2025-07-09 09:50:37 make run
-  200  2025-07-09 09:50:37 make lint
-  201  2025-07-09 09:50:37 make run
-  202  2025-07-09 09:50:37 git checkout main
-  203  2025-07-09 09:50:37 sudo dnf install MPICH
-  204  2025-07-09 09:50:37 sudo dnf install mpich
-  205  2025-07-09 09:50:37 date
-  206  2025-07-09 09:50:37 mpiexec date
-  207  2025-07-09 09:50:37 mpiexec -npp 3 date
-  208  2025-07-09 09:50:37 sudo dnf install mpich
-  209  2025-07-09 09:50:37 sudo dnf install mpich mpich-devel
-  210  2025-07-09 09:50:37 mpicc --version
-  211  2025-07-09 09:50:37 mpirun --version
-  212  2025-07-09 09:50:37 mpic++ -show
-  213  2025-07-09 09:50:37 make
-  214  2025-07-09 09:50:37 cd mpi_h
-  215  2025-07-09 09:50:37 cd mpi_hello
-  216  2025-07-09 09:50:37 make
-  217  2025-07-09 09:50:37 sudo dnf install mpich mpich-devel
-  218  2025-07-09 09:50:37 echo 'export PATH=/usr/lib64/openmpi/bin:$PATH' >> ~/.bashrc
-  219  2025-07-09 09:50:37 echo 'export LD_LIBRARY_PATH=/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
-  220  2025-07-09 09:50:37 source ~/.bashrc
-  221  2025-07-09 09:50:37 make
-  222  2025-07-09 09:50:37 sudo dnf install mpich
-  223  2025-07-09 09:50:37 make
-  224  2025-07-09 09:50:37 module load mpi/mpich-$arch
-  225  2025-07-09 09:50:37 module load mpi/mpich-x86-64
-  226  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  227  2025-07-09 09:50:37 which mpic++
-  228  2025-07-09 09:50:37 make
-  229  2025-07-09 09:50:37 bin/mpi_hello 3
-  230  2025-07-09 09:50:37 mpiexec -np 3 bin/mpi_hello
-  231  2025-07-09 09:50:37 make lint
-  232  2025-07-09 09:50:37 git add .
-  233  2025-07-09 09:50:37 git status
-  234  2025-07-09 09:50:37 git commit -m "mpi_hello: Completed in class"
-  235  2025-07-09 09:50:37 git push
-  236  2025-07-09 09:50:37 git fetch
-  237  2025-07-09 09:50:37 git branch
-  238  2025-07-09 09:50:37 git checkout TaskBack10-SimulationClass 
-  239  2025-07-09 09:50:37 cd project_02_conquest/
-  240  2025-07-09 09:50:37 make clean
-  241  2025-07-09 09:50:37 make run
-  242  2025-07-09 09:50:37 make clean asan run
-  243  2025-07-09 09:50:37 make run
-  244  2025-07-09 09:50:37 make clean
-  245  2025-07-09 09:50:37 make run
-  246  2025-07-09 09:50:37 cd optimized/pthread_optimized/
-  247  2025-07-09 09:50:37 make clean 
-  248  2025-07-09 09:50:37 make doc
-  249  2025-07-09 09:50:37 make lint
-  250  2025-07-09 09:50:37 make run
-  251  2025-07-09 09:50:37 make clean asan run
-  252  2025-07-09 09:50:37 make clean tsan
-  253  2025-07-09 09:50:37 make run
-  254  2025-07-09 09:50:37 cd ..
-  255  2025-07-09 09:50:37 cd pthread/
-  256  2025-07-09 09:50:37 make doc
-  257  2025-07-09 09:50:37 cd ..
-  258  2025-07-09 09:50:37 cd optimized/
-  259  2025-07-09 09:50:37 cd pthread_optimized/
-  260  2025-07-09 09:50:37 make clean release run
-  261  2025-07-09 09:50:37 make clean asan run
-  262  2025-07-09 09:50:37 make clean msan run
-  263  2025-07-09 09:50:37 git add .
-  264  2025-07-09 09:50:37 git commit -m "TODOs added"
-  265  2025-07-09 09:50:37 git branch
-  266  2025-07-09 09:50:37 git checkout SerialOptimizations
-  267  2025-07-09 09:50:37 cd ..
-  268  2025-07-09 09:50:37 c d..
-  269  2025-07-09 09:50:37 cd serial
-  270  2025-07-09 09:50:37 cd ..
-  271  2025-07-09 09:50:37 cd serial 
-  272  2025-07-09 09:50:37 make clean
-  273  2025-07-09 09:50:37 make clean run
-  274  2025-07-09 09:50:37 cd ..
-  275  2025-07-09 09:50:37 git checkout main
-  276  2025-07-09 09:50:37 cd optimized/pthread_optimized/
-  277  2025-07-09 09:50:37 make lint
-  278  2025-07-09 09:50:37 cd stack_underflow/projects/
-  279  2025-07-09 09:50:37 code .
-  280  2025-07-09 09:50:37 rstudio
-  281  2025-07-09 09:50:37 cd ..
-  282  2025-07-09 09:50:37 cd Downloads/
-  283  2025-07-09 09:50:37 cd proyeto_proba/
-  284  2025-07-09 09:50:37 rstudio
-  285  2025-07-09 09:50:37 cd ..
-  286  2025-07-09 09:50:37 cd paralela25a-evan-chen/
-  287  2025-07-09 09:50:37 cd homeworks/
-  288  2025-07-09 09:50:37 code .
-  289  2025-07-09 09:50:37 cd ..
-  290  2025-07-09 09:50:37 cd mpi
-  291  2025-07-09 09:50:37 code .
-  292  2025-07-09 09:50:37 cd ..
-  293  2025-07-09 09:50:37 cd stack_underflow/
-  294  2025-07-09 09:50:37 cd projects/
-  295  2025-07-09 09:50:37 code .
-  296  2025-07-09 09:50:37 cd ..
-  297  2025-07-09 09:50:37 ssh C32200@10.84.19.15
-  298  2025-07-09 09:50:37 make
-  299  2025-07-09 09:50:37 cd project_02_conquest/
-  300  2025-07-09 09:50:37 make
-  301  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  302  2025-07-09 09:50:37 make
-  303  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  304  2025-07-09 09:50:37 make
-  305  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  306  2025-07-09 09:50:37 make
-  307  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  308  2025-07-09 09:50:37 make
-  309  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  310  2025-07-09 09:50:37 make
-  311  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  312  2025-07-09 09:50:37 make
-  313  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  314  2025-07-09 09:50:37 make
-  315  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  316  2025-07-09 09:50:37 make clean asan run
-  317  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  318  2025-07-09 09:50:37 make
-  319  2025-07-09 09:50:37 make clean
-  320  2025-07-09 09:50:37 make
-  321  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  322  2025-07-09 09:50:37 make
-  323  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  324  2025-07-09 09:50:37 make
-  325  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  326  2025-07-09 09:50:37 make
-  327  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  328  2025-07-09 09:50:37 make clean asan run
-  329  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  330  2025-07-09 09:50:37 bin/project_02_conquest tests/milky_way_systems.csv print
-  331  2025-07-09 09:50:37 make clean asan run
-  332  2025-07-09 09:50:37 bin/project_02_conquest tests/milky_way_systems.csv print
-  333  2025-07-09 09:50:37 make clean asan run
-  334  2025-07-09 09:50:37 bin/project_02_conquest tests/milky_way_systems.csv print
-  335  2025-07-09 09:50:37 make clean asan
-  336  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  337  2025-07-09 09:50:37 make
-  338  2025-07-09 09:50:37 make clean
-  339  2025-07-09 09:50:37 make
-  340  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  341  2025-07-09 09:50:37 make
-  342  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  343  2025-07-09 09:50:37 make
-  344  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  345  2025-07-09 09:50:37 make
-  346  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  347  2025-07-09 09:50:37 make
-  348  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  349  2025-07-09 09:50:37 make
-  350  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  351  2025-07-09 09:50:37 make clean
-  352  2025-07-09 09:50:37 make
-  353  2025-07-09 09:50:37 bin/project_02_conquest 
-  354  2025-07-09 09:50:37 make
-  355  2025-07-09 09:50:37 bin/project_02_conquest 
-  356  2025-07-09 09:50:37 make clean
-  357  2025-07-09 09:50:37 make 
-  358  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  359  2025-07-09 09:50:37 make 
-  360  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  361  2025-07-09 09:50:37 make
-  362  2025-07-09 09:50:37 bin/project_02_conquest 
-  363  2025-07-09 09:50:37 make
-  364  2025-07-09 09:50:37 bin/project_02_conquest 
-  365  2025-07-09 09:50:37 make
-  366  2025-07-09 09:50:37 bin/project_02_conquest 
-  367  2025-07-09 09:50:37 make
-  368  2025-07-09 09:50:37 bin/project_02_conquest 
-  369  2025-07-09 09:50:37 make
-  370  2025-07-09 09:50:37 bin/project_02_conquest 
-  371  2025-07-09 09:50:37 make
-  372  2025-07-09 09:50:37 bin/project_02_conquest 
-  373  2025-07-09 09:50:37 make
-  374  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  375  2025-07-09 09:50:37 make
-  376  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  377  2025-07-09 09:50:37 make
-  378  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  379  2025-07-09 09:50:37 make
-  380  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  381  2025-07-09 09:50:37 MAKE
-  382  2025-07-09 09:50:37 make
-  383  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  384  2025-07-09 09:50:37 make clean asan run
-  385  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  386  2025-07-09 09:50:37 bin/project_02_conquest tests/andromeda_systems.csv print
-  387  2025-07-09 09:50:37 bin/project_02_conquest tests/milky_way_systems.csv print
-  388  2025-07-09 09:50:37 make
-  389  2025-07-09 09:50:37 make clean
-  390  2025-07-09 09:50:37 make
-  391  2025-07-09 09:50:37 bin/project_02_conquest tests/milky_way_systems.csv print
-  392  2025-07-09 09:50:37 make
-  393  2025-07-09 09:50:37 bin/project_02_conquest tests/milky_way_systems.csv print
-  394  2025-07-09 09:50:37 make
-  395  2025-07-09 09:50:37 make clean
-  396  2025-07-09 09:50:37 make -j8
-  397  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  398  2025-07-09 09:50:37 make -j8
-  399  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  400  2025-07-09 09:50:37 make -j8
-  401  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  402  2025-07-09 09:50:37 make -j8
-  403  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  404  2025-07-09 09:50:37 make -j8
-  405  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  406  2025-07-09 09:50:37 make 
-  407  2025-07-09 09:50:37 make clean
-  408  2025-07-09 09:50:37 make 
-  409  2025-07-09 09:50:37 bin/project_02_conquest tests/simul_systems.csv print
-  410  2025-07-09 09:50:37 make -j8
-  411  2025-07-09 09:50:37 bin/project_02_conquest 
-  412  2025-07-09 09:50:37 make -j8
-  413  2025-07-09 09:50:37 bin/project_02_conquest 
-  414  2025-07-09 09:50:37 make -j8
-  415  2025-07-09 09:50:37 bin/project_02_conquest 
-  416  2025-07-09 09:50:37 make -j8
-  417  2025-07-09 09:50:37 bin/project_02_conquest 
-  418  2025-07-09 09:50:37 make -j8
-  419  2025-07-09 09:50:37 bin/project_02_conquest 
-  420  2025-07-09 09:50:37 make -j8
-  421  2025-07-09 09:50:37 bin/project_02_conquest 
-  422  2025-07-09 09:50:37 make -j8
-  423  2025-07-09 09:50:37 bin/project_02_conquest 
-  424  2025-07-09 09:50:37 make -j8
-  425  2025-07-09 09:50:37 bin/project_02_conquest 
-  426  2025-07-09 09:50:37 make -j8
-  427  2025-07-09 09:50:37 git checkout main
-  428  2025-07-09 09:50:37 git checkout -b "TaskBack12-DisconnectionsFix"
-  429  2025-07-09 09:50:37 make -j8
-  430  2025-07-09 09:50:37 make clean
-  431  2025-07-09 09:50:37 make -j8
-  432  2025-07-09 09:50:37 bin/project_02_conquest 
-  433  2025-07-09 09:50:37 make -j8
-  434  2025-07-09 09:50:37 bin/project_02_conquest 
-  435  2025-07-09 09:50:37 make -j8
-  436  2025-07-09 09:50:37 bin/project_02_conquest 
-  437  2025-07-09 09:50:37 make -j8
-  438  2025-07-09 09:50:37 bin/project_02_conquest 
-  439  2025-07-09 09:50:37 make -j8
-  440  2025-07-09 09:50:37 bin/project_02_conquest 
-  441  2025-07-09 09:50:37 git checkout main
-  442  2025-07-09 09:50:37 git pull
-  443  2025-07-09 09:50:37 git checkout -b "Task10.1-UpdateSimmulation"
-  444  2025-07-09 09:50:37 make simulation
-  445  2025-07-09 09:50:37 git branch
-  446  2025-07-09 09:50:37 make simulation
-  447  2025-07-09 09:50:37 make
-  448  2025-07-09 09:50:37 make clean
-  449  2025-07-09 09:50:37 make simulation
-  450  2025-07-09 09:50:37 make clean
-  451  2025-07-09 09:50:37 make run
-  452  2025-07-09 09:50:37 make clean asan run
-  453  2025-07-09 09:50:37 make run
-  454  2025-07-09 09:50:37 make clean
-  455  2025-07-09 09:50:37 make run
-  456  2025-07-09 09:50:37 make clean 
-  457  2025-07-09 09:50:37 make simulation
-  458  2025-07-09 09:50:37 cd optimized/pthread_optimized/
-  459  2025-07-09 09:50:37 make doc
-  460  2025-07-09 09:50:37 git tag -a "hw03fix" -m "Added internal documentation and missing intialization"
-  461  2025-07-09 09:50:37 git push tags
-  462  2025-07-09 09:50:37 git push --tags
-  463  2025-07-09 09:50:37 make clean
-  464  2025-07-09 09:50:37 cd ..
-  465  2025-07-09 09:50:37 cd omp_mpi/
-  466  2025-07-09 09:50:37 cd pthread_optimized/
-  467  2025-07-09 09:50:37 make doc
-  468  2025-07-09 09:50:37 make clean
-  469  2025-07-09 09:50:37 cd ..
-  470  2025-07-09 09:50:37 git add .
-  471  2025-07-09 09:50:37 git commit -m "omp_mpi: Initial files (copy of hw03)"
-  472  2025-07-09 09:50:37 git push
-  473  2025-07-09 09:50:37 git pull
-  474  2025-07-09 09:50:37 cd mpi_h
-  475  2025-07-09 09:50:37 cd mpi_hybrid_distr_arg/
-  476  2025-07-09 09:50:37 make run
-  477  2025-07-09 09:50:37 cd ..
-  478  2025-07-09 09:50:37 cd mpi_wrapper/
-  479  2025-07-09 09:50:37 make run
-  480  2025-07-09 09:50:37 cd ..
-  481  2025-07-09 09:50:37 cd mpi_hello/
-  482  2025-07-09 09:50:37 make run
-  483  2025-07-09 09:50:37 mpic++
-  484  2025-07-09 09:50:37 sudo dnf install mpich
-  485  2025-07-09 09:50:37 make run
-  486  2025-07-09 09:50:37 mpic++ --version
-  487  2025-07-09 09:50:37 sudo dnf install mpich mpich-devel
-  488  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  489  2025-07-09 09:50:37 bin/mpi_hello 
-  490  2025-07-09 09:50:37 cd ..
-  491  2025-07-09 09:50:37 cd mpi_hybrid_distr_arg/
-  492  2025-07-09 09:50:37 make run
-  493  2025-07-09 09:50:37 make clean 
-  494  2025-07-09 09:50:37 make 
-  495  2025-07-09 09:50:37 make run
-  496  2025-07-09 09:50:37 make lint
-  497  2025-07-09 09:50:37 git add .
-  498  2025-07-09 09:50:37 git status
-  499  2025-07-09 09:50:37 git commit -m "mpi: Completed mpi_hybrid_distr_arg"
-  500  2025-07-09 09:50:37 cd ..
-  501  2025-07-09 09:50:37 cd mpi_wrapper/
-  502  2025-07-09 09:50:37 make run
-  503  2025-07-09 09:50:37 git add .
-  504  2025-07-09 09:50:37 git status
-  505  2025-07-09 09:50:37 git commit -m "mpi: Added custom error in wrapper"
-  506  2025-07-09 09:50:37 make
-  507  2025-07-09 09:50:37 bin/mpi_wrapper 
-  508  2025-07-09 09:50:37 cd ..
-  509  2025-07-09 09:50:37 cd mpi_h
-  510  2025-07-09 09:50:37 cd mpi_hybrid_distr_arg/
-  511  2025-07-09 09:50:37 make
-  512  2025-07-09 09:50:37 bin/mpi_hybrid_distr_arg 
-  513  2025-07-09 09:50:37 make run ARGS=
-  514  2025-07-09 09:50:37 make lint
-  515  2025-07-09 09:50:37 make lint\
-  516  2025-07-09 09:50:37 make lint
-  517  2025-07-09 09:50:37 git add .
-  518  2025-07-09 09:50:37 git status
-  519  2025-07-09 09:50:37 git commit -m "mpi: Added input and send receives"
-  520  2025-07-09 09:50:37 git push
-  521  2025-07-09 09:50:37 make run ARGS=
-  522  2025-07-09 09:50:37 cd mpi_hello
-  523  2025-07-09 09:50:37 make run
-  524  2025-07-09 09:50:37 sudo dnf install mpich mpich-devel
-  525  2025-07-09 09:50:37 make run
-  526  2025-07-09 09:50:37 which mpic++
-  527  2025-07-09 09:50:37 mpic++ --version
-  528  2025-07-09 09:50:37 cd mpi_wrapper/
-  529  2025-07-09 09:50:37 make run
-  530  2025-07-09 09:50:37 cd ..
-  531  2025-07-09 09:50:37 cd mpi_hello/
-  532  2025-07-09 09:50:37 make
-  533  2025-07-09 09:50:37 bin/mpi_hello 
-  534  2025-07-09 09:50:37 make clean
-  535  2025-07-09 09:50:37 make
-  536  2025-07-09 09:50:37 sudo dnf install mpich.x86_64 mpich-devel.x86_64
-  537  2025-07-09 09:50:37 make
-  538  2025-07-09 09:50:37 make run
-  539  2025-07-09 09:50:37 c d..
-  540  2025-07-09 09:50:37 cd ..
-  541  2025-07-09 09:50:37 cd mpi_hybrid_distr_arg/
-  542  2025-07-09 09:50:37 make
-  543  2025-07-09 09:50:37 make run
-  544  2025-07-09 09:50:37 make clean
-  545  2025-07-09 09:50:37 make
-  546  2025-07-09 09:50:37 sudo dnf install mpich.x86_64 mpich-devel.x86_64
-  547  2025-07-09 09:50:37 module load mpi/mpich-86_64
-  548  2025-07-09 09:50:37 uname -m
-  549  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  550  2025-07-09 09:50:37 make
-  551  2025-07-09 09:50:37 git branch
-  552  2025-07-09 09:50:37 make clean tsan run
-  553  2025-07-09 09:50:37 make run
-  554  2025-07-09 09:50:37 make run ARGS=jobs/job002b/job002.txt
-  555  2025-07-09 09:50:37 make lint
-  556  2025-07-09 09:50:37 make run
-  557  2025-07-09 09:50:37 make clean
-  558  2025-07-09 09:50:37 make
-  559  2025-07-09 09:50:37 make clean
-  560  2025-07-09 09:50:37 make
-  561  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  562  2025-07-09 09:50:37 make
-  563  2025-07-09 09:50:37 bin/omp_mpi 
-  564  2025-07-09 09:50:37 make run
-  565  2025-07-09 09:50:37 make clean
-  566  2025-07-09 09:50:37 make run
-  567  2025-07-09 09:50:37 make clean run
-  568  2025-07-09 09:50:37 make lint
-  569  2025-07-09 09:50:37 make clean
-  570  2025-07-09 09:50:37 make
-  571  2025-07-09 09:50:37 git branch
-  572  2025-07-09 09:50:37 make lint
-  573  2025-07-09 09:50:37 make run ARGS=jobs/job002b/job002.txt
-  574  2025-07-09 09:50:37 module load mpi/mmpich-x86_64
-  575  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  576  2025-07-09 09:50:37 make run ARGS=jobs/job002b/job002.txt
-  577  2025-07-09 09:50:37 make lint
-  578  2025-07-09 09:50:37 git add .
-  579  2025-07-09 09:50:37 git tag -a hw04 -m "hw04 submission"
-  580  2025-07-09 09:50:37 git push --tags
-  581  2025-07-09 09:50:37 cd web_server
-  582  2025-07-09 09:50:37 git pull
-  583  2025-07-09 09:50:37 git branch
-  584  2025-07-09 09:50:37 git checkout -b Task9.0_Project12RevisionFix
-  585  2025-07-09 09:50:37 make clean run
-  586  2025-07-09 09:50:37 make clean run -j
-  587  2025-07-09 09:50:37 make clean
-  588  2025-07-09 09:50:37 make -j
-  589  2025-07-09 09:50:37 make run
-  590  2025-07-09 09:50:37 make lint
-  591  2025-07-09 09:50:37 make clean run!
-  592  2025-07-09 09:50:37 make clean run
-  593  2025-07-09 09:50:37 git pull
-  594  2025-07-09 09:50:37 cd paralela25a-evan-chen/homeworks/
-  595  2025-07-09 09:50:37 cd omp_mpi/
-  596  2025-07-09 09:50:37 code .
-  597  2025-07-09 09:50:37 cd ..
-  598  2025-07-09 09:50:37 code .
-  599  2025-07-09 09:50:37 cd ..
-  600  2025-07-09 09:50:37 cd paralela25a-stockholm_syndrome/
-  601  2025-07-09 09:50:37 code .
-  602  2025-07-09 09:50:37 cd ..
-  603  2025-07-09 09:50:37 cd Downloads/
-  604  2025-07-09 09:50:37 ll
-  605  2025-07-09 09:50:37 cd proyecto-proba
-  606  2025-07-09 09:50:37 cd proyecto_proba
-  607  2025-07-09 09:50:37 cd proyeto_proba/
-  608  2025-07-09 09:50:37 cd ..
-  609  2025-07-09 09:50:37 cd proyecto_proba/
-  610  2025-07-09 09:50:37 code .
-  611  2025-07-09 09:50:37 cd ..
-  612  2025-07-09 09:50:37 cd stack_underflow/projects/project_02_conquest/
-  613  2025-07-09 09:50:37 code .
-  614  2025-07-09 09:50:37 cd ..
-  615  2025-07-09 09:50:37 cd paralela25a-evan-chen/
-  616  2025-07-09 09:50:37 cd ..
-  617  2025-07-09 09:50:37 cd paralela25a-stockholm_syndrome/
-  618  2025-07-09 09:50:37 cd web_server/
-  619  2025-07-09 09:50:37 code .
-  620  2025-07-09 09:50:37 cd ..
-  621  2025-07-09 09:50:37 ssh C32200@10.84.19.15
-  622  2025-07-09 09:50:37 git add .
-  623  2025-07-09 09:50:37 git status
-  624  2025-07-09 09:50:37 git commit -m "mpi/send_recv_*: initial files"
-  625  2025-07-09 09:50:37 git push
-  626  2025-07-09 09:50:37 cd send_recv_ord_sem/
-  627  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  628  2025-07-09 09:50:37 make run
-  629  2025-07-09 09:50:37 git checkout 511cc9bff1b3f9dcaf003c6fca8a6decb287b34b
-  630  2025-07-09 09:50:37 cd ..
-  631  2025-07-09 09:50:37 cd mpi_hybrid_distr_arg/
-  632  2025-07-09 09:50:37 make run
-  633  2025-07-09 09:50:37 git checkout main
-  634  2025-07-09 09:50:37 cd ..
-  635  2025-07-09 09:50:37 git mv mpi_hybrid_distr_arg mpi_hybrid_distr_stdin
-  636  2025-07-09 09:50:37 cd mpi_hybrid_distr_stdin/
-  637  2025-07-09 09:50:37 make run
-  638  2025-07-09 09:50:37 bin/mpi_hybrid_distr_
-  639  2025-07-09 09:50:37 make clean
-  640  2025-07-09 09:50:37 make 
-  641  2025-07-09 09:50:37 bin/mpi_hybrid_distr_stdin 
-  642  2025-07-09 09:50:37 make run ARGS=
-  643  2025-07-09 09:50:37 cd ..
-  644  2025-07-09 09:50:37 git aadd .
-  645  2025-07-09 09:50:37 git add .
-  646  2025-07-09 09:50:37 git commit -m "mpi: separated hybrid distr into args and stdin"
-  647  2025-07-09 09:50:37 cd send_recv_ord_itm/
-  648  2025-07-09 09:50:37 make run
-  649  2025-07-09 09:50:37 sudo dnf install R
-  650  2025-07-09 09:50:37 git checkout Task0-ProjectStructure 
-  651  2025-07-09 09:50:37 sudo dnf install pylint
-  652  2025-07-09 09:50:37 cd carlos
-  653  2025-07-09 09:50:37 cd 
-  654  2025-07-09 09:50:37 cd Downloads/tarea_calcu/I.S.2025.RRF.CI-0119.001-Trabajo\ en\ clase\ laboratorio\ \ tarea-2666803/
-  655  2025-07-09 09:50:37 cd carlos/
-  656  2025-07-09 09:50:37 make run
-  657  2025-07-09 09:50:37 make
-  658  2025-07-09 09:50:37 cd ..
-  659  2025-07-09 09:50:37 cd carlos/
-  660  2025-07-09 09:50:37 make
-  661  2025-07-09 09:50:37 cd Tarea/Tarea/
-  662  2025-07-09 09:50:37 make
-  663  2025-07-09 09:50:37 sudo dnf install nasm
-  664  2025-07-09 09:50:37 make
-  665  2025-07-09 09:50:37 bin/Tarea 
-  666  2025-07-09 09:50:37 cd ../../..
-  667  2025-07-09 09:50:37 cd gabriel/
-  668  2025-07-09 09:50:37 cd calculadora_hibrida-Gabriel_Bermudez_Vasquez/
-  669  2025-07-09 09:50:37 make
-  670  2025-07-09 09:50:37 cd calculadora/
-  671  2025-07-09 09:50:37 make run
-  672  2025-07-09 09:50:37 make clean
-  673  2025-07-09 09:50:37 make
-  674  2025-07-09 09:50:37 py
-  675  2025-07-09 09:50:37 cd ..
-  676  2025-07-09 09:50:37 cd manuel/
-  677  2025-07-09 09:50:37 cd Tarea_PI/
-  678  2025-07-09 09:50:37 make
-  679  2025-07-09 09:50:37 make run
-  680  2025-07-09 09:50:37 cd leo_c
-  681  2025-07-09 09:50:37 cd ..
-  682  2025-07-09 09:50:37 cd leo_c
-  683  2025-07-09 09:50:37 cd Calculadora\ Hibrida/
-  684  2025-07-09 09:50:37 cd Tarea2/
-  685  2025-07-09 09:50:37 make run
-  686  2025-07-09 09:50:37 0
-  687  2025-07-09 09:50:37 make run
-  688  2025-07-09 09:50:37 cd ..
-  689  2025-07-09 09:50:37 cd luis/Tarea\ -\ Trabajo\ en\ clase\ C10645\ Luis\ Arias/src/
-  690  2025-07-09 09:50:37 make run
-  691  2025-07-09 09:50:37 cd ..
-  692  2025-07-09 09:50:37 make run
-  693  2025-07-09 09:50:37 make
-  694  2025-07-09 09:50:37 sudo dnf install g++-multiliblibc6-dev-i386
-  695  2025-07-09 09:50:37 sudo dnf install g++-multilib libc6-dev-i386
-  696  2025-07-09 09:50:37 sudo dnf install g++-multilib
-  697  2025-07-09 09:50:37 sudo dnf install g++ -multilib
-  698  2025-07-09 09:50:37 sudo dnf install g++ -multilib libc6-dev-i386
-  699  2025-07-09 09:50:37 cd stack_underflow/projects/project_02_conquest/
-  700  2025-07-09 09:50:37 cd ..
-  701  2025-07-09 09:50:37 cd project_01_vessels/
-  702  2025-07-09 09:50:37 make run
-  703  2025-07-09 09:50:37 cd mpi_ping_pong/
-  704  2025-07-09 09:50:37 make run
-  705  2025-07-09 09:50:37 module load mpi/mpich-x_86_64
-  706  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  707  2025-07-09 09:50:37 make run
-  708  2025-07-09 09:50:37 git add .
-  709  2025-07-09 09:50:37 git status
-  710  2025-07-09 09:50:37 git commit -m "mpi_ping_pong: Completed"
-  711  2025-07-09 09:50:37 cd ..
-  712  2025-07-09 09:50:37 git add .
-  713  2025-07-09 09:50:37 git statu
-  714  2025-07-09 09:50:37 git status
-  715  2025-07-09 09:50:37 git commit -m "mpi_relay_race: added initial files"
-  716  2025-07-09 09:50:37 cd mpi_relay_race/
-  717  2025-07-09 09:50:37 make run
-  718  2025-07-09 09:50:37 git add .
-  719  2025-07-09 09:50:37 git status
-  720  2025-07-09 09:50:37 git commit -m "mpi_relay_race: completed"
-  721  2025-07-09 09:50:37 cd ..
-  722  2025-07-09 09:50:37 git add README.adoc 
-  723  2025-07-09 09:50:37 git commit -m "Updated index tables with new mpi exercises"
-  724  2025-07-09 09:50:37 git push
-  725  2025-07-09 09:50:37 git add .
-  726  2025-07-09 09:50:37 git commit -m "mpi_wrapper: Updated wrapper with barrier and wall time methods"
-  727  2025-07-09 09:50:37 git psuh
-  728  2025-07-09 09:50:37 git push
-  729  2025-07-09 09:50:37 cd ..
-  730  2025-07-09 09:50:37 cd paralela25a-evan-chen/
-  731  2025-07-09 09:50:37 cd mpi/
-  732  2025-07-09 09:50:37 cd hybrid_distr_bcast/
-  733  2025-07-09 09:50:37 make clean
-  734  2025-07-09 09:50:37 make run
-  735  2025-07-09 09:50:37 make run ARGS=
-  736  2025-07-09 09:50:37 make
-  737  2025-07-09 09:50:37 bin/Plantillas 
-  738  2025-07-09 09:50:37 clear
-  739  2025-07-09 09:50:37 git checkout main
-  740  2025-07-09 09:50:37 git pull
-  741  2025-07-09 09:50:37 git checkout -b Task1_GeneticAlgorithm
-  742  2025-07-09 09:50:37 /bin/python
-  743  2025-07-09 09:50:37 git pull
-  744  2025-07-09 09:50:37 make lint
-  745  2025-07-09 09:50:37 make clean asan run
-  746  2025-07-09 09:50:37 make
-  747  2025-07-09 09:50:37 make lint
-  748  2025-07-09 09:50:37 bin/proyecto2 
-  749  2025-07-09 09:50:37 make clean asan 
-  750  2025-07-09 09:50:37 bin/proyecto2 
-  751  2025-07-09 09:50:37 make clean msan run
-  752  2025-07-09 09:50:37 make clean run
-  753  2025-07-09 09:50:37 make doc
-  754  2025-07-09 09:50:37 make clean
-  755  2025-07-09 09:50:37 make doc
-  756  2025-07-09 09:50:37 cd mpi_
-  757  2025-07-09 09:50:37 cd mpi_lucky_number_reduce/
-  758  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  759  2025-07-09 09:50:37 make run
-  760  2025-07-09 09:50:37 make clean
-  761  2025-07-09 09:50:37 make 
-  762  2025-07-09 09:50:37 make run
-  763  2025-07-09 09:50:37 cd ..
-  764  2025-07-09 09:50:37 cd mpi_lucky_number_reduce/
-  765  2025-07-09 09:50:37 make lint
-  766  2025-07-09 09:50:37 cd ..
-  767  2025-07-09 09:50:37 cd mpi_lucky_number_who/
-  768  2025-07-09 09:50:37 make run
-  769  2025-07-09 09:50:37 make lint
-  770  2025-07-09 09:50:37 git branch
-  771  2025-07-09 09:50:37 git pull
-  772  2025-07-09 09:50:37 git tag -a project12_fix -m "Project 1.2 fixes"
-  773  2025-07-09 09:50:37 git push --tag
-  774  2025-07-09 09:50:37 git push --tags
-  775  2025-07-09 09:50:37 make clean run
-  776  2025-07-09 09:50:37 make clean
-  777  2025-07-09 09:50:37 make run
-  778  2025-07-09 09:50:37 make lint
-  779  2025-07-09 09:50:37 git fetch --prune
-  780  2025-07-09 09:50:37 git branch
-  781  2025-07-09 09:50:37 git checkout main
-  782  2025-07-09 09:50:37 git pull
-  783  2025-07-09 09:50:37 git branch
-  784  2025-07-09 09:50:37 git checkout -b Task1_DataUnitPointers
-  785  2025-07-09 09:50:37 make clean asan run
-  786  2025-07-09 09:50:37 make run
-  787  2025-07-09 09:50:37 make lint
-  788  2025-07-09 09:50:37 make clean msan run
-  789  2025-07-09 09:50:37 make clean asan run
-  790  2025-07-09 09:50:37 /bin/python
-  791  2025-07-09 09:50:37 make run
-  792  2025-07-09 09:50:37 make
-  793  2025-07-09 09:50:37 make clean
-  794  2025-07-09 09:50:37 make
-  795  2025-07-09 09:50:37 bin/Proyecto_II 
-  796  2025-07-09 09:50:37 make lint
-  797  2025-07-09 09:50:37 make run
-  798  2025-07-09 09:50:37 make
-  799  2025-07-09 09:50:37 make lint
-  800  2025-07-09 09:50:37 make doc
-  801  2025-07-09 09:50:37 make clean asan run
-  802  2025-07-09 09:50:37 make lint
-  803  2025-07-09 09:50:37 make run
-  804  2025-07-09 09:50:37 make clean asan run
-  805  2025-07-09 09:50:37 make lint
-  806  2025-07-09 09:50:37 make doc
-  807  2025-07-09 09:50:37 make clean
-  808  2025-07-09 09:50:37 make doc
-  809  2025-07-09 09:50:37 make clean asan run
-  810  2025-07-09 09:50:37 make lint
-  811  2025-07-09 09:50:37 cd proyectoProgramado2/
-  812  2025-07-09 09:50:37 make lint
-  813  2025-07-09 09:50:37 make clean asan run
-  814  2025-07-09 09:50:37 bin/proyectoProgramado2 
-  815  2025-07-09 09:50:37 make doc
-  816  2025-07-09 09:50:37 make
-  817  2025-07-09 09:50:37 make run
-  818  2025-07-09 09:50:37 make lint
-  819  2025-07-09 09:50:37 sudo dnf install g++ make pkg-config libgtkmm-3.0-dev
-  820  2025-07-09 09:50:37 sudo dnf install gtk3-devel
-  821  2025-07-09 09:50:37 make run
-  822  2025-07-09 09:50:37 make clean
-  823  2025-07-09 09:50:37 make
-  824  2025-07-09 09:50:37 git branch
-  825  2025-07-09 09:50:37 git checkout main
-  826  2025-07-09 09:50:37 git pull
-  827  2025-07-09 09:50:37 git checkout -b Task3_DistributorAndRequestClient
-  828  2025-07-09 09:50:37 git pull
-  829  2025-07-09 09:50:37 git checkout main
-  830  2025-07-09 09:50:37 git pull
-  831  2025-07-09 09:50:37 make lint
-  832  2025-07-09 09:50:37 git checkout main
-  833  2025-07-09 09:50:37 git pull
-  834  2025-07-09 09:50:37 make clean run 
-  835  2025-07-09 09:50:37 make 
-  836  2025-07-09 09:50:37 make clean
-  837  2025-07-09 09:50:37 make run
-  838  2025-07-09 09:50:37 make clean
-  839  2025-07-09 09:50:37 make
-  840  2025-07-09 09:50:37 make clean
-  841  2025-07-09 09:50:37 make run
-  842  2025-07-09 09:50:37 mak4 clean asan run
-  843  2025-07-09 09:50:37 make clean asan run
-  844  2025-07-09 09:50:37 make run
-  845  2025-07-09 09:50:37 make clean
-  846  2025-07-09 09:50:37 make run
-  847  2025-07-09 09:50:37 make clean
-  848  2025-07-09 09:50:37 make run
-  849  2025-07-09 09:50:37 make run\
-  850  2025-07-09 09:50:37 make run
-  851  2025-07-09 09:50:37 make clean
-  852  2025-07-09 09:50:37 make -j4
-  853  2025-07-09 09:50:37 bin/web_server 
-  854  2025-07-09 09:50:37 make run
-  855  2025-07-09 09:50:37 make run
-  856  2025-07-09 09:50:37 make clean
-  857  2025-07-09 09:50:37 make run
-  858  2025-07-09 09:50:37 git branch
-  859  2025-07-09 09:50:37 git fetch --prune
-  860  2025-07-09 09:50:37 git branch
-  861  2025-07-09 09:50:37 make run
-  862  2025-07-09 09:50:37 git checkout main
-  863  2025-07-09 09:50:37 git checkout -b Task1.1_Solver
-  864  2025-07-09 09:50:37 git checkout main
-  865  2025-07-09 09:50:37 git checkout Task2
-  866  2025-07-09 09:50:37 git checkout Task2_SubsetSums 
-  867  2025-07-09 09:50:37 git checkout main
-  868  2025-07-09 09:50:37 git pull
-  869  2025-07-09 09:50:37 make run
-  870  2025-07-09 09:50:37 git branch
-  871  2025-07-09 09:50:37 git pull
-  872  2025-07-09 09:50:37 git checkout -b Task1.2_SolverOptimizationAndMinCoins
-  873  2025-07-09 09:50:37 git checkout main
-  874  2025-07-09 09:50:37 git pull
-  875  2025-07-09 09:50:37 git checkout main
-  876  2025-07-09 09:50:37 git checkout -b Task5_DoubleKnapsack
-  877  2025-07-09 09:50:37 make clean
-  878  2025-07-09 09:50:37 make run
-  879  2025-07-09 09:50:37 make clean
-  880  2025-07-09 09:50:37 make run
-  881  2025-07-09 09:50:37 make clean
-  882  2025-07-09 09:50:37 make run
-  883  2025-07-09 09:50:37 /bin/python
-  884  2025-07-09 09:50:37 make lint
-  885  2025-07-09 09:50:37 make run
-  886  2025-07-09 09:50:37 3
-  887  2025-07-09 09:50:37 make run
-  888  2025-07-09 09:50:37 3
-  889  2025-07-09 09:50:37 make run
-  890  2025-07-09 09:50:37 3
-  891  2025-07-09 09:50:37 git checkout main
-  892  2025-07-09 09:50:37 gi tpull
-  893  2025-07-09 09:50:37 git pull
-  894  2025-07-09 09:50:37 make run
-  895  2025-07-09 09:50:37 git checkout main
-  896  2025-07-09 09:50:37 git PULL
-  897  2025-07-09 09:50:37 git pull
-  898  2025-07-09 09:50:37 git config pull.rebase true
-  899  2025-07-09 09:50:37 git checkout main
-  900  2025-07-09 09:50:37 git pull
-  901  2025-07-09 09:50:37 git checkout main
-  902  2025-07-09 09:50:37 git branch
-  903  2025-07-09 09:50:37 git pull
-  904  2025-07-09 09:50:37 git checkout Task7_GAOptimizer 
-  905  2025-07-09 09:50:37 /bin/python /home/evan/.vscode/extensions/ms-python.python-2025.8.0-linux-x64/python_files/printEnvVariablesToFile.py /home/evan/.vscode/extensions/ms-python.python-2025.8.0-linux-x64/python_files/deactivate/bash/envVars.txt
-  906  2025-07-09 09:50:37 git checkout main
-  907  2025-07-09 09:50:37 git push
-  908  2025-07-09 09:50:37 git checkout Task8_BottomUps 
-  909  2025-07-09 09:50:37 make doc
-  910  2025-07-09 09:50:37 git checkout main
-  911  2025-07-09 09:50:37 git pul
-  912  2025-07-09 09:50:37 git pull
-  913  2025-07-09 09:50:37 make run >> subset_sum_test
-  914  2025-07-09 09:50:37 make run >> double_knapsack_test
-  915  2025-07-09 09:50:37 git pull
-  916  2025-07-09 09:50:37 git checkout main
-  917  2025-07-09 09:50:37 git pull
-  918  2025-07-09 09:50:37 git pull origin/main
-  919  2025-07-09 09:50:37 make run
-  920  2025-07-09 09:50:37 /bin/python /home/evan/.vscode/extensions/ms-python.python-2025.8.0-linux-x64/python_files/printEnvVariablesToFile.py /home/evan/.vscode/extensions/ms-python.python-2025.8.0-linux-x64/python_files/deactivate/bash/envVars.txt
-  921  2025-07-09 09:50:37 make lint
-  922  2025-07-09 09:50:37 make clean
-  923  2025-07-09 09:50:37 make lint
-  924  2025-07-09 09:50:37 make doc
-  925  2025-07-09 09:50:37 make lint
-  926  2025-07-09 09:50:37 sudo dnf install allegro5-devel gcc-c++
-  927  2025-07-09 09:50:37 make clean asan run
-  928  2025-07-09 09:50:37 make install-deps
-  929  2025-07-09 09:50:37 make run
-  930  2025-07-09 09:50:37 cd ..
-  931  2025-07-09 09:50:37 make
-  932  2025-07-09 09:50:37 make -j
-  933  2025-07-09 09:50:37 cd ..
-  934  2025-07-09 09:50:37 git pull
-  935  2025-07-09 09:50:37 make run
-  936  2025-07-09 09:50:37 make master
-  937  2025-07-09 09:50:37 make run
-  938  2025-07-09 09:50:37 make clean
-  939  2025-07-09 09:50:37 make run
-  940  2025-07-09 09:50:37 make clean
-  941  2025-07-09 09:50:37 make run
-  942  2025-07-09 09:50:37 bin/web_server help
-  943  2025-07-09 09:50:37 make 
-  944  2025-07-09 09:50:37 bin/web_server 8080 30 70
-  945  2025-07-09 09:50:37 git pull
-  946  2025-07-09 09:50:37 git config pull.rebase true
-  947  2025-07-09 09:50:37 git pull
-  948  2025-07-09 09:50:37 make run
-  949  2025-07-09 09:50:37 bin/web_server 8080 30 70 40
-  950  2025-07-09 09:50:37 make run
-  951  2025-07-09 09:50:37 make clean release
-  952  2025-07-09 09:50:37 bin/web_server master 4 8080 30 70 40
-  953  2025-07-09 09:50:37 bin/web_server 
-  954  2025-07-09 09:50:37 bin/web_server help
-  955  2025-07-09 09:50:37 bin/web_server 2 help
-  956  2025-07-09 09:50:37 make clean asan
-  957  2025-07-09 09:50:37 make run
-  958  2025-07-09 09:50:37 git pull
-  959  2025-07-09 09:50:37 make run
-  960  2025-07-09 09:50:37 make clean
-  961  2025-07-09 09:50:37 make run ARGS=master 4 8080
-  962  2025-07-09 09:50:37 make run ARGS=master 4
-  963  2025-07-09 09:50:37 bin/web_server master 4 8080
-  964  2025-07-09 09:50:37 make lint
-  965  2025-07-09 09:50:37 bin/web_server master 4 8080
-  966  2025-07-09 09:50:37 make doc
-  967  2025-07-09 09:50:37 make lint
-  968  2025-07-09 09:50:37 cd pthreads/
-  969  2025-07-09 09:50:37 cd readers_writers/
-  970  2025-07-09 09:50:37 make run
-  971  2025-07-09 09:50:37 make test < tests/input001.txt 
-  972  2025-07-09 09:50:37 make run
-  973  2025-07-09 09:50:37 make run < tests/input001.txt 
-  974  2025-07-09 09:50:37 make run < tests/input002.txt 
-  975  2025-07-09 09:50:37 make lint
-  976  2025-07-09 09:50:37 cd ..
-  977  2025-07-09 09:50:37 git add .
-  978  2025-07-09 09:50:37 git commit -m "readers_writers: Completed"
-  979  2025-07-09 09:50:37 R version
-  980  2025-07-09 09:50:37 cd optimized/
-  981  2025-07-09 09:50:37 cd pthread_optimized/
-  982  2025-07-09 09:50:37 make doc
-  983  2025-07-09 09:50:37 make lint
-  984  2025-07-09 09:50:37 make doc
-  985  2025-07-09 09:50:37 make clean
-  986  2025-07-09 09:50:37 make run
-  987  2025-07-09 09:50:37 uname -m
-  988  2025-07-09 09:50:37 module load mpi/mpich-86_64
-  989  2025-07-09 09:50:37 module load mpi/mpich-x86_64
-  990  2025-07-09 09:50:37 make run
-  991  2025-07-09 09:50:37 make lint
-  992  2025-07-09 09:50:37 make doc
-  993  2025-07-09 09:50:37 make run
-  994  2025-07-09 09:50:37 python3
-  995  2025-07-09 09:50:37 cd proyecto2/
-  996  2025-07-09 09:50:37 make lint
-  997  2025-07-09 09:50:37 make log
-  998  2025-07-09 09:50:37 cd build_h2o/
-  999  2025-07-09 09:50:37 make log
+    1  2025-07-09 10:12:45 make clean
+    2  2025-07-09 10:12:45 make
+    3  2025-07-09 10:12:45 make clean
+    4  2025-07-09 10:12:45 make
+    5  2025-07-09 10:12:45 ll
+    6  2025-07-09 10:12:45 git pull git@github.com:5n4v3/stack_underflow.git
+    7  2025-07-09 10:12:45 git clone git@github.com:5n4v3/stack_underflow.git
+    8  2025-07-09 10:12:45 ssh-keygen -t ed25519 -C "evan.chen@ucr.ac.cr"
+    9  2025-07-09 10:12:45 eval "$(ssh-agent -s)"
+   10  2025-07-09 10:12:45 ssh-add ~/.ssh/id_ed25519
+   11  2025-07-09 10:12:45 cat ~/.ssh/id_ed25519.pub
+   12  2025-07-09 10:12:45 git clone git@github.com:5n4v3/stack_underflow.git
+   13  2025-07-09 10:12:45 ssh -T git@github.com
+   14  2025-07-09 10:12:45 cat ~/.ssh/id_ed25519.pub
+   15  2025-07-09 10:12:45 cd omp_mergesort/
+   16  2025-07-09 10:12:45 make test
+   17  2025-07-09 10:12:45 make clean debug
+   18  2025-07-09 10:12:45 make clean debug && time  bin/omp_mergesort 5000000 16 0
+   19  2025-07-09 10:12:45 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
+   20  2025-07-09 10:12:45 make clean test
+   21  2025-07-09 10:12:45 make clean debug && time  bin/omp_mergesort 5000000 16 0
+   22  2025-07-09 10:12:45 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
+   23  2025-07-09 10:12:45 make clean test
+   24  2025-07-09 10:12:45 make clean debug && time  bin/omp_mergesort 5000000 16 0
+   25  2025-07-09 10:12:45 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
+   26  2025-07-09 10:12:45 make clean test
+   27  2025-07-09 10:12:45 make clean debug && time  bin/omp_mergesort 5000000 16 0
+   28  2025-07-09 10:12:45 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
+   29  2025-07-09 10:12:45 make clean test
+   30  2025-07-09 10:12:45 make clean debug && time  bin/omp_mergesort 5000000 16 0
+   31  2025-07-09 10:12:45 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
+   32  2025-07-09 10:12:45 make clean test
+   33  2025-07-09 10:12:45 make clean debug && time  bin/omp_mergesort 5000000 16 0
+   34  2025-07-09 10:12:45 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
+   35  2025-07-09 10:12:45 make clean test
+   36  2025-07-09 10:12:45 make clean debug && time  bin/omp_mergesort 5000000 16 0
+   37  2025-07-09 10:12:45 make clean release && perf stat  bin/omp_mergesort 50000000 16 0
+   38  2025-07-09 10:12:45 make clean test
+   39  2025-07-09 10:12:45 make clean debug && time  bin/omp_mergesort 5000000 16 0
+   40  2025-07-09 10:12:45 make clean release && perf stat  bin/omp_mergesort 50000000 32 0
+   41  2025-07-09 10:12:45 cd ..
+   42  2025-07-09 10:12:45 cd  omp_stats
+   43  2025-07-09 10:12:45 make test
+   44  2025-07-09 10:12:45 make bench
+   45  2025-07-09 10:12:45 git add .
+   46  2025-07-09 10:12:45 git status
+   47  2025-07-09 10:12:45 git commit -m "omp/omp
+   48  2025-07-09 10:12:45 git add omp/
+   49  2025-07-09 10:12:45 git status
+   50  2025-07-09 10:12:45 git commit -m "omp/omp_mergesort: Fixed results analysis"
+   51  2025-07-09 10:12:45 git add .
+   52  2025-07-09 10:12:45 git commit -m "README: Added condition variable and cluster definitions"
+   53  2025-07-09 10:12:45 git push
+   54  2025-07-09 10:12:45 git checkout main
+   55  2025-07-09 10:12:45 git pull
+   56  2025-07-09 10:12:45 git branch
+   57  2025-07-09 10:12:45 git checkout Task4_Decomposer
+   58  2025-07-09 10:12:45 git checkout -b Task4_Decomposer
+   59  2025-07-09 10:12:45 git checkout main
+   60  2025-07-09 10:12:45 git fetch --prune
+   61  2025-07-09 10:12:45 git pull 
+   62  2025-07-09 10:12:45 make clean
+   63  2025-07-09 10:12:45 git branch
+   64  2025-07-09 10:12:45 git checkout -b Task4.0_Decomposer
+   65  2025-07-09 10:12:45 make lint
+   66  2025-07-09 10:12:45 cd paralela25a-stockholm_syndrome/
+   67  2025-07-09 10:12:45 cd web_server_11/
+   68  2025-07-09 10:12:45 code .
+   69  2025-07-09 10:12:45 cd ..
+   70  2025-07-09 10:12:45 cd stack_underflow/
+   71  2025-07-09 10:12:45 cd projects/
+   72  2025-07-09 10:12:45 code .
+   73  2025-07-09 10:12:45 make clean release run
+   74  2025-07-09 10:12:45 make lint
+   75  2025-07-09 10:12:45 make doc
+   76  2025-07-09 10:12:45 git add .
+   77  2025-07-09 10:12:45 cd web_server_11/
+   78  2025-07-09 10:12:45 git pull
+   79  2025-07-09 10:12:45 git main
+   80  2025-07-09 10:12:45 git branch
+   81  2025-07-09 10:12:45 git checkout main
+   82  2025-07-09 10:12:45 git pull
+   83  2025-07-09 10:12:45 make clean release run
+   84  2025-07-09 10:12:45 cd ..
+   85  2025-07-09 10:12:45 cd paralela25a-stockholm_syndrome/
+   86  2025-07-09 10:12:45 cd web_server/
+   87  2025-07-09 10:12:45 make clean release run
+   88  2025-07-09 10:12:45 make run
+   89  2025-07-09 10:12:45 make clean && make asan run
+   90  2025-07-09 10:12:45 make lint
+   91  2025-07-09 10:12:45 sudo dnf install gtest gtest-devel
+   92  2025-07-09 10:12:45 make
+   93  2025-07-09 10:12:45 ./runtests
+   94  2025-07-09 10:12:45 ./runTests
+   95  2025-07-09 10:12:45 make
+   96  2025-07-09 10:12:45 ./runTests
+   97  2025-07-09 10:12:45 make
+   98  2025-07-09 10:12:45 make clean
+   99  2025-07-09 10:12:45 make
+  100  2025-07-09 10:12:45 ./runTests
+  101  2025-07-09 10:12:45 make
+  102  2025-07-09 10:12:45 make clean
+  103  2025-07-09 10:12:45 make
+  104  2025-07-09 10:12:45 cd tests/gtests/
+  105  2025-07-09 10:12:45 git clone https://github.com/google/googletest.git
+  106  2025-07-09 10:12:45 cd googletest
+  107  2025-07-09 10:12:45 cmake -S . -B build
+  108  2025-07-09 10:12:45 cmake --build build
+  109  2025-07-09 10:12:45 sudo cmake --install build
+  110  2025-07-09 10:12:45 cd ..
+  111  2025-07-09 10:12:45 cd..
+  112  2025-07-09 10:12:45 cd ..
+  113  2025-07-09 10:12:45 cd build
+  114  2025-07-09 10:12:45 cmake
+  115  2025-07-09 10:12:45 cmake ..
+  116  2025-07-09 10:12:45 make
+  117  2025-07-09 10:12:45 cd ..
+  118  2025-07-09 10:12:45 make
+  119  2025-07-09 10:12:45 cd build
+  120  2025-07-09 10:12:45 cmake ..
+  121  2025-07-09 10:12:45 make
+  122  2025-07-09 10:12:45 cd ..
+  123  2025-07-09 10:12:45 make test
+  124  2025-07-09 10:12:45 make clean
+  125  2025-07-09 10:12:45 make
+  126  2025-07-09 10:12:45 make test
+  127  2025-07-09 10:12:45 bin/SolarSystemTests 
+  128  2025-07-09 10:12:45 make clean
+  129  2025-07-09 10:12:45 make test
+  130  2025-07-09 10:12:45 ./bin/SolarSystemTests 
+  131  2025-07-09 10:12:45 ./bin/SolarSystemTests --gtest_list_tests
+  132  2025-07-09 10:12:45 make test
+  133  2025-07-09 10:12:45 ./bin/SolarSystemTests --gtest_list_tests
+  134  2025-07-09 10:12:45 make test
+  135  2025-07-09 10:12:45 cd stack_underflow/
+  136  2025-07-09 10:12:45 cd projects/
+  137  2025-07-09 10:12:45 cd project_02_conquest/
+  138  2025-07-09 10:12:45 code .
+  139  2025-07-09 10:12:45 cd ..
+  140  2025-07-09 10:12:45 cd paralela25a-stockholm_syndrome/
+  141  2025-07-09 10:12:45 code .
+  142  2025-07-09 10:12:45 sudo apt install libgtest-dev
+  143  2025-07-09 10:12:45 sudo dnf install libgtest-dev
+  144  2025-07-09 10:12:45 make test
+  145  2025-07-09 10:12:45 make clean
+  146  2025-07-09 10:12:45 make test
+  147  2025-07-09 10:12:45 cd /usr/src/gtest
+  148  2025-07-09 10:12:45 sudo cmake .
+  149  2025-07-09 10:12:45 sudo make
+  150  2025-07-09 10:12:45 sudo cp lib/*.a /usr/lib
+  151  2025-07-09 10:12:45 make clean test
+  152  2025-07-09 10:12:45 make test
+  153  2025-07-09 10:12:45 sudo rm /usr/lib/libgtest.a /usr/lib/libgtest_main.a
+  154  2025-07-09 10:12:45 sudo rm CMakeFiles/
+  155  2025-07-09 10:12:45 sudo rm -r  CMakeFiles/
+  156  2025-07-09 10:12:45 sudo rm -r tests/ CMakeFiles/
+  157  2025-07-09 10:12:45 sudo rm -r tests/CMakeFiles/
+  158  2025-07-09 10:12:45 sudo rm -r tests/
+  159  2025-07-09 10:12:45 sudo rm -r Testing/
+  160  2025-07-09 10:12:45 make
+  161  2025-07-09 10:12:45 make run
+  162  2025-07-09 10:12:45 make
+  163  2025-07-09 10:12:45 make run
+  164  2025-07-09 10:12:45 make
+  165  2025-07-09 10:12:45 make clean
+  166  2025-07-09 10:12:45 make
+  167  2025-07-09 10:12:45 make clean
+  168  2025-07-09 10:12:45 make
+  169  2025-07-09 10:12:45 make clean asan run
+  170  2025-07-09 10:12:45 make clean msan run 
+  171  2025-07-09 10:12:45 addr2line -e bin/project_02_conquest 0x472b49
+  172  2025-07-09 10:12:45 llvm-symbolizer --obj=bin/project_02_conquest 0x472b49
+  173  2025-07-09 10:12:45 make clean run
+  174  2025-07-09 10:12:45 make run
+  175  2025-07-09 10:12:45 make lint
+  176  2025-07-09 10:12:45 make run
+  177  2025-07-09 10:12:45 git checkout main
+  178  2025-07-09 10:12:45 git pull
+  179  2025-07-09 10:12:45 git checkout -b Task4.4-Floyd
+  180  2025-07-09 10:12:45 git checkout main
+  181  2025-07-09 10:12:45 git checkout -b TaskBack7-GalaxyClass
+  182  2025-07-09 10:12:45 cd src/backend/galaxy
+  183  2025-07-09 10:12:45 git mv SolarSystem.cpp solar_system/SolarSystem.cpp
+  184  2025-07-09 10:12:45 git mv SolarSystem.hpp solar_system/SolarSystem.hpp
+  185  2025-07-09 10:12:45 git mv SolarSystemExceptions.hpp solar_system/SolarSystemExceptions.hpp
+  186  2025-07-09 10:12:45 git mv SolarSystemVerifier.hpp solar_system/SolarSystemVerifier.hpp
+  187  2025-07-09 10:12:45 git mv SolarSystemVerifier.cpp solar_system/SolarSystemVerifier.cpp
+  188  2025-07-09 10:12:45 git mv Planet.hpp solar_system/planet/Planet.hpp
+  189  2025-07-09 10:12:45 git mv Planet.cpp solar_system/planet/Planet.cpp
+  190  2025-07-09 10:12:45 git mv Boss.cpp solar_system/planet/Boss.cpp
+  191  2025-07-09 10:12:45 git mv Boss.hpp solar_system/planet/Boss.hpp
+  192  2025-07-09 10:12:45 git add .
+  193  2025-07-09 10:12:45 git status
+  194  2025-07-09 10:12:45 git checkout main
+  195  2025-07-09 10:12:45 git checkout -b TaskBack4.4-Floyd
+  196  2025-07-09 10:12:45 make
+  197  2025-07-09 10:12:45 make run
+  198  2025-07-09 10:12:45 cd ..
+  199  2025-07-09 10:12:45 make run
+  200  2025-07-09 10:12:45 make lint
+  201  2025-07-09 10:12:45 make run
+  202  2025-07-09 10:12:45 git checkout main
+  203  2025-07-09 10:12:45 sudo dnf install MPICH
+  204  2025-07-09 10:12:45 sudo dnf install mpich
+  205  2025-07-09 10:12:45 date
+  206  2025-07-09 10:12:45 mpiexec date
+  207  2025-07-09 10:12:45 mpiexec -npp 3 date
+  208  2025-07-09 10:12:45 sudo dnf install mpich
+  209  2025-07-09 10:12:45 sudo dnf install mpich mpich-devel
+  210  2025-07-09 10:12:45 mpicc --version
+  211  2025-07-09 10:12:45 mpirun --version
+  212  2025-07-09 10:12:45 mpic++ -show
+  213  2025-07-09 10:12:45 make
+  214  2025-07-09 10:12:45 cd mpi_h
+  215  2025-07-09 10:12:45 cd mpi_hello
+  216  2025-07-09 10:12:45 make
+  217  2025-07-09 10:12:45 sudo dnf install mpich mpich-devel
+  218  2025-07-09 10:12:45 echo 'export PATH=/usr/lib64/openmpi/bin:$PATH' >> ~/.bashrc
+  219  2025-07-09 10:12:45 echo 'export LD_LIBRARY_PATH=/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
+  220  2025-07-09 10:12:45 source ~/.bashrc
+  221  2025-07-09 10:12:45 make
+  222  2025-07-09 10:12:45 sudo dnf install mpich
+  223  2025-07-09 10:12:45 make
+  224  2025-07-09 10:12:45 module load mpi/mpich-$arch
+  225  2025-07-09 10:12:45 module load mpi/mpich-x86-64
+  226  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  227  2025-07-09 10:12:45 which mpic++
+  228  2025-07-09 10:12:45 make
+  229  2025-07-09 10:12:45 bin/mpi_hello 3
+  230  2025-07-09 10:12:45 mpiexec -np 3 bin/mpi_hello
+  231  2025-07-09 10:12:45 make lint
+  232  2025-07-09 10:12:45 git add .
+  233  2025-07-09 10:12:45 git status
+  234  2025-07-09 10:12:45 git commit -m "mpi_hello: Completed in class"
+  235  2025-07-09 10:12:45 git push
+  236  2025-07-09 10:12:45 git fetch
+  237  2025-07-09 10:12:45 git branch
+  238  2025-07-09 10:12:45 git checkout TaskBack10-SimulationClass 
+  239  2025-07-09 10:12:45 cd project_02_conquest/
+  240  2025-07-09 10:12:45 make clean
+  241  2025-07-09 10:12:45 make run
+  242  2025-07-09 10:12:45 make clean asan run
+  243  2025-07-09 10:12:45 make run
+  244  2025-07-09 10:12:45 make clean
+  245  2025-07-09 10:12:45 make run
+  246  2025-07-09 10:12:45 cd optimized/pthread_optimized/
+  247  2025-07-09 10:12:45 make clean 
+  248  2025-07-09 10:12:45 make doc
+  249  2025-07-09 10:12:45 make lint
+  250  2025-07-09 10:12:45 make run
+  251  2025-07-09 10:12:45 make clean asan run
+  252  2025-07-09 10:12:45 make clean tsan
+  253  2025-07-09 10:12:45 make run
+  254  2025-07-09 10:12:45 cd ..
+  255  2025-07-09 10:12:45 cd pthread/
+  256  2025-07-09 10:12:45 make doc
+  257  2025-07-09 10:12:45 cd ..
+  258  2025-07-09 10:12:45 cd optimized/
+  259  2025-07-09 10:12:45 cd pthread_optimized/
+  260  2025-07-09 10:12:45 make clean release run
+  261  2025-07-09 10:12:45 make clean asan run
+  262  2025-07-09 10:12:45 make clean msan run
+  263  2025-07-09 10:12:45 git add .
+  264  2025-07-09 10:12:45 git commit -m "TODOs added"
+  265  2025-07-09 10:12:45 git branch
+  266  2025-07-09 10:12:45 git checkout SerialOptimizations
+  267  2025-07-09 10:12:45 cd ..
+  268  2025-07-09 10:12:45 c d..
+  269  2025-07-09 10:12:45 cd serial
+  270  2025-07-09 10:12:45 cd ..
+  271  2025-07-09 10:12:45 cd serial 
+  272  2025-07-09 10:12:45 make clean
+  273  2025-07-09 10:12:45 make clean run
+  274  2025-07-09 10:12:45 cd ..
+  275  2025-07-09 10:12:45 git checkout main
+  276  2025-07-09 10:12:45 cd optimized/pthread_optimized/
+  277  2025-07-09 10:12:45 make lint
+  278  2025-07-09 10:12:45 cd stack_underflow/projects/
+  279  2025-07-09 10:12:45 code .
+  280  2025-07-09 10:12:45 rstudio
+  281  2025-07-09 10:12:45 cd ..
+  282  2025-07-09 10:12:45 cd Downloads/
+  283  2025-07-09 10:12:45 cd proyeto_proba/
+  284  2025-07-09 10:12:45 rstudio
+  285  2025-07-09 10:12:45 cd ..
+  286  2025-07-09 10:12:45 cd paralela25a-evan-chen/
+  287  2025-07-09 10:12:45 cd homeworks/
+  288  2025-07-09 10:12:45 code .
+  289  2025-07-09 10:12:45 cd ..
+  290  2025-07-09 10:12:45 cd mpi
+  291  2025-07-09 10:12:45 code .
+  292  2025-07-09 10:12:45 cd ..
+  293  2025-07-09 10:12:45 cd stack_underflow/
+  294  2025-07-09 10:12:45 cd projects/
+  295  2025-07-09 10:12:45 code .
+  296  2025-07-09 10:12:45 cd ..
+  297  2025-07-09 10:12:45 ssh C32200@10.84.19.15
+  298  2025-07-09 10:12:45 make
+  299  2025-07-09 10:12:45 cd project_02_conquest/
+  300  2025-07-09 10:12:45 make
+  301  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  302  2025-07-09 10:12:45 make
+  303  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  304  2025-07-09 10:12:45 make
+  305  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  306  2025-07-09 10:12:45 make
+  307  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  308  2025-07-09 10:12:45 make
+  309  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  310  2025-07-09 10:12:45 make
+  311  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  312  2025-07-09 10:12:45 make
+  313  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  314  2025-07-09 10:12:45 make
+  315  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  316  2025-07-09 10:12:45 make clean asan run
+  317  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  318  2025-07-09 10:12:45 make
+  319  2025-07-09 10:12:45 make clean
+  320  2025-07-09 10:12:45 make
+  321  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  322  2025-07-09 10:12:45 make
+  323  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  324  2025-07-09 10:12:45 make
+  325  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  326  2025-07-09 10:12:45 make
+  327  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  328  2025-07-09 10:12:45 make clean asan run
+  329  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  330  2025-07-09 10:12:45 bin/project_02_conquest tests/milky_way_systems.csv print
+  331  2025-07-09 10:12:45 make clean asan run
+  332  2025-07-09 10:12:45 bin/project_02_conquest tests/milky_way_systems.csv print
+  333  2025-07-09 10:12:45 make clean asan run
+  334  2025-07-09 10:12:45 bin/project_02_conquest tests/milky_way_systems.csv print
+  335  2025-07-09 10:12:45 make clean asan
+  336  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  337  2025-07-09 10:12:45 make
+  338  2025-07-09 10:12:45 make clean
+  339  2025-07-09 10:12:45 make
+  340  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  341  2025-07-09 10:12:45 make
+  342  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  343  2025-07-09 10:12:45 make
+  344  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  345  2025-07-09 10:12:45 make
+  346  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  347  2025-07-09 10:12:45 make
+  348  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  349  2025-07-09 10:12:45 make
+  350  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  351  2025-07-09 10:12:45 make clean
+  352  2025-07-09 10:12:45 make
+  353  2025-07-09 10:12:45 bin/project_02_conquest 
+  354  2025-07-09 10:12:45 make
+  355  2025-07-09 10:12:45 bin/project_02_conquest 
+  356  2025-07-09 10:12:45 make clean
+  357  2025-07-09 10:12:45 make 
+  358  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  359  2025-07-09 10:12:45 make 
+  360  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  361  2025-07-09 10:12:45 make
+  362  2025-07-09 10:12:45 bin/project_02_conquest 
+  363  2025-07-09 10:12:45 make
+  364  2025-07-09 10:12:45 bin/project_02_conquest 
+  365  2025-07-09 10:12:45 make
+  366  2025-07-09 10:12:45 bin/project_02_conquest 
+  367  2025-07-09 10:12:45 make
+  368  2025-07-09 10:12:45 bin/project_02_conquest 
+  369  2025-07-09 10:12:45 make
+  370  2025-07-09 10:12:45 bin/project_02_conquest 
+  371  2025-07-09 10:12:45 make
+  372  2025-07-09 10:12:45 bin/project_02_conquest 
+  373  2025-07-09 10:12:45 make
+  374  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  375  2025-07-09 10:12:45 make
+  376  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  377  2025-07-09 10:12:45 make
+  378  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  379  2025-07-09 10:12:45 make
+  380  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  381  2025-07-09 10:12:45 MAKE
+  382  2025-07-09 10:12:45 make
+  383  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  384  2025-07-09 10:12:45 make clean asan run
+  385  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  386  2025-07-09 10:12:45 bin/project_02_conquest tests/andromeda_systems.csv print
+  387  2025-07-09 10:12:45 bin/project_02_conquest tests/milky_way_systems.csv print
+  388  2025-07-09 10:12:45 make
+  389  2025-07-09 10:12:45 make clean
+  390  2025-07-09 10:12:45 make
+  391  2025-07-09 10:12:45 bin/project_02_conquest tests/milky_way_systems.csv print
+  392  2025-07-09 10:12:45 make
+  393  2025-07-09 10:12:45 bin/project_02_conquest tests/milky_way_systems.csv print
+  394  2025-07-09 10:12:45 make
+  395  2025-07-09 10:12:45 make clean
+  396  2025-07-09 10:12:45 make -j8
+  397  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  398  2025-07-09 10:12:45 make -j8
+  399  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  400  2025-07-09 10:12:45 make -j8
+  401  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  402  2025-07-09 10:12:45 make -j8
+  403  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  404  2025-07-09 10:12:45 make -j8
+  405  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  406  2025-07-09 10:12:45 make 
+  407  2025-07-09 10:12:45 make clean
+  408  2025-07-09 10:12:45 make 
+  409  2025-07-09 10:12:45 bin/project_02_conquest tests/simul_systems.csv print
+  410  2025-07-09 10:12:45 make -j8
+  411  2025-07-09 10:12:45 bin/project_02_conquest 
+  412  2025-07-09 10:12:45 make -j8
+  413  2025-07-09 10:12:45 bin/project_02_conquest 
+  414  2025-07-09 10:12:45 make -j8
+  415  2025-07-09 10:12:45 bin/project_02_conquest 
+  416  2025-07-09 10:12:45 make -j8
+  417  2025-07-09 10:12:45 bin/project_02_conquest 
+  418  2025-07-09 10:12:45 make -j8
+  419  2025-07-09 10:12:45 bin/project_02_conquest 
+  420  2025-07-09 10:12:45 make -j8
+  421  2025-07-09 10:12:45 bin/project_02_conquest 
+  422  2025-07-09 10:12:45 make -j8
+  423  2025-07-09 10:12:45 bin/project_02_conquest 
+  424  2025-07-09 10:12:45 make -j8
+  425  2025-07-09 10:12:45 bin/project_02_conquest 
+  426  2025-07-09 10:12:45 make -j8
+  427  2025-07-09 10:12:45 git checkout main
+  428  2025-07-09 10:12:45 git checkout -b "TaskBack12-DisconnectionsFix"
+  429  2025-07-09 10:12:45 make -j8
+  430  2025-07-09 10:12:45 make clean
+  431  2025-07-09 10:12:45 make -j8
+  432  2025-07-09 10:12:45 bin/project_02_conquest 
+  433  2025-07-09 10:12:45 make -j8
+  434  2025-07-09 10:12:45 bin/project_02_conquest 
+  435  2025-07-09 10:12:45 make -j8
+  436  2025-07-09 10:12:45 bin/project_02_conquest 
+  437  2025-07-09 10:12:45 make -j8
+  438  2025-07-09 10:12:45 bin/project_02_conquest 
+  439  2025-07-09 10:12:45 make -j8
+  440  2025-07-09 10:12:45 bin/project_02_conquest 
+  441  2025-07-09 10:12:45 git checkout main
+  442  2025-07-09 10:12:45 git pull
+  443  2025-07-09 10:12:45 git checkout -b "Task10.1-UpdateSimmulation"
+  444  2025-07-09 10:12:45 make simulation
+  445  2025-07-09 10:12:45 git branch
+  446  2025-07-09 10:12:45 make simulation
+  447  2025-07-09 10:12:45 make
+  448  2025-07-09 10:12:45 make clean
+  449  2025-07-09 10:12:45 make simulation
+  450  2025-07-09 10:12:45 make clean
+  451  2025-07-09 10:12:45 make run
+  452  2025-07-09 10:12:45 make clean asan run
+  453  2025-07-09 10:12:45 make run
+  454  2025-07-09 10:12:45 make clean
+  455  2025-07-09 10:12:45 make run
+  456  2025-07-09 10:12:45 make clean 
+  457  2025-07-09 10:12:45 make simulation
+  458  2025-07-09 10:12:45 cd optimized/pthread_optimized/
+  459  2025-07-09 10:12:45 make doc
+  460  2025-07-09 10:12:45 git tag -a "hw03fix" -m "Added internal documentation and missing intialization"
+  461  2025-07-09 10:12:45 git push tags
+  462  2025-07-09 10:12:45 git push --tags
+  463  2025-07-09 10:12:45 make clean
+  464  2025-07-09 10:12:45 cd ..
+  465  2025-07-09 10:12:45 cd omp_mpi/
+  466  2025-07-09 10:12:45 cd pthread_optimized/
+  467  2025-07-09 10:12:45 make doc
+  468  2025-07-09 10:12:45 make clean
+  469  2025-07-09 10:12:45 cd ..
+  470  2025-07-09 10:12:45 git add .
+  471  2025-07-09 10:12:45 git commit -m "omp_mpi: Initial files (copy of hw03)"
+  472  2025-07-09 10:12:45 git push
+  473  2025-07-09 10:12:45 git pull
+  474  2025-07-09 10:12:45 cd mpi_h
+  475  2025-07-09 10:12:45 cd mpi_hybrid_distr_arg/
+  476  2025-07-09 10:12:45 make run
+  477  2025-07-09 10:12:45 cd ..
+  478  2025-07-09 10:12:45 cd mpi_wrapper/
+  479  2025-07-09 10:12:45 make run
+  480  2025-07-09 10:12:45 cd ..
+  481  2025-07-09 10:12:45 cd mpi_hello/
+  482  2025-07-09 10:12:45 make run
+  483  2025-07-09 10:12:45 mpic++
+  484  2025-07-09 10:12:45 sudo dnf install mpich
+  485  2025-07-09 10:12:45 make run
+  486  2025-07-09 10:12:45 mpic++ --version
+  487  2025-07-09 10:12:45 sudo dnf install mpich mpich-devel
+  488  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  489  2025-07-09 10:12:45 bin/mpi_hello 
+  490  2025-07-09 10:12:45 cd ..
+  491  2025-07-09 10:12:45 cd mpi_hybrid_distr_arg/
+  492  2025-07-09 10:12:45 make run
+  493  2025-07-09 10:12:45 make clean 
+  494  2025-07-09 10:12:45 make 
+  495  2025-07-09 10:12:45 make run
+  496  2025-07-09 10:12:45 make lint
+  497  2025-07-09 10:12:45 git add .
+  498  2025-07-09 10:12:45 git status
+  499  2025-07-09 10:12:45 git commit -m "mpi: Completed mpi_hybrid_distr_arg"
+  500  2025-07-09 10:12:45 cd ..
+  501  2025-07-09 10:12:45 cd mpi_wrapper/
+  502  2025-07-09 10:12:45 make run
+  503  2025-07-09 10:12:45 git add .
+  504  2025-07-09 10:12:45 git status
+  505  2025-07-09 10:12:45 git commit -m "mpi: Added custom error in wrapper"
+  506  2025-07-09 10:12:45 make
+  507  2025-07-09 10:12:45 bin/mpi_wrapper 
+  508  2025-07-09 10:12:45 cd ..
+  509  2025-07-09 10:12:45 cd mpi_h
+  510  2025-07-09 10:12:45 cd mpi_hybrid_distr_arg/
+  511  2025-07-09 10:12:45 make
+  512  2025-07-09 10:12:45 bin/mpi_hybrid_distr_arg 
+  513  2025-07-09 10:12:45 make run ARGS=
+  514  2025-07-09 10:12:45 make lint
+  515  2025-07-09 10:12:45 make lint\
+  516  2025-07-09 10:12:45 make lint
+  517  2025-07-09 10:12:45 git add .
+  518  2025-07-09 10:12:45 git status
+  519  2025-07-09 10:12:45 git commit -m "mpi: Added input and send receives"
+  520  2025-07-09 10:12:45 git push
+  521  2025-07-09 10:12:45 make run ARGS=
+  522  2025-07-09 10:12:45 cd mpi_hello
+  523  2025-07-09 10:12:45 make run
+  524  2025-07-09 10:12:45 sudo dnf install mpich mpich-devel
+  525  2025-07-09 10:12:45 make run
+  526  2025-07-09 10:12:45 which mpic++
+  527  2025-07-09 10:12:45 mpic++ --version
+  528  2025-07-09 10:12:45 cd mpi_wrapper/
+  529  2025-07-09 10:12:45 make run
+  530  2025-07-09 10:12:45 cd ..
+  531  2025-07-09 10:12:45 cd mpi_hello/
+  532  2025-07-09 10:12:45 make
+  533  2025-07-09 10:12:45 bin/mpi_hello 
+  534  2025-07-09 10:12:45 make clean
+  535  2025-07-09 10:12:45 make
+  536  2025-07-09 10:12:45 sudo dnf install mpich.x86_64 mpich-devel.x86_64
+  537  2025-07-09 10:12:45 make
+  538  2025-07-09 10:12:45 make run
+  539  2025-07-09 10:12:45 c d..
+  540  2025-07-09 10:12:45 cd ..
+  541  2025-07-09 10:12:45 cd mpi_hybrid_distr_arg/
+  542  2025-07-09 10:12:45 make
+  543  2025-07-09 10:12:45 make run
+  544  2025-07-09 10:12:45 make clean
+  545  2025-07-09 10:12:45 make
+  546  2025-07-09 10:12:45 sudo dnf install mpich.x86_64 mpich-devel.x86_64
+  547  2025-07-09 10:12:45 module load mpi/mpich-86_64
+  548  2025-07-09 10:12:45 uname -m
+  549  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  550  2025-07-09 10:12:45 make
+  551  2025-07-09 10:12:45 git branch
+  552  2025-07-09 10:12:45 make clean tsan run
+  553  2025-07-09 10:12:45 make run
+  554  2025-07-09 10:12:45 make run ARGS=jobs/job002b/job002.txt
+  555  2025-07-09 10:12:45 make lint
+  556  2025-07-09 10:12:45 make run
+  557  2025-07-09 10:12:45 make clean
+  558  2025-07-09 10:12:45 make
+  559  2025-07-09 10:12:45 make clean
+  560  2025-07-09 10:12:45 make
+  561  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  562  2025-07-09 10:12:45 make
+  563  2025-07-09 10:12:45 bin/omp_mpi 
+  564  2025-07-09 10:12:45 make run
+  565  2025-07-09 10:12:45 make clean
+  566  2025-07-09 10:12:45 make run
+  567  2025-07-09 10:12:45 make clean run
+  568  2025-07-09 10:12:45 make lint
+  569  2025-07-09 10:12:45 make clean
+  570  2025-07-09 10:12:45 make
+  571  2025-07-09 10:12:45 git branch
+  572  2025-07-09 10:12:45 make lint
+  573  2025-07-09 10:12:45 make run ARGS=jobs/job002b/job002.txt
+  574  2025-07-09 10:12:45 module load mpi/mmpich-x86_64
+  575  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  576  2025-07-09 10:12:45 make run ARGS=jobs/job002b/job002.txt
+  577  2025-07-09 10:12:45 make lint
+  578  2025-07-09 10:12:45 git add .
+  579  2025-07-09 10:12:45 git tag -a hw04 -m "hw04 submission"
+  580  2025-07-09 10:12:45 git push --tags
+  581  2025-07-09 10:12:45 cd web_server
+  582  2025-07-09 10:12:45 git pull
+  583  2025-07-09 10:12:45 git branch
+  584  2025-07-09 10:12:45 git checkout -b Task9.0_Project12RevisionFix
+  585  2025-07-09 10:12:45 make clean run
+  586  2025-07-09 10:12:45 make clean run -j
+  587  2025-07-09 10:12:45 make clean
+  588  2025-07-09 10:12:45 make -j
+  589  2025-07-09 10:12:45 make run
+  590  2025-07-09 10:12:45 make lint
+  591  2025-07-09 10:12:45 make clean run!
+  592  2025-07-09 10:12:45 make clean run
+  593  2025-07-09 10:12:45 git pull
+  594  2025-07-09 10:12:45 cd paralela25a-evan-chen/homeworks/
+  595  2025-07-09 10:12:45 cd omp_mpi/
+  596  2025-07-09 10:12:45 code .
+  597  2025-07-09 10:12:45 cd ..
+  598  2025-07-09 10:12:45 code .
+  599  2025-07-09 10:12:45 cd ..
+  600  2025-07-09 10:12:45 cd paralela25a-stockholm_syndrome/
+  601  2025-07-09 10:12:45 code .
+  602  2025-07-09 10:12:45 cd ..
+  603  2025-07-09 10:12:45 cd Downloads/
+  604  2025-07-09 10:12:45 ll
+  605  2025-07-09 10:12:45 cd proyecto-proba
+  606  2025-07-09 10:12:45 cd proyecto_proba
+  607  2025-07-09 10:12:45 cd proyeto_proba/
+  608  2025-07-09 10:12:45 cd ..
+  609  2025-07-09 10:12:45 cd proyecto_proba/
+  610  2025-07-09 10:12:45 code .
+  611  2025-07-09 10:12:45 cd ..
+  612  2025-07-09 10:12:45 cd stack_underflow/projects/project_02_conquest/
+  613  2025-07-09 10:12:45 code .
+  614  2025-07-09 10:12:45 cd ..
+  615  2025-07-09 10:12:45 cd paralela25a-evan-chen/
+  616  2025-07-09 10:12:45 cd ..
+  617  2025-07-09 10:12:45 cd paralela25a-stockholm_syndrome/
+  618  2025-07-09 10:12:45 cd web_server/
+  619  2025-07-09 10:12:45 code .
+  620  2025-07-09 10:12:45 cd ..
+  621  2025-07-09 10:12:45 ssh C32200@10.84.19.15
+  622  2025-07-09 10:12:45 git add .
+  623  2025-07-09 10:12:45 git status
+  624  2025-07-09 10:12:45 git commit -m "mpi/send_recv_*: initial files"
+  625  2025-07-09 10:12:45 git push
+  626  2025-07-09 10:12:45 cd send_recv_ord_sem/
+  627  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  628  2025-07-09 10:12:45 make run
+  629  2025-07-09 10:12:45 git checkout 511cc9bff1b3f9dcaf003c6fca8a6decb287b34b
+  630  2025-07-09 10:12:45 cd ..
+  631  2025-07-09 10:12:45 cd mpi_hybrid_distr_arg/
+  632  2025-07-09 10:12:45 make run
+  633  2025-07-09 10:12:45 git checkout main
+  634  2025-07-09 10:12:45 cd ..
+  635  2025-07-09 10:12:45 git mv mpi_hybrid_distr_arg mpi_hybrid_distr_stdin
+  636  2025-07-09 10:12:45 cd mpi_hybrid_distr_stdin/
+  637  2025-07-09 10:12:45 make run
+  638  2025-07-09 10:12:45 bin/mpi_hybrid_distr_
+  639  2025-07-09 10:12:45 make clean
+  640  2025-07-09 10:12:45 make 
+  641  2025-07-09 10:12:45 bin/mpi_hybrid_distr_stdin 
+  642  2025-07-09 10:12:45 make run ARGS=
+  643  2025-07-09 10:12:45 cd ..
+  644  2025-07-09 10:12:45 git aadd .
+  645  2025-07-09 10:12:45 git add .
+  646  2025-07-09 10:12:45 git commit -m "mpi: separated hybrid distr into args and stdin"
+  647  2025-07-09 10:12:45 cd send_recv_ord_itm/
+  648  2025-07-09 10:12:45 make run
+  649  2025-07-09 10:12:45 sudo dnf install R
+  650  2025-07-09 10:12:45 git checkout Task0-ProjectStructure 
+  651  2025-07-09 10:12:45 sudo dnf install pylint
+  652  2025-07-09 10:12:45 cd carlos
+  653  2025-07-09 10:12:45 cd 
+  654  2025-07-09 10:12:45 cd Downloads/tarea_calcu/I.S.2025.RRF.CI-0119.001-Trabajo\ en\ clase\ laboratorio\ \ tarea-2666803/
+  655  2025-07-09 10:12:45 cd carlos/
+  656  2025-07-09 10:12:45 make run
+  657  2025-07-09 10:12:45 make
+  658  2025-07-09 10:12:45 cd ..
+  659  2025-07-09 10:12:45 cd carlos/
+  660  2025-07-09 10:12:45 make
+  661  2025-07-09 10:12:45 cd Tarea/Tarea/
+  662  2025-07-09 10:12:45 make
+  663  2025-07-09 10:12:45 sudo dnf install nasm
+  664  2025-07-09 10:12:45 make
+  665  2025-07-09 10:12:45 bin/Tarea 
+  666  2025-07-09 10:12:45 cd ../../..
+  667  2025-07-09 10:12:45 cd gabriel/
+  668  2025-07-09 10:12:45 cd calculadora_hibrida-Gabriel_Bermudez_Vasquez/
+  669  2025-07-09 10:12:45 make
+  670  2025-07-09 10:12:45 cd calculadora/
+  671  2025-07-09 10:12:45 make run
+  672  2025-07-09 10:12:45 make clean
+  673  2025-07-09 10:12:45 make
+  674  2025-07-09 10:12:45 py
+  675  2025-07-09 10:12:45 cd ..
+  676  2025-07-09 10:12:45 cd manuel/
+  677  2025-07-09 10:12:45 cd Tarea_PI/
+  678  2025-07-09 10:12:45 make
+  679  2025-07-09 10:12:45 make run
+  680  2025-07-09 10:12:45 cd leo_c
+  681  2025-07-09 10:12:45 cd ..
+  682  2025-07-09 10:12:45 cd leo_c
+  683  2025-07-09 10:12:45 cd Calculadora\ Hibrida/
+  684  2025-07-09 10:12:45 cd Tarea2/
+  685  2025-07-09 10:12:45 make run
+  686  2025-07-09 10:12:45 0
+  687  2025-07-09 10:12:45 make run
+  688  2025-07-09 10:12:45 cd ..
+  689  2025-07-09 10:12:45 cd luis/Tarea\ -\ Trabajo\ en\ clase\ C10645\ Luis\ Arias/src/
+  690  2025-07-09 10:12:45 make run
+  691  2025-07-09 10:12:45 cd ..
+  692  2025-07-09 10:12:45 make run
+  693  2025-07-09 10:12:45 make
+  694  2025-07-09 10:12:45 sudo dnf install g++-multiliblibc6-dev-i386
+  695  2025-07-09 10:12:45 sudo dnf install g++-multilib libc6-dev-i386
+  696  2025-07-09 10:12:45 sudo dnf install g++-multilib
+  697  2025-07-09 10:12:45 sudo dnf install g++ -multilib
+  698  2025-07-09 10:12:45 sudo dnf install g++ -multilib libc6-dev-i386
+  699  2025-07-09 10:12:45 cd stack_underflow/projects/project_02_conquest/
+  700  2025-07-09 10:12:45 cd ..
+  701  2025-07-09 10:12:45 cd project_01_vessels/
+  702  2025-07-09 10:12:45 make run
+  703  2025-07-09 10:12:45 cd mpi_ping_pong/
+  704  2025-07-09 10:12:45 make run
+  705  2025-07-09 10:12:45 module load mpi/mpich-x_86_64
+  706  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  707  2025-07-09 10:12:45 make run
+  708  2025-07-09 10:12:45 git add .
+  709  2025-07-09 10:12:45 git status
+  710  2025-07-09 10:12:45 git commit -m "mpi_ping_pong: Completed"
+  711  2025-07-09 10:12:45 cd ..
+  712  2025-07-09 10:12:45 git add .
+  713  2025-07-09 10:12:45 git statu
+  714  2025-07-09 10:12:45 git status
+  715  2025-07-09 10:12:45 git commit -m "mpi_relay_race: added initial files"
+  716  2025-07-09 10:12:45 cd mpi_relay_race/
+  717  2025-07-09 10:12:45 make run
+  718  2025-07-09 10:12:45 git add .
+  719  2025-07-09 10:12:45 git status
+  720  2025-07-09 10:12:45 git commit -m "mpi_relay_race: completed"
+  721  2025-07-09 10:12:45 cd ..
+  722  2025-07-09 10:12:45 git add README.adoc 
+  723  2025-07-09 10:12:45 git commit -m "Updated index tables with new mpi exercises"
+  724  2025-07-09 10:12:45 git push
+  725  2025-07-09 10:12:45 git add .
+  726  2025-07-09 10:12:45 git commit -m "mpi_wrapper: Updated wrapper with barrier and wall time methods"
+  727  2025-07-09 10:12:45 git psuh
+  728  2025-07-09 10:12:45 git push
+  729  2025-07-09 10:12:45 cd ..
+  730  2025-07-09 10:12:45 cd paralela25a-evan-chen/
+  731  2025-07-09 10:12:45 cd mpi/
+  732  2025-07-09 10:12:45 cd hybrid_distr_bcast/
+  733  2025-07-09 10:12:45 make clean
+  734  2025-07-09 10:12:45 make run
+  735  2025-07-09 10:12:45 make run ARGS=
+  736  2025-07-09 10:12:45 make
+  737  2025-07-09 10:12:45 bin/Plantillas 
+  738  2025-07-09 10:12:45 clear
+  739  2025-07-09 10:12:45 git checkout main
+  740  2025-07-09 10:12:45 git pull
+  741  2025-07-09 10:12:45 git checkout -b Task1_GeneticAlgorithm
+  742  2025-07-09 10:12:45 /bin/python
+  743  2025-07-09 10:12:45 git pull
+  744  2025-07-09 10:12:45 make lint
+  745  2025-07-09 10:12:45 make clean asan run
+  746  2025-07-09 10:12:45 make
+  747  2025-07-09 10:12:45 make lint
+  748  2025-07-09 10:12:45 bin/proyecto2 
+  749  2025-07-09 10:12:45 make clean asan 
+  750  2025-07-09 10:12:45 bin/proyecto2 
+  751  2025-07-09 10:12:45 make clean msan run
+  752  2025-07-09 10:12:45 make clean run
+  753  2025-07-09 10:12:45 make doc
+  754  2025-07-09 10:12:45 make clean
+  755  2025-07-09 10:12:45 make doc
+  756  2025-07-09 10:12:45 cd mpi_
+  757  2025-07-09 10:12:45 cd mpi_lucky_number_reduce/
+  758  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  759  2025-07-09 10:12:45 make run
+  760  2025-07-09 10:12:45 make clean
+  761  2025-07-09 10:12:45 make 
+  762  2025-07-09 10:12:45 make run
+  763  2025-07-09 10:12:45 cd ..
+  764  2025-07-09 10:12:45 cd mpi_lucky_number_reduce/
+  765  2025-07-09 10:12:45 make lint
+  766  2025-07-09 10:12:45 cd ..
+  767  2025-07-09 10:12:45 cd mpi_lucky_number_who/
+  768  2025-07-09 10:12:45 make run
+  769  2025-07-09 10:12:45 make lint
+  770  2025-07-09 10:12:45 git branch
+  771  2025-07-09 10:12:45 git pull
+  772  2025-07-09 10:12:45 git tag -a project12_fix -m "Project 1.2 fixes"
+  773  2025-07-09 10:12:45 git push --tag
+  774  2025-07-09 10:12:45 git push --tags
+  775  2025-07-09 10:12:45 make clean run
+  776  2025-07-09 10:12:45 make clean
+  777  2025-07-09 10:12:45 make run
+  778  2025-07-09 10:12:45 make lint
+  779  2025-07-09 10:12:45 git fetch --prune
+  780  2025-07-09 10:12:45 git branch
+  781  2025-07-09 10:12:45 git checkout main
+  782  2025-07-09 10:12:45 git pull
+  783  2025-07-09 10:12:45 git branch
+  784  2025-07-09 10:12:45 git checkout -b Task1_DataUnitPointers
+  785  2025-07-09 10:12:45 make clean asan run
+  786  2025-07-09 10:12:45 make run
+  787  2025-07-09 10:12:45 make lint
+  788  2025-07-09 10:12:45 make clean msan run
+  789  2025-07-09 10:12:45 make clean asan run
+  790  2025-07-09 10:12:45 /bin/python
+  791  2025-07-09 10:12:45 make run
+  792  2025-07-09 10:12:45 make
+  793  2025-07-09 10:12:45 make clean
+  794  2025-07-09 10:12:45 make
+  795  2025-07-09 10:12:45 bin/Proyecto_II 
+  796  2025-07-09 10:12:45 make lint
+  797  2025-07-09 10:12:45 make run
+  798  2025-07-09 10:12:45 make
+  799  2025-07-09 10:12:45 make lint
+  800  2025-07-09 10:12:45 make doc
+  801  2025-07-09 10:12:45 make clean asan run
+  802  2025-07-09 10:12:45 make lint
+  803  2025-07-09 10:12:45 make run
+  804  2025-07-09 10:12:45 make clean asan run
+  805  2025-07-09 10:12:45 make lint
+  806  2025-07-09 10:12:45 make doc
+  807  2025-07-09 10:12:45 make clean
+  808  2025-07-09 10:12:45 make doc
+  809  2025-07-09 10:12:45 make clean asan run
+  810  2025-07-09 10:12:45 make lint
+  811  2025-07-09 10:12:45 cd proyectoProgramado2/
+  812  2025-07-09 10:12:45 make lint
+  813  2025-07-09 10:12:45 make clean asan run
+  814  2025-07-09 10:12:45 bin/proyectoProgramado2 
+  815  2025-07-09 10:12:45 make doc
+  816  2025-07-09 10:12:45 make
+  817  2025-07-09 10:12:45 make run
+  818  2025-07-09 10:12:45 make lint
+  819  2025-07-09 10:12:45 sudo dnf install g++ make pkg-config libgtkmm-3.0-dev
+  820  2025-07-09 10:12:45 sudo dnf install gtk3-devel
+  821  2025-07-09 10:12:45 make run
+  822  2025-07-09 10:12:45 make clean
+  823  2025-07-09 10:12:45 make
+  824  2025-07-09 10:12:45 git branch
+  825  2025-07-09 10:12:45 git checkout main
+  826  2025-07-09 10:12:45 git pull
+  827  2025-07-09 10:12:45 git checkout -b Task3_DistributorAndRequestClient
+  828  2025-07-09 10:12:45 git pull
+  829  2025-07-09 10:12:45 git checkout main
+  830  2025-07-09 10:12:45 git pull
+  831  2025-07-09 10:12:45 make lint
+  832  2025-07-09 10:12:45 git checkout main
+  833  2025-07-09 10:12:45 git pull
+  834  2025-07-09 10:12:45 make clean run 
+  835  2025-07-09 10:12:45 make 
+  836  2025-07-09 10:12:45 make clean
+  837  2025-07-09 10:12:45 make run
+  838  2025-07-09 10:12:45 make clean
+  839  2025-07-09 10:12:45 make
+  840  2025-07-09 10:12:45 make clean
+  841  2025-07-09 10:12:45 make run
+  842  2025-07-09 10:12:45 mak4 clean asan run
+  843  2025-07-09 10:12:45 make clean asan run
+  844  2025-07-09 10:12:45 make run
+  845  2025-07-09 10:12:45 make clean
+  846  2025-07-09 10:12:45 make run
+  847  2025-07-09 10:12:45 make clean
+  848  2025-07-09 10:12:45 make run
+  849  2025-07-09 10:12:45 make run\
+  850  2025-07-09 10:12:45 make run
+  851  2025-07-09 10:12:45 make clean
+  852  2025-07-09 10:12:45 make -j4
+  853  2025-07-09 10:12:45 bin/web_server 
+  854  2025-07-09 10:12:45 make run
+  855  2025-07-09 10:12:45 make run
+  856  2025-07-09 10:12:45 make clean
+  857  2025-07-09 10:12:45 make run
+  858  2025-07-09 10:12:45 git branch
+  859  2025-07-09 10:12:45 git fetch --prune
+  860  2025-07-09 10:12:45 git branch
+  861  2025-07-09 10:12:45 make run
+  862  2025-07-09 10:12:45 git checkout main
+  863  2025-07-09 10:12:45 git checkout -b Task1.1_Solver
+  864  2025-07-09 10:12:45 git checkout main
+  865  2025-07-09 10:12:45 git checkout Task2
+  866  2025-07-09 10:12:45 git checkout Task2_SubsetSums 
+  867  2025-07-09 10:12:45 git checkout main
+  868  2025-07-09 10:12:45 git pull
+  869  2025-07-09 10:12:45 make run
+  870  2025-07-09 10:12:45 git branch
+  871  2025-07-09 10:12:45 git pull
+  872  2025-07-09 10:12:45 git checkout -b Task1.2_SolverOptimizationAndMinCoins
+  873  2025-07-09 10:12:45 git checkout main
+  874  2025-07-09 10:12:45 git pull
+  875  2025-07-09 10:12:45 git checkout main
+  876  2025-07-09 10:12:45 git checkout -b Task5_DoubleKnapsack
+  877  2025-07-09 10:12:45 make clean
+  878  2025-07-09 10:12:45 make run
+  879  2025-07-09 10:12:45 make clean
+  880  2025-07-09 10:12:45 make run
+  881  2025-07-09 10:12:45 make clean
+  882  2025-07-09 10:12:45 make run
+  883  2025-07-09 10:12:45 /bin/python
+  884  2025-07-09 10:12:45 make lint
+  885  2025-07-09 10:12:45 make run
+  886  2025-07-09 10:12:45 3
+  887  2025-07-09 10:12:45 make run
+  888  2025-07-09 10:12:45 3
+  889  2025-07-09 10:12:45 make run
+  890  2025-07-09 10:12:45 3
+  891  2025-07-09 10:12:45 git checkout main
+  892  2025-07-09 10:12:45 gi tpull
+  893  2025-07-09 10:12:45 git pull
+  894  2025-07-09 10:12:45 make run
+  895  2025-07-09 10:12:45 git checkout main
+  896  2025-07-09 10:12:45 git PULL
+  897  2025-07-09 10:12:45 git pull
+  898  2025-07-09 10:12:45 git config pull.rebase true
+  899  2025-07-09 10:12:45 git checkout main
+  900  2025-07-09 10:12:45 git pull
+  901  2025-07-09 10:12:45 git checkout main
+  902  2025-07-09 10:12:45 git branch
+  903  2025-07-09 10:12:45 git pull
+  904  2025-07-09 10:12:45 git checkout Task7_GAOptimizer 
+  905  2025-07-09 10:12:45 /bin/python /home/evan/.vscode/extensions/ms-python.python-2025.8.0-linux-x64/python_files/printEnvVariablesToFile.py /home/evan/.vscode/extensions/ms-python.python-2025.8.0-linux-x64/python_files/deactivate/bash/envVars.txt
+  906  2025-07-09 10:12:45 git checkout main
+  907  2025-07-09 10:12:45 git push
+  908  2025-07-09 10:12:45 git checkout Task8_BottomUps 
+  909  2025-07-09 10:12:45 make doc
+  910  2025-07-09 10:12:45 git checkout main
+  911  2025-07-09 10:12:45 git pul
+  912  2025-07-09 10:12:45 git pull
+  913  2025-07-09 10:12:45 make run >> subset_sum_test
+  914  2025-07-09 10:12:45 make run >> double_knapsack_test
+  915  2025-07-09 10:12:45 git pull
+  916  2025-07-09 10:12:45 git checkout main
+  917  2025-07-09 10:12:45 git pull
+  918  2025-07-09 10:12:45 git pull origin/main
+  919  2025-07-09 10:12:45 make run
+  920  2025-07-09 10:12:45 /bin/python /home/evan/.vscode/extensions/ms-python.python-2025.8.0-linux-x64/python_files/printEnvVariablesToFile.py /home/evan/.vscode/extensions/ms-python.python-2025.8.0-linux-x64/python_files/deactivate/bash/envVars.txt
+  921  2025-07-09 10:12:45 make lint
+  922  2025-07-09 10:12:45 make clean
+  923  2025-07-09 10:12:45 make lint
+  924  2025-07-09 10:12:45 make doc
+  925  2025-07-09 10:12:45 make lint
+  926  2025-07-09 10:12:45 sudo dnf install allegro5-devel gcc-c++
+  927  2025-07-09 10:12:45 make clean asan run
+  928  2025-07-09 10:12:45 make install-deps
+  929  2025-07-09 10:12:45 make run
+  930  2025-07-09 10:12:45 cd ..
+  931  2025-07-09 10:12:45 make
+  932  2025-07-09 10:12:45 make -j
+  933  2025-07-09 10:12:45 cd ..
+  934  2025-07-09 10:12:45 git pull
+  935  2025-07-09 10:12:45 make run
+  936  2025-07-09 10:12:45 make master
+  937  2025-07-09 10:12:45 make run
+  938  2025-07-09 10:12:45 make clean
+  939  2025-07-09 10:12:45 make run
+  940  2025-07-09 10:12:45 make clean
+  941  2025-07-09 10:12:45 make run
+  942  2025-07-09 10:12:45 bin/web_server help
+  943  2025-07-09 10:12:45 make 
+  944  2025-07-09 10:12:45 bin/web_server 8080 30 70
+  945  2025-07-09 10:12:45 git pull
+  946  2025-07-09 10:12:45 git config pull.rebase true
+  947  2025-07-09 10:12:45 git pull
+  948  2025-07-09 10:12:45 make run
+  949  2025-07-09 10:12:45 bin/web_server 8080 30 70 40
+  950  2025-07-09 10:12:45 make run
+  951  2025-07-09 10:12:45 make clean release
+  952  2025-07-09 10:12:45 bin/web_server master 4 8080 30 70 40
+  953  2025-07-09 10:12:45 bin/web_server 
+  954  2025-07-09 10:12:45 bin/web_server help
+  955  2025-07-09 10:12:45 bin/web_server 2 help
+  956  2025-07-09 10:12:45 make clean asan
+  957  2025-07-09 10:12:45 make run
+  958  2025-07-09 10:12:45 git pull
+  959  2025-07-09 10:12:45 make run
+  960  2025-07-09 10:12:45 make clean
+  961  2025-07-09 10:12:45 make run ARGS=master 4 8080
+  962  2025-07-09 10:12:45 make run ARGS=master 4
+  963  2025-07-09 10:12:45 bin/web_server master 4 8080
+  964  2025-07-09 10:12:45 make lint
+  965  2025-07-09 10:12:45 bin/web_server master 4 8080
+  966  2025-07-09 10:12:45 make doc
+  967  2025-07-09 10:12:45 make lint
+  968  2025-07-09 10:12:45 cd pthreads/
+  969  2025-07-09 10:12:45 cd readers_writers/
+  970  2025-07-09 10:12:45 make run
+  971  2025-07-09 10:12:45 make test < tests/input001.txt 
+  972  2025-07-09 10:12:45 make run
+  973  2025-07-09 10:12:45 make run < tests/input001.txt 
+  974  2025-07-09 10:12:45 make run < tests/input002.txt 
+  975  2025-07-09 10:12:45 make lint
+  976  2025-07-09 10:12:45 cd ..
+  977  2025-07-09 10:12:45 git add .
+  978  2025-07-09 10:12:45 git commit -m "readers_writers: Completed"
+  979  2025-07-09 10:12:45 R version
+  980  2025-07-09 10:12:45 cd optimized/
+  981  2025-07-09 10:12:45 cd pthread_optimized/
+  982  2025-07-09 10:12:45 make doc
+  983  2025-07-09 10:12:45 make lint
+  984  2025-07-09 10:12:45 make doc
+  985  2025-07-09 10:12:45 make clean
+  986  2025-07-09 10:12:45 make run
+  987  2025-07-09 10:12:45 uname -m
+  988  2025-07-09 10:12:45 module load mpi/mpich-86_64
+  989  2025-07-09 10:12:45 module load mpi/mpich-x86_64
+  990  2025-07-09 10:12:45 make run
+  991  2025-07-09 10:12:45 make lint
+  992  2025-07-09 10:12:45 make doc
+  993  2025-07-09 10:12:45 make run
+  994  2025-07-09 10:12:45 python3
+  995  2025-07-09 10:12:45 cd proyecto2/
+  996  2025-07-09 10:12:45 make lint
+  997  2025-07-09 10:12:45 make log
+  998  2025-07-09 10:12:45 cd build_h2o/
+  999  2025-07-09 10:12:45 make log

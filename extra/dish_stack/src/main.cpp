@@ -5,6 +5,8 @@
 #include <thread>
 #include <vector>
 
+#define STACK_EMPTY_FLAG -1
+
 // Thread-safe dish stack
 class DishStack {
  private:
@@ -33,11 +35,15 @@ class DishStack {
     this->mutex.unlock();
   }
   /// Pop the top element from the stack and return its value
-  /// Precondition: the stack must be not empty
+  /// Precondition: the stack must be not empty, if it is, returns flag value -1
   int pop() {
+    int value = STACK_EMPTY_FLAG;
     this->mutex.lock();
-    const int value = stack.top();
-    stack.pop();
+    // Pop value if stack is not empty
+    if (!stack.empty()) {
+      value = stack.top();
+      stack.pop();
+    }
     this->mutex.unlock();
     return value;
   }
@@ -51,10 +57,13 @@ void wash(const int dish) {
 }
 
 void wash_dishes() {
-  while (!dishes.empty()) {
+  // Selected approach to fix atomicity violation was calling empty() inside pop
+  // and use flag value to determine if it's done washing
+  while (true) {
     // Pop a dish from the stack
     const int dish = dishes.pop();
-    wash(dish);
+    if (dish == STACK_EMPTY_FLAG) break;
+    else wash(dish);
   }
 }
 
