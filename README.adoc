@@ -7,6 +7,9 @@
 :toc:
 :xrefstyle: short
 
+== DISCLAIMER
+Este repositorio resuelve las versiones de los problemas asignados en el curso CI-0117 Programacion Paralela y Concurrente de la Universidad de Costa Rica en el primer semestre del año 2025. Ciertos ejercicios tienen errores, a no mencionar que podrian ser versiones diferentes a las que se requieren en el curso en su estado actual.
+
 == Pthreads
 
 [%autowidth]
